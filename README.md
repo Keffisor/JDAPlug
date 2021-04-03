@@ -7,7 +7,7 @@
 - Easy API and usage.
 
 
-### Start the expansion
+### Get started
 ```
 public static void main(String[] args) throws LoginException {
        JDA jda = new JDABuilder(AccountType.BOT).setToken(token).build(); //any call of jda
@@ -30,13 +30,11 @@ createCommand command = new createCommand("!", "principalcommand", "aliase1", "a
 				if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
 					System.exit(0);
 					} else {
-				  e.getChannel().sendMessage("You don't have permissions to do this, you must have the administrator permission").queue();  
+				  e.getChannel().sendMessage("No permission").queue();  
 					}
 	}
 	
-
-
-		}; 
+     }; 
 }
 ```
 You have to use the class of createCommand which needs a prefix, a principal commands, and aliases of the command (optional).
