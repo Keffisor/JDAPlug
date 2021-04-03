@@ -1,3 +1,6 @@
+[![Git Releases Version](https://img.shields.io/github/release/Keffisor/JDAExpansion.svg)](https://github.com/Keffisor/JDAExpansion/releases)
+[![Last Release](https://img.shields.io/github/release-date/Keffisor/JDAExpansion.svg?logo=JDAExpansion)](https://github.com/Keffisor/JDAExpansion/releases)
+
 # JDAExpansion
 **JDAExpansion** - Add a console and install/create plugins with a easy api to your bot. It's based on the Discord library [JDA](https://github.com/DV8FromTheWorld/JDA).
 
