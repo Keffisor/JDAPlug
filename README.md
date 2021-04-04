@@ -8,6 +8,7 @@
 # Features
 - Create a console on the Bot for execute commands.
 - Install or create plugins for any bot that have this expansion.
+- Create configs files for the plugins.
 - Easy API and usage.
 
 
@@ -74,3 +75,29 @@ In case that you need to register a class with events you must to call this func
 	}
 ```
 After compiling the plugin, you have to move the jar into the plugins folder created by the Bot. You can reload the plugins with the command !reload o !rl and you can see the plugins installed with !plugins or !pl.
+
+### Creating configs for plugins
+```
+public class Main extends PluginListener {
+	public static FileConfiguration config;
+	
+	@Override
+	protected void onEnable() {
+		JDAExpansion.registerEvent(new Event());		
+		config = getConfig("config.yml");
+ 		
+	}
+	
+	@Override
+	protected void onDisable() {
+		
+	}
+```
+The config file is created into a directory with the name of the plugin in the directory of plugins. The config file **must** be created inside the jar without any package. The data that contains that config will be created into the directory of the plugin.
+```
+e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
+config.set("something", 1); //set data to the config
+```
+<br>
+<br>
+<br>
