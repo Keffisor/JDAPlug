@@ -69,7 +69,7 @@ public class Main extends PluginListener {
 ```
 In case that you need to register a class with events you must to call this function
 ```
-@Override
+        @Override
 	protected void onEnable() {
 		JDAExpansion.registerEvent(new EventClass());
 	}
