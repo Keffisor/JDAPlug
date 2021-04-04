@@ -1,5 +1,5 @@
 [![Git Releases Version](https://img.shields.io/github/release/Keffisor/JDAExpansion)](https://github.com/Keffisor/JDAExpansion/releases)
-[![Last Release](https://img.shields.io/github/release-date/Keffisor/JDAExpansion.svg?logo=JDAExpansion)](https://github.com/Keffisor/JDAExpansion/releases)
+[![Last Release](https://img.shields.io/github/release-date/Keffisor/JDAExpansion)](https://github.com/Keffisor/JDAExpansion/releases)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/Keffisor/JDAExpansion)](https://github.com/Keffisor/JDAExpansion/commits/master)
 <br>
 # JDAExpansion
