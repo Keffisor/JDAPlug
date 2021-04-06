@@ -1,20 +1,21 @@
-package com.Keffisor21.JDAExpansion;
+package com.Keffisor21.JDAExpansion.EventsHandler;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
-import net.dv8tion.jda.api.Permission;
+
+import com.Keffisor21.JDAExpansion.Main;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
+import com.Keffisor21.JDAExpansion.NMS.JDANMS;
+import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
 
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class setupCommands {
 	
-      public static void loadCommands(JDA jda) {
+      public static void loadCommands(JDANMS jda) {
       jda.addEventListener(reloadCommand());
       jda.addEventListener(pluginsCommand());
       }
@@ -51,7 +52,7 @@ public class setupCommands {
 			
 			@Override
 			protected void isExecutedConsole(String[] args) {
-				Plugin.loadPlugins(Main.Jda);
+				Plugin.loadPlugins(JDAExpansion.getJDANMS());
 				Console.logger.info("Plugins recargados");
 			}
 			
@@ -59,7 +60,7 @@ public class setupCommands {
 			protected void isExecuted(String[] args) {
                MessageReceivedEvent e = eventCommand();
                if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
-                   Plugin.loadPlugins(Main.Jda);
+                   Plugin.loadPlugins(JDAExpansion.getJDANMS());
             	   e.getChannel().sendMessage("Plugins reloaded! "+e.getAuthor().getAsMention()).queue();
                } else {
 					 e.getChannel().sendMessage("You don't have permissions to do this, you must have the administrator permission").queue();  

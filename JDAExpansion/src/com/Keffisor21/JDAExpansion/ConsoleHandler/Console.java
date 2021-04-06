@@ -18,21 +18,7 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 	@Override
 	protected void append(ILoggingEvent e) {
  		if(e == null) return;
-		String text = e.getMessage();
-		String s = text;
-
-		removeLine(text);
-	 
-		int length = text.split("\n").length-1;
-		
-		if(s.equals("> ")) return;
-		if(s.startsWith("> ") || s.equals(">")) { 
-			System.out.println(s);
-		} else {
-			
-			System.out.println("[INFO]: "+s);
-		}	
-		System.out.print("> ");
+ 		filter(e.getMessage());
 		/*
 		 if(e == null) return;
 		String text = e.getMessage();
@@ -49,6 +35,23 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 		System.out.print("> ");
 		 */
 	}
+	
+	public void filter(String msg) {
+		
+		removeLine(msg);
+	 
+		int length = msg.split("\n").length-1;
+		
+		if(msg.equals("> ")) return;
+		if(msg.startsWith("> ") || msg.equals(">")) { 
+			System.out.println(msg);
+		} else {
+			System.out.println("[INFO]: "+msg);
+		}	
+		System.out.print("> ");
+	}
+	
+	
 	private void removeLine(String text) {
 		String[] split = text.split("\n");
 		if(split.length == 1) {

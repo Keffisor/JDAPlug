@@ -1,6 +1,6 @@
 package com.Keffisor21.JDAExpansion.Plugins;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,13 +19,12 @@ import java.util.zip.ZipFile;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-
-import net.dv8tion.jda.api.JDA;
+import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 public class Plugin {
 	public static ConcurrentHashMap<String, PluginListener> registedClass = new ConcurrentHashMap<String, PluginListener>();
 	
-	public static void loadPlugins(JDA jda) {
+	public static void loadPlugins(JDANMS jda) {
 		File f = new File("plugins");
 		if(!f.exists()) {
 			f.mkdir();

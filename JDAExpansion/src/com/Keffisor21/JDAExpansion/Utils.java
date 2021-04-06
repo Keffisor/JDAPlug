@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.Keffisor21.JDAExpansion.NMS.JDAType;
+
 public class Utils {
 
 	  public static String generateRandomID(int length)
@@ -69,4 +71,5 @@ public class Utils {
 	  public static String getCharDelete() {
 		    	 return "\033[K";
 	  }
+	  
 }

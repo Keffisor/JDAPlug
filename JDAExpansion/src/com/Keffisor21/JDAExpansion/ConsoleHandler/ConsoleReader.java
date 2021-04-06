@@ -1,17 +1,16 @@
 package com.Keffisor21.JDAExpansion.ConsoleHandler;
 
-import java.util.Scanner; 
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
-
-import net.dv8tion.jda.api.JDA;
+import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 
 public class ConsoleReader {
-	private JDA jda;
+	private JDANMS jda;
 	
-	public ConsoleReader(JDA jda) {
+	public ConsoleReader(JDANMS jda) {
 	  this.jda = jda;
 	}
     
@@ -38,7 +37,7 @@ public class ConsoleReader {
           }.start();
     }
     private void detectCommand(String command) {
-    	if(jda.getEventManager().getRegisteredListeners().stream().filter(obj -> {
+    	if(jda.getEventManager().stream().filter(obj -> {
    			if(obj instanceof createCommand) {
    				return ((createCommand) obj).onConsoleMessageReceived(command);
    			}

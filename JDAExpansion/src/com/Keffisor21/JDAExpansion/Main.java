@@ -14,6 +14,7 @@ import com.Keffisor21.JDAExpansion.ConfigManager.TokenConfiguration;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleReader;
+import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
 
@@ -21,10 +22,13 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class Main extends ListenerAdapter {
-	public static JDA Jda;
-	
+	public static JDA Jda = null;
+ 	public static ShardManager shardManager = null;
+ 	public static JDANMS JdaNMS = null;
+ 	
 	public static void main(String[] args) throws LoginException {
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {
