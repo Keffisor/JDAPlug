@@ -67,6 +67,9 @@ public class FileConfiguration {
 	public Object get(String x) {
 		return this.data.get(x);
 	}
+	public Map<String, Object> getElements() {
+		return data;
+	}
 	public void reloadConfig() {
 	try {
 		DumperOptions options = new DumperOptions();
