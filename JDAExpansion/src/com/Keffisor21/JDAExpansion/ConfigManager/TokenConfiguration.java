@@ -23,7 +23,7 @@ public class TokenConfiguration {
 		}
 		try {
 			return Files.readAllLines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).get(0);
-		} catch (IOException e) {
+		} catch (IOException | IndexOutOfBoundsException e) {
             return "";
 		}
 	}
