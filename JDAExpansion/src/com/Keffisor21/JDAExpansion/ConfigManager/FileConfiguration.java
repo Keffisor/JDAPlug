@@ -1,6 +1,6 @@
 package com.Keffisor21.JDAExpansion.ConfigManager;
 
-import java.io.File; 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.google.api.Files;
+import com.iwebpp.crypto.TweetNaclFast.poly1305;
 
 public class FileConfiguration {
 	private Yaml yaml;
@@ -137,5 +139,20 @@ public class FileConfiguration {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	private static Object getElementMap(String req, Object x) {
+		if(x instanceof Map || x instanceof HashMap) {
+			final Object object = getLastElement(Arrays.asList(req.split(".")), x);
+			return object;
+		}
+		return x;
+	}
+	private static Object getLastElement(List<String> each, Object o) {
+		if(each.size() == 0) {
+			return o;
+		}
+		final String toRemove = each.get(0);
+		each.remove(toRemove);
+		return getLastElement(each, ((Map)o).get(toRemove));
 	}
 }
