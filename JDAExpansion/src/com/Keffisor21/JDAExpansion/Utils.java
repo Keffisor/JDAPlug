@@ -3,14 +3,15 @@ package com.Keffisor21.JDAExpansion;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
-import com.Keffisor21.JDAExpansion.NMS.JDAType;
 
 public class Utils {
 
@@ -71,5 +72,20 @@ public class Utils {
 	  public static String getCharDelete() {
 		    	 return "\033[K";
 	  }
-	  
+	  public static void dispachMethod (Object o, String name) {
+		  try {
+			  Class<?> class0 = o.getClass();
+			  Arrays.asList(class0.getMethods()).forEach(obj -> {
+				  if(obj.getName().equals(name)) {
+					  try {
+					    Method method = class0.getMethod(name);
+						method.invoke(null);
+					} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				  }
+			  });
+		  } catch(Exception e) {}
+	  }
 }
