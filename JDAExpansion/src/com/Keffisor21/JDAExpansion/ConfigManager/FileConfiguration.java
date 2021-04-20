@@ -99,7 +99,7 @@ public class FileConfiguration {
 		return String.valueOf(getElementMap(x, data.get(x), data));
 	}
 	public List<Object> getList(String x) {
-		return Arrays.asList(getElementMap(x, data.get(x), data));
+		return (List<Object>)getElementMap(x, data.get(x), data);
 	}
 	public int getInt(String x) {
 		return (int)getElementMap(x, data.get(x), data);
