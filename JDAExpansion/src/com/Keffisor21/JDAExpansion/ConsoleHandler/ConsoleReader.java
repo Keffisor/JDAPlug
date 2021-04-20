@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.Utils;
+import com.Keffisor21.JDAExpansion.EventsHandler.ConsoleEvents;
 import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
@@ -39,7 +40,9 @@ public class ConsoleReader {
     }
     private void detectCommand(String command) {
     	if(jda.getEventManager().stream().filter(obj -> {
-		Utils.dispachMethod(obj, "onMessageConsoleReceive");
+    		if(obj instanceof ConsoleEvents) {
+    			((ConsoleEvents)obj).onMessageConsoleReceive(command);
+    		}
     		if(obj instanceof createCommand) {
    				return ((createCommand) obj).onConsoleMessageReceived(command);
    			}

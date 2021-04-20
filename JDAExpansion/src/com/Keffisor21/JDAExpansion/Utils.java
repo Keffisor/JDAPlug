@@ -72,7 +72,7 @@ public class Utils {
 	  public static String getCharDelete() {
 		    	 return "\033[K";
 	  }
-	  public static void dispachMethod (Object o, String name) {
+	  /*public static void dispachMethod (Object o, String name) {
 		  try {
 			  Class<?> class0 = o.getClass();
 			  Arrays.asList(class0.getMethods()).forEach(obj -> {
@@ -87,5 +87,5 @@ public class Utils {
 				  }
 			  });
 		  } catch(Exception e) {}
-	  }
+	  }*/
 }
