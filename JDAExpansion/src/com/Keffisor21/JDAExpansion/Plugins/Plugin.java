@@ -50,6 +50,7 @@ public class Plugin {
 		if(fList.isEmpty()) return;
 		fList.stream().filter(s -> hasExtensionJar(s)).collect(Collectors.toList())
 		.forEach(f2 -> {
+			try {
 			PluginConfigurationObject getClassInf = getMainClass(f2);
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
@@ -80,9 +81,12 @@ public class Plugin {
 				        }
 				        
 			} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e ) {
-				e.printStackTrace();
+				JDAExpansion.getLogger().info(e.getMessage());
 			}  
- 
+
+			} catch(Exception e) {
+				JDAExpansion.getLogger().info(e.getMessage());
+			}
 		});
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
