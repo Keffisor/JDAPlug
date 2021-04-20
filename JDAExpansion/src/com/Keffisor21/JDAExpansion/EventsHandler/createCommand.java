@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.qos.logback.core.joran.conditional.ElseAction;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter; 
 
@@ -26,20 +27,22 @@ public abstract class createCommand extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
     	if(e.getAuthor().isBot()) return;
-      if(e.getMessage().getContentRaw().startsWith(command) || getAliases(e.getMessage().getContentRaw(), false)) {
+      if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
+    	  
     	  contentRaw = e.getMessage().getContentRaw();
     	  event = e;
      	  isExecuted(Args());
       }
     }
    public boolean onConsoleMessageReceived(String content) {
-	   if(content.startsWith(command.replaceFirst("!", "")) || getAliases(content, true)) {
+	   if(isCommand(content, command.replaceFirst(prefix, "")) || getAliases(content, true)) {
 	    contentRaw = content;
 	   isExecutedConsole(Args());
 	   return true;
 	      }
 	   return false;
    }
+   
    protected abstract void isExecuted(String[] args);
    protected abstract void isExecutedConsole(String[] args);
    
@@ -59,6 +62,13 @@ public abstract class createCommand extends ListenerAdapter {
     if(contentRaw.isEmpty()) {
     	return false;
     }
-    	return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;}return contentRaw.startsWith(sT);}).collect(Collectors.toList()).isEmpty();
+    	return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;}return isCommand(contentRaw, sT);}).collect(Collectors.toList()).isEmpty();
+    }
+    private boolean isCommand(String message, String command) {
+    	if(!message.contains(" ")) return message.equalsIgnoreCase(command);
+    	else {
+			String cmd = message.split(" ")[0];
+			return cmd.equalsIgnoreCase(command);
+		}
     }
 }
