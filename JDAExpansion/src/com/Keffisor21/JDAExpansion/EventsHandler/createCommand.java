@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
+
 import ch.qos.logback.core.joran.conditional.ElseAction;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter; 
@@ -17,7 +19,7 @@ public abstract class createCommand extends ListenerAdapter {
     private String prefix;
     
     public createCommand(String prefix, String cmd, String... args) {
-    	this.prefix = prefix;
+    	this.prefix = "\\"+prefix;
     	this.command = prefix+cmd;
     	if(args.length != 0) {
     	this.aliases = Arrays.asList(args);
@@ -62,7 +64,7 @@ public abstract class createCommand extends ListenerAdapter {
     if(contentRaw.isEmpty()) {
     	return false;
     }
-    	return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;}return isCommand(contentRaw, sT);}).collect(Collectors.toList()).isEmpty();
+    	return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;} return isCommand(contentRaw, sT);}).collect(Collectors.toList()).isEmpty();
     }
     private boolean isCommand(String message, String command) {
     	if(!message.contains(" ")) return message.equalsIgnoreCase(command);
