@@ -19,7 +19,7 @@ public abstract class createCommand extends ListenerAdapter {
     private String prefix;
     
     public createCommand(String prefix, String cmd, String... args) {
-    	this.prefix = "\\"+prefix;
+    	this.prefix = prefix;
     	this.command = prefix+cmd;
     	if(args.length != 0) {
     	this.aliases = Arrays.asList(args);
@@ -37,7 +37,7 @@ public abstract class createCommand extends ListenerAdapter {
       }
     }
    public boolean onConsoleMessageReceived(String content) {
-	   if(isCommand(content, command.replaceFirst(prefix, "")) || getAliases(content, true)) {
+	   if(isCommand(content, command.replaceFirst("\\"+prefix, "")) || getAliases(content, true)) {
 	    contentRaw = content;
 	   isExecutedConsole(Args());
 	   return true;
