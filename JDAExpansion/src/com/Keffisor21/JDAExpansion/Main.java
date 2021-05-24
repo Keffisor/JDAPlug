@@ -36,7 +36,7 @@ public class Main extends ListenerAdapter {
 			Console.logger.info(ConsoleColor.RED_BRIGHT+"The token.txt is empty, please write the token of the bot"+ConsoleColor.RESET);
 			return;
 		}
-       JDA jda = new JDABuilder(AccountType.BOT).setToken(token).build();
+       JDA jda =  JDABuilder.createDefault(token).build();
        Jda = jda;
    	   JDAExpansion.start(jda);  
 	}

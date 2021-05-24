@@ -18,21 +18,17 @@ public class setupCommands {
       public static void loadCommands(JDANMS jda) {
       jda.addEventListener(reloadCommand());
       jda.addEventListener(pluginsCommand());
+      jda.addEventListener(stopCommand());
       }
       
      
       public static createCommand stopCommand() {
-    	  createCommand command = new createCommand("!", "stop") {
+    	  createCommand command = new createCommand("!", "stop", "shutdown") {
 			
 			@Override
 			protected void isExecutedConsole(String[] args) {
-				try {
-				System.exit(0);
-				} catch(Exception e2) {
-					System.exit(0);
-				}
+ 				System.exit(0);	 
 			}
-			
 			@Override
 			protected void isExecuted(String[] args) {
 				MessageReceivedEvent e = eventCommand();
@@ -94,4 +90,5 @@ public class setupCommands {
 		};
 		return command;
       }
+    
 }
