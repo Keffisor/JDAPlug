@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -21,7 +25,7 @@ import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
-public class Plugin {
+public class PluginManager {
 	public static ConcurrentHashMap<String, PluginListener> registedClass = new ConcurrentHashMap<String, PluginListener>();
 	
 	public static void loadPlugins(JDANMS jda) {
@@ -59,10 +63,14 @@ public class Plugin {
 			if(name == null) return;
 			
  			try {
+ 				ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
  				URLClassLoader child = new URLClassLoader (
-				        new URL[] {new URL("file:///"+f2.getAbsolutePath())}, Plugin.class.getClassLoader());
+				new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
+ 				//sync classes
+	        	Thread.currentThread().setContextClassLoader(child);
 				        Class<?> cl = Class.forName(classMain, true, child);
 				        Object o = cl.newInstance();
+				        
 				        if(o instanceof PluginListener) {
 				        	if(registedClass.get(name) != null) {
 				        		Console.logger.info(ConsoleColor.RED_BRIGHT+"There is already a plugin with the same name \""+name+"\""+ConsoleColor.RESET);
@@ -72,7 +80,7 @@ public class Plugin {
 				        	PluginListener lPluginListener = (PluginListener)o;
 				        	registedClass.put(name, lPluginListener);
 				        	jda.addEventListener(lPluginListener);
-				        	Console.logger.info(name+" has been loaded successfully");
+				        	Console.logger.info(ConsoleColor.GREEN+name+" has been loaded successfully"+ConsoleColor.RESET);
 				        	try {
 				        	lPluginListener.onEnable();
 				        	} catch(Exception e) {
@@ -81,11 +89,11 @@ public class Plugin {
 				        }
 				        
 			} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e ) {
-				JDAExpansion.getLogger().info(e.getMessage());
+				e.printStackTrace();
 			}  
 
 			} catch(Exception e) {
-				JDAExpansion.getLogger().info(e.getMessage());
+				e.printStackTrace();
 			}
 		});
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
@@ -137,4 +145,5 @@ public class Plugin {
 		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, nameJar);
 		return configurationObject;
 	}
+
 }

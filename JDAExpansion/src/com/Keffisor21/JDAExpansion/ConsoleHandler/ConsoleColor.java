@@ -1,10 +1,14 @@
 package com.Keffisor21.JDAExpansion.ConsoleHandler;
 
 public enum ConsoleColor {
-    //Color end string, color reset
+	
+	 /*
+	 Enum from https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println/45444716#45444716
+	 All credits of this enums to shakram02
+	 */
+	
     RESET("\033[0m"),
 
-    // Regular Colors. Normal color, no bold, background color etc.
     BLACK("\033[0;30m"),    // BLACK
     RED("\033[0;31m"),      // RED
     GREEN("\033[0;32m"),    // GREEN
@@ -14,7 +18,6 @@ public enum ConsoleColor {
     CYAN("\033[0;36m"),     // CYAN
     WHITE("\033[0;37m"),    // WHITE
 
-    // Bold
     BLACK_BOLD("\033[1;30m"),   // BLACK
     RED_BOLD("\033[1;31m"),     // RED
     GREEN_BOLD("\033[1;32m"),   // GREEN
@@ -24,7 +27,6 @@ public enum ConsoleColor {
     CYAN_BOLD("\033[1;36m"),    // CYAN
     WHITE_BOLD("\033[1;37m"),   // WHITE
 
-    // Underline
     BLACK_UNDERLINED("\033[4;30m"),     // BLACK
     RED_UNDERLINED("\033[4;31m"),       // RED
     GREEN_UNDERLINED("\033[4;32m"),     // GREEN
@@ -34,7 +36,6 @@ public enum ConsoleColor {
     CYAN_UNDERLINED("\033[4;36m"),      // CYAN
     WHITE_UNDERLINED("\033[4;37m"),     // WHITE
 
-    // Background
     BLACK_BACKGROUND("\033[40m"),   // BLACK
     RED_BACKGROUND("\033[41m"),     // RED
     GREEN_BACKGROUND("\033[42m"),   // GREEN
@@ -44,7 +45,6 @@ public enum ConsoleColor {
     CYAN_BACKGROUND("\033[46m"),    // CYAN
     WHITE_BACKGROUND("\033[47m"),   // WHITE
 
-    // High Intensity
     BLACK_BRIGHT("\033[0;90m"),     // BLACK
     RED_BRIGHT("\033[0;91m"),       // RED
     GREEN_BRIGHT("\033[0;92m"),     // GREEN
@@ -54,7 +54,6 @@ public enum ConsoleColor {
     CYAN_BRIGHT("\033[0;96m"),      // CYAN
     WHITE_BRIGHT("\033[0;97m"),     // WHITE
 
-    // Bold High Intensity
     BLACK_BOLD_BRIGHT("\033[1;90m"),    // BLACK
     RED_BOLD_BRIGHT("\033[1;91m"),      // RED
     GREEN_BOLD_BRIGHT("\033[1;92m"),    // GREEN
@@ -64,7 +63,6 @@ public enum ConsoleColor {
     CYAN_BOLD_BRIGHT("\033[1;96m"),     // CYAN
     WHITE_BOLD_BRIGHT("\033[1;97m"),    // WHITE
 
-    // High Intensity backgrounds
     BLACK_BACKGROUND_BRIGHT("\033[0;100m"),     // BLACK
     RED_BACKGROUND_BRIGHT("\033[0;101m"),       // RED
     GREEN_BACKGROUND_BRIGHT("\033[0;102m"),     // GREEN

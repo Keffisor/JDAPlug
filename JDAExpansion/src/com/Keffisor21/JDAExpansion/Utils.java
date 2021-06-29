@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
+
 public class Utils {
 
 	  public static String generateRandomID(int length)
@@ -58,20 +60,32 @@ public class Utils {
 	        }
 	        return list;  
 	  }
-	  public static void clearConsole(){
+	  public static void executeCommand(String windows, String ubuntu){
 		    try {
 
 		     if (System.getProperty("os.name").contains("Windows"))
 		         new ProcessBuilder("cmd", "/c", 
-		                  "cls").inheritIO().start().waitFor();
+		                  windows).inheritIO().start().waitFor();
 		     else
-		         Runtime.getRuntime().exec("clear");
+		         Runtime.getRuntime().exec(ubuntu);
+		         System.out.print("\033[H\033[2J");
+		    } catch (IOException | InterruptedException ex) {}
+		} 
+	  public static void executeCommand(String command){
+		    try {
+
+		     if (System.getProperty("os.name").contains("Windows"))
+		         new ProcessBuilder("cmd", "/c", 
+		                  command).inheritIO().start().waitFor();
+		     else
+		         Runtime.getRuntime().exec(command);
 		         System.out.print("\033[H\033[2J");
 		    } catch (IOException | InterruptedException ex) {}
 		} 
 	  public static String getCharDelete() {
 		    	 return "\033[K";
 	  }
+	  
 	  /*public static void dispachMethod (Object o, String name) {
 		  try {
 			  Class<?> class0 = o.getClass();

@@ -9,35 +9,31 @@ import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 
-public class ConsoleReader {
+public class ConsoleReader extends Thread {
 	private JDANMS jda;
 	
 	public ConsoleReader(JDANMS jda) {
 	  this.jda = jda;
 	}
     
-	public void run() {
-    	new Thread() {
-         	 @Override
-         	 public void run() {
-         		 while(true) {
-         			 try {
-          		 Scanner scanner = new Scanner(System.in);
-          		 System.out.flush();
-         		 String command = scanner.nextLine();
-       			 Console.lines.add("> "+command);
-       			 if(!command.isEmpty()) {
+   @Override
+   public void run() {
+     while(true) {
+        try {
+        Scanner scanner = new Scanner(System.in);
+        System.out.flush();
+        String command = scanner.nextLine();
+        Console.lines.add("> "+command);
+       	if(!command.isEmpty()) {
        			detectCommand(command);
-       			 } else {
-       	  			System.out.print("\033[F");
-       				 Console.logger.info(">");
-       			 }
-       			
+       	 } else {
+       	  		System.out.print("\033[F");
+       			Console.logger.info(">");
+       	 }		
          		 }catch(Exception e2) {}
-         		 } 
-         	 }
-          }.start();
-    }
+        } 
+  }
+         
     private void detectCommand(String command) {
     	if(jda.getEventManager().stream().filter(obj -> {
     		if(obj instanceof ConsoleEvents) {

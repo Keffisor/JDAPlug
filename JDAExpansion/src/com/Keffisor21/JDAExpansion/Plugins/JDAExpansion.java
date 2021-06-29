@@ -29,14 +29,15 @@ public class JDAExpansion {
 		start((Object)shardManager);
 	}
 	private static void start(Object o) {
-		Utils.clearConsole();
+		Utils.executeCommand("cls", "clear");
+		Console.logger.info("Loading libraries...");
 		JDANMS jda = new JDANMS(getJDAType(o));
 		Main.JdaNMS = jda;
- 	    new ConsoleReader(jda).run();
-		Console.logger.info("Loading libraries...");
+		//create thread of reading the console
+ 	    new ConsoleReader(jda).start();
 		setupCommands.loadCommands(jda);
 	    new Console().start();
-	    Plugin.loadPlugins(jda);
+	    PluginManager.loadPlugins(jda);
 	}
 	private static JDAType getJDAType(Object o) {
 		JDAType type = new JDAType();

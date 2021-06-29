@@ -18,13 +18,6 @@ public abstract class PluginListener extends ListenerAdapter {
 	   }
 	   
 	   public String getPluginName() {
-		  /* ConcurrentHashMap<String, PluginListener> plugins = Plugin.registedClass;
-		   for (Map.Entry<String, PluginListener> entry : plugins.entrySet()) {
-			   String name = entry.getKey();
-			   Object object = entry.getValue();
-			   if(o.equals(object)) return name;
-		   }
-		   return "Unknown";^*/
 		   return PluginConfigurationObject.getPluginInformation.get(this).name;
 	   }
 }
