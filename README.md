@@ -30,8 +30,7 @@ createCommand command = new createCommand("!", "principalcommand", "aliase1", "a
 				System.exit(0);
 			}
 			@Override
-			protected void isExecuted(String[] args) {
-				MessageReceivedEvent e = eventCommand();
+			protected void isExecuted(String[] args, CommandEvent e) {
 				if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
 					System.exit(0);
 					} else {
@@ -51,6 +50,9 @@ You will need to setup a plugin.yml on the jar without being on a package
 ```
 name: Name of your plugin
 main: your.main.class.of.your.plugin
+# optional ⬇
+author: Keffisor21
+version: v2.3
 ```
 Now you will have to create a class extending the PluginListener class
 ```
