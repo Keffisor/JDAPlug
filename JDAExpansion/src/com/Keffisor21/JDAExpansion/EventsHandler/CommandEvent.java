@@ -1,5 +1,6 @@
 package com.Keffisor21.JDAExpansion.EventsHandler;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -32,6 +33,10 @@ public class CommandEvent {
 	
 	public ChannelType getChannelType() {
 		return e.getChannelType();
+	}
+	
+	public JDA getJDA() {
+		return e.getJDA();
 	}
 	
 	public Guild getGuild() {
