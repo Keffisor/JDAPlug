@@ -9,13 +9,14 @@ import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
 
 import ch.qos.logback.core.joran.conditional.ElseAction;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter; 
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command; 
 
 public abstract class createCommand extends ListenerAdapter {
     private String command;
     private String contentRaw = "";
     private List<String> aliases = new ArrayList<String>();
-    private MessageReceivedEvent event = null;
+    private CommandEvent event = null;
     private String prefix;
     
     public createCommand(String prefix, String cmd, String... args) {
@@ -32,8 +33,8 @@ public abstract class createCommand extends ListenerAdapter {
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = e;
-     	  isExecuted(Args());
+    	  event = new CommandEvent(e.getJDA(), e.getResponseNumber(), e.getMessage());
+     	  isExecuted(Args(), event);
       }
     }
    public boolean onConsoleMessageReceived(String content) {
@@ -45,7 +46,7 @@ public abstract class createCommand extends ListenerAdapter {
 	   return false;
    }
    
-   protected abstract void isExecuted(String[] args);
+   protected abstract void isExecuted(String[] args, CommandEvent e);
    protected abstract void isExecutedConsole(String[] args);
    
     private String[] Args() {
@@ -54,7 +55,7 @@ public abstract class createCommand extends ListenerAdapter {
     	}
     	return null;
     }
-    public MessageReceivedEvent eventCommand() {
+    public CommandEvent eventCommand() {
     	return this.event;
     }
     private boolean getAliases(String contentRaw, boolean console) {

@@ -12,6 +12,7 @@ import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
 
 public class setupCommands {
 	
@@ -30,8 +31,7 @@ public class setupCommands {
  				System.exit(0);	 
 			}
 			@Override
-			protected void isExecuted(String[] args) {
-				MessageReceivedEvent e = eventCommand();
+			protected void isExecuted(String[] args, CommandEvent e) {
 				if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
 					System.exit(0);
 					} else {
@@ -53,8 +53,7 @@ public class setupCommands {
 			}
 			
 			@Override
-			protected void isExecuted(String[] args) {
-               MessageReceivedEvent e = eventCommand();
+			protected void isExecuted(String[] args, CommandEvent e) {
                if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
                    JDAExpansion.getPluginManager().loadPlugins(JDAExpansion.getJDANMS());
             	   e.getChannel().sendMessage("Plugins reloaded! "+e.getAuthor().getAsMention()).queue();
@@ -78,8 +77,7 @@ public class setupCommands {
 			}
 			
 			@Override
-			protected void isExecuted(String[] args) {
-				MessageReceivedEvent e = eventCommand();
+			protected void isExecuted(String[] args, CommandEvent e) {
 				List<String> plugins = new ArrayList<String>();
 				JDAExpansion.getPluginManager().registedClass.forEach((k, v) -> {
 					plugins.add(k);
