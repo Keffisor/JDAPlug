@@ -33,7 +33,8 @@ public abstract class createCommand extends ListenerAdapter {
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = new CommandEvent(e.getJDA(), e.getResponseNumber(), e.getMessage());
+    	  event = new CommandEvent(e);
+    	  
      	  isExecuted(Args(), event);
       }
     }
