@@ -31,7 +31,7 @@ public abstract class createCommand extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent e) {
     	if(e.getAuthor().isBot()) return;
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
-    	  
+    	   
     	  contentRaw = e.getMessage().getContentRaw();
     	  event = new CommandEvent(e);
     	  
