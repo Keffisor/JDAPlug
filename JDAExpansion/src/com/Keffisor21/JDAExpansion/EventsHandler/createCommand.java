@@ -26,7 +26,7 @@ public abstract class createCommand extends ListenerAdapter {
     	this.aliases = Arrays.asList(args);
     	}
     }
-   
+    
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
     	if(e.getAuthor().isBot()) return;
