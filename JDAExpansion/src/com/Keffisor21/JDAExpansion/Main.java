@@ -31,7 +31,7 @@ public class Main extends ListenerAdapter {
  	public static JDANMS JdaNMS = null;
  	
 	public static void main(String[] args) throws LoginException {
-		
+
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {
 			Utils.executeCommand("cls", "clear");

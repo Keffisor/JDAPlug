@@ -21,6 +21,8 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 public class JDAExpansion {
 	
 	public static List<Object> registratedClassPlugin = new ArrayList<Object>(); 
+	private static PluginManager pluginManager = new PluginManager();
+	public static boolean DEBUG = false;
 	
 	public static void start(JDA jda) {
 		start((Object)jda);
@@ -37,7 +39,7 @@ public class JDAExpansion {
  	    new ConsoleReader(jda).start();
 		setupCommands.loadCommands(jda);
 	    new Console().start();
-	    PluginManager.loadPlugins(jda);
+	    pluginManager.loadPlugins(jda);
 	}
 	private static JDAType getJDAType(Object o) {
 		JDAType type = new JDAType();
@@ -51,6 +53,11 @@ public class JDAExpansion {
 		}
 		return type;
 	}
+	
+	public static PluginManager getPluginManager() {
+		return pluginManager;
+	}
+	
 	public static JDANMS getJDANMS() {
 		return Main.JdaNMS;
 	}

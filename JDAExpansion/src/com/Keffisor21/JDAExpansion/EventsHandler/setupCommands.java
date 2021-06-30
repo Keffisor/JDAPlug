@@ -48,7 +48,7 @@ public class setupCommands {
 			
 			@Override
 			protected void isExecutedConsole(String[] args) {
-				PluginManager.loadPlugins(JDAExpansion.getJDANMS());
+				JDAExpansion.getPluginManager().loadPlugins(JDAExpansion.getJDANMS());
 				Console.logger.info("Plugins recargados");
 			}
 			
@@ -56,7 +56,7 @@ public class setupCommands {
 			protected void isExecuted(String[] args) {
                MessageReceivedEvent e = eventCommand();
                if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
-                   PluginManager.loadPlugins(JDAExpansion.getJDANMS());
+                   JDAExpansion.getPluginManager().loadPlugins(JDAExpansion.getJDANMS());
             	   e.getChannel().sendMessage("Plugins reloaded! "+e.getAuthor().getAsMention()).queue();
                } else {
 					 e.getChannel().sendMessage("You don't have permissions to do this, you must have the administrator permission").queue();  
@@ -71,7 +71,7 @@ public class setupCommands {
 			@Override
 			protected void isExecutedConsole(String[] args) {
 				List<String> plugins = new ArrayList<String>();
-				PluginManager.registedClass.forEach((k, v) -> {
+				JDAExpansion.getPluginManager().registedClass.forEach((k, v) -> {
 					plugins.add(k);
 				});
 				Console.logger.info("Plugins ("+ConsoleColor.GREEN_BRIGHT+plugins.size()+ConsoleColor.RESET+"):"+ConsoleColor.GREEN_BRIGHT+" "+("$!"+plugins.toString()+"$!").replace("$![", "").replace("]$!", "")+ConsoleColor.RESET);
@@ -81,7 +81,7 @@ public class setupCommands {
 			protected void isExecuted(String[] args) {
 				MessageReceivedEvent e = eventCommand();
 				List<String> plugins = new ArrayList<String>();
-				PluginManager.registedClass.forEach((k, v) -> {
+				JDAExpansion.getPluginManager().registedClass.forEach((k, v) -> {
 					plugins.add(k);
 				});
 				e.getChannel().sendMessage("Plugins ("+plugins.size()+"): "+("$!"+plugins.toString()+"$!").replace("$![", "").replace("]$!", "")).queue();

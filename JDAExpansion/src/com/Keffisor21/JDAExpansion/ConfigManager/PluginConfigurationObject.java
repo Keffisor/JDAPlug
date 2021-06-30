@@ -8,10 +8,16 @@ public class PluginConfigurationObject {
 	public String name = null;
     public String main = null;
     public String jarName = null;
-
-	public PluginConfigurationObject(String name, String main, String jarName) {
+    public String author = null;
+    public String description = null;
+    public String version = null;
+    
+	public PluginConfigurationObject(String name, String main, String author, String description, String version, String jarName) {
 		this.name = name;
 		this.main = main;
+		this.author = author;
+		this.description = description;
+		this.version = version;
 		this.jarName = jarName;
 	}
 }

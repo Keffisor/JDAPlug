@@ -5,50 +5,44 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.Keffisor21.Exception.InvalidPluginYML;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 public class PluginManager {
-	public static ConcurrentHashMap<String, PluginListener> registedClass = new ConcurrentHashMap<String, PluginListener>();
+	public ConcurrentHashMap<String, Plugin> registedClass = new ConcurrentHashMap<String, Plugin>();
+	public List<Plugin> loadedPlugins = new ArrayList<Plugin>();
+	public static ClassLoader previusClassLoader = null;
 	
-	public static void loadPlugins(JDANMS jda) {
+	public PluginManager() {
+		
+	}
+	
+	public List<Plugin> getPlugins() {
+		return loadedPlugins;
+	}
+	
+	public void loadPlugins(JDANMS jda) {
 		File f = new File("plugins");
 		if(!f.exists()) {
 			f.mkdir();
 		}
-		if(!registedClass.isEmpty()) {
-			registedClass.forEach((k, v) -> {
-				PluginListener pluginListener = (PluginListener)v;
-				jda.removeEventListener(pluginListener);
-			try {
-				pluginListener.onDisable();
-			} catch(Exception e) {
-        		e.printStackTrace();
-        	}
-			});
-		}
 		//clear data
-		JDAExpansion.registratedClassPlugin.forEach(jda::removeEventListener);
-		registedClass.clear();
-		PluginConfigurationObject.getPluginInformation.clear();
-		JDAExpansion.registratedClassPlugin.clear();
+		unloadPlugins(jda);
 		
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
@@ -56,21 +50,16 @@ public class PluginManager {
 		.forEach(f2 -> {
 			try {
 			PluginConfigurationObject getClassInf = getMainClass(f2);
+			
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
 			
 			if(classMain == null) return;
 			if(name == null) return;
 			
- 			try {
- 				ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
- 				URLClassLoader child = new URLClassLoader (
-				new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
- 				//sync classes
-	        	Thread.currentThread().setContextClassLoader(child);
-				        Class<?> cl = Class.forName(classMain, true, child);
-				        Object o = cl.newInstance();
-				        
+ 		     	try {
+ 				        //instance convert Class<?> to Object
+				        Object o = Class.forName(classMain, true, syncClassPlugin(f2)).newInstance();
 				        if(o instanceof PluginListener) {
 				        	if(registedClass.get(name) != null) {
 				        		Console.logger.info(ConsoleColor.RED_BRIGHT+"There is already a plugin with the same name \""+name+"\""+ConsoleColor.RESET);
@@ -78,33 +67,90 @@ public class PluginManager {
 				        	}
 					        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
 				        	PluginListener lPluginListener = (PluginListener)o;
-				        	registedClass.put(name, lPluginListener);
 				        	jda.addEventListener(lPluginListener);
-				        	Console.logger.info(ConsoleColor.GREEN+name+" has been loaded successfully"+ConsoleColor.RESET);
 				        	try {
 				        	lPluginListener.onEnable();
 				        	} catch(Exception e) {
+				        		if(JDAExpansion.DEBUG) 
 				        		e.printStackTrace();
+				        		else
+				        			JDAExpansion.getLogger().info(e.getMessage());
 				        	}
+				        	//create plugin
+				    		initPlugin(f2, getClassInf, lPluginListener);
+
 				        }
 				        
 			} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e ) {
+				if(JDAExpansion.DEBUG)
 				e.printStackTrace();
 			}  
-
 			} catch(Exception e) {
+				if(JDAExpansion.DEBUG)
 				e.printStackTrace();
 			}
 		});
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
-	public static boolean hasExtensionJar(File f) {
+	
+	private URLClassLoader syncClassPlugin(File f2) throws MalformedURLException {
+		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+		URLClassLoader child = new URLClassLoader (
+		new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
+    	Thread.currentThread().setContextClassLoader(child);
+        return child;
+	}
+	
+	private void initPlugin(File f2, PluginConfigurationObject getClassInf, PluginListener o) {
+		Plugin plugin = new Plugin(f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version);
+		loadedPlugins.add(plugin);
+    	registedClass.put(plugin.getName(), plugin);
+
+		if(plugin.getAuthor() == null)
+    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("%s %s has been loaded successfully", plugin.getName(), plugin.getVersion())+ConsoleColor.RESET);
+		else
+	    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("%s %s by %s has been loaded successfully", plugin.getName(), plugin.getVersion(), plugin.getAuthor())+ConsoleColor.RESET);
+	}
+	
+	public void unloadPlugins(JDANMS jda) {
+		if(!registedClass.isEmpty()) {
+			registedClass.forEach((k, v) -> {
+				Plugin plugin = v;
+				PluginListener pluginListener = (PluginListener)plugin.getMainClass();
+				jda.removeEventListener(pluginListener);
+			try {
+				pluginListener.onDisable();
+				if(plugin.getAuthor() == null)
+			    	Console.logger.info(ConsoleColor.RED_BRIGHT+String.format("%s %s has been unloaded successfully", plugin.getName(), plugin.getVersion())+ConsoleColor.RESET);
+					else
+				 Console.logger.info(ConsoleColor.RED_BRIGHT+String.format("%s %s by %s has been unloaded successfully", plugin.getName(), plugin.getVersion(), plugin.getAuthor())+ConsoleColor.RESET);
+			} catch(Exception e) {
+				if(JDAExpansion.DEBUG)
+        		e.printStackTrace();
+        	}
+			});
+		}
+		JDAExpansion.registratedClassPlugin.forEach(jda::removeEventListener);
+		registedClass.clear();
+		PluginConfigurationObject.getPluginInformation.clear();
+		JDAExpansion.registratedClassPlugin.clear();
+		loadedPlugins.clear();
+		
+		if(previusClassLoader == null) {
+			previusClassLoader = Thread.currentThread().getContextClassLoader();
+		} else {
+			Thread.currentThread().setContextClassLoader(previusClassLoader);
+		}
+		
+	}
+	
+	private boolean hasExtensionJar(File f) {
 		if(f.isDirectory()) return false;
 		String name = f.getName();
 		if(!name.contains(".jar")) return false;
 		return true;
 	}
-	public static PluginConfigurationObject getMainClass(File f) {
+	private PluginConfigurationObject getMainClass(File f) {
 	    try {
 			ZipFile zipFile = new ZipFile("plugins/"+f.getName());
 			ZipEntry zipEntry = zipFile.getEntry("plugin.yml");
@@ -121,8 +167,8 @@ public class PluginManager {
 	        		return result;
 	         
 	        } else {
-	        	Console.logger.info(ConsoleColor.RED_BRIGHT+"The plugin.yml of "+f.getName()+" is invalid"+ConsoleColor.RESET);
-	           return null;
+	        	throw new InvalidPluginYML(null);
+	        	//Console.logger.info(ConsoleColor.RED_BRIGHT+"The plugin.yml of "+f.getName()+" is invalid"+ConsoleColor.RESET);
 	        }
 	        
 	    } catch (IOException e) {
@@ -131,9 +177,13 @@ public class PluginManager {
 		}
 		
 	}
-	public static PluginConfigurationObject extract(String nameJar, Stream<String> list) {
+	private PluginConfigurationObject extract(String nameJar, Stream<String> list) {
  		String name = null;
 		String main = null;
+		String author = null;
+		String description = null;
+		String version = null;
+		
 		for (String string : list.collect(Collectors.toList())) {
 			if(string.contains("main: ")) {
 				main = string.replace("main: ", "");
@@ -141,8 +191,17 @@ public class PluginManager {
 			if(string.contains("name: ")) {
 				name = string.replace("name: ", "");
 			}
+			if(string.contains("author")) {
+				author = string.replace("author: ", "");
+			}
+			if(string.contains("description")) {
+				description = string.replace("description: ", "");
+			}
+			if(string.contains("version")) {
+				version = string.replace("version: ", "");
+			}
 		}
-		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, nameJar);
+		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, author, description, version, nameJar);
 		return configurationObject;
 	}
 
