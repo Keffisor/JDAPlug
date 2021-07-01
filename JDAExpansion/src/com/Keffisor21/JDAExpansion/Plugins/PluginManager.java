@@ -82,7 +82,7 @@ public class PluginManager {
 				    		initPlugin(f2, getClassInf, lPluginListener);
 				        }
  		     		} catch(ClassNotFoundException e) {
- 		     			new MainNotFound(e);
+ 		     			new MainNotFound(name, e);
  		     		}
 				        
 			} catch (MalformedURLException | InstantiationException | IllegalAccessException e ) {
