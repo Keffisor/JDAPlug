@@ -100,8 +100,8 @@ The config file is created into a directory with the name of the plugin in the d
 e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
 config.set("something", 1); //set data to the config
 ```
-<br>
 <h2><strong>Example</strong></h2>
 <p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
+<br>
 <br>
 <br>
