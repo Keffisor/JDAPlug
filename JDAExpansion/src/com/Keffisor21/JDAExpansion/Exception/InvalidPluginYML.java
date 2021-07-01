@@ -1,4 +1,4 @@
-package com.Keffisor21.Exception;
+package com.Keffisor21.JDAExpansion.Exception;
 
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;

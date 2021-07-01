@@ -17,10 +17,11 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.Keffisor21.Exception.InvalidPluginYML;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
+import com.Keffisor21.JDAExpansion.Exception.InvalidPluginYML;
+import com.Keffisor21.JDAExpansion.Exception.MainNotFound;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 public class PluginManager {
@@ -59,6 +60,7 @@ public class PluginManager {
 			
  		     	try {
  				        //instance convert Class<?> to Object
+ 		     		try {
 				        Object o = Class.forName(classMain, true, syncClassPlugin(f2)).newInstance();
 				        if(o instanceof PluginListener) {
 				        	if(registedClass.get(name) != null) {
@@ -78,10 +80,12 @@ public class PluginManager {
 				        	}
 				        	//create plugin
 				    		initPlugin(f2, getClassInf, lPluginListener);
-
 				        }
+ 		     		} catch(ClassNotFoundException e) {
+ 		     			new MainNotFound(e);
+ 		     		}
 				        
-			} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e ) {
+			} catch (MalformedURLException | InstantiationException | IllegalAccessException e ) {
 				if(JDAExpansion.DEBUG)
 				e.printStackTrace();
 			}  
