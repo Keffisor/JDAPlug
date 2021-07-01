@@ -103,3 +103,5 @@ config.set("something", 1); //set data to the config
 <br>
 <br>
 <br>
+<h2><strong>Example</strong></h2>
+<p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
