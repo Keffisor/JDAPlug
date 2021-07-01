@@ -10,6 +10,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +57,6 @@ public class FileConfiguration {
 			Writer writer = new FileWriter(file.getAbsoluteFile());
 			yaml.dump(data, writer);
 	    	writer.close();	
-
 		
 		} catch(IOException e2) { 
 			Console.logger.info(ConsoleColor.RED_BRIGHT+"Error on creating the file "+file.getAbsolutePath()+ConsoleColor.RESET);
@@ -82,8 +83,8 @@ public class FileConfiguration {
 	 }
   }
 	public void set(String x, Object o) {
-	    data.put(x, o);
-	    try {
+	    setElementMap(x, data.get(x), o);
+		try {
 	    Writer writer = new FileWriter(file.getAbsoluteFile());
 	    yaml.dump(data, writer);
 	    writer.close();
@@ -139,7 +140,7 @@ public class FileConfiguration {
 			return false;
 		}
 	}
-	private static Object getElementMap(String req, Object x, Map<String, Object> data) {
+	private Object getElementMap(String req, Object x, Map<String, Object> data) {
 		if(req.contains(".")) {
 			String[] split = (req.replace(".", ":").split(":"));
 			List<String> list = new ArrayList<>(Arrays.asList(split));
@@ -149,12 +150,52 @@ public class FileConfiguration {
 		}
 		return x;
 	}
-	private static Object getLastElement(List<String> each, Object o) {
+	private Object getLastElement(List<String> each, Object o) {
 		if(!(o instanceof Map)) return o;
 		if(each.size() == 0) return o;
 		String S = each.get(0);
 		List<String> nL = new ArrayList<>(each);
 		nL.remove(S);
 		return getLastElement(nL, ((Map)o).get(S));
+	}
+	private void setElementMap(String req, Object x, Object toChange) {
+		if(req.contains(".")) {
+			String[] split = (req.replace(".", ":").split(":"));
+			String s = split[0];
+			LinkedList<Object> linkedList = new LinkedList<>(Arrays.asList(s));
+			List<String> list = new ArrayList<>(Arrays.asList(split));
+			list.remove(s);
+			linkedList = getAllElements(list, linkedList, data.get(split[0]));
+			Object object = ((Map)setNewElementMap(linkedList, data, req, toChange)).get(s);
+		    data.put(s, object);
+		    return;
+		}
+		data.put(req, x);
+	}
+	private Object setNewElementMap(LinkedList<Object> list, Map<String, Object> data, String content, Object toChange) {
+		String[] cnt = (content.replace(".", ":")).split(":");
+		Map<String, Object> d =  null;
+		for(int i = (list.size()-1); i!=0; i--) {
+			Object o = list.get(i);
+			if(d == null) {
+				Map<String, Object> amMap = new HashMap<>();
+				amMap.put(cnt[i-1], toChange);
+				d = amMap;
+				continue;
+			}
+			Map<String, Object> amMap = new HashMap<>();
+			amMap.put(cnt[i-1], d);
+		    d = amMap;
+		}
+		return d;
+	}
+	private LinkedList<Object> getAllElements(List<String> each, LinkedList<Object> comp, Object o) {
+		comp.add(o);
+		if(each.size() == 0) return comp;
+		if(!(o instanceof Map)) return comp;
+		String S = each.get(0);
+		List<String> nL = new ArrayList<>(each);
+		nL.remove(S);
+		return getAllElements(nL, comp, ((Map)o).get(S));
 	}
 }

@@ -41,7 +41,7 @@ public class CommandEvent {
 	
 	public Guild getGuild() {
 		return e.getGuild();
-	} 
+	}
 	
 	public Member getMember() {
 		return e.getMember();
