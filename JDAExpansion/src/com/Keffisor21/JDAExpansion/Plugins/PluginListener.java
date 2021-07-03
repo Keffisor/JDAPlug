@@ -1,5 +1,6 @@
 package com.Keffisor21.JDAExpansion.Plugins;
 
+import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.ConfigManager.FileConfiguration;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 

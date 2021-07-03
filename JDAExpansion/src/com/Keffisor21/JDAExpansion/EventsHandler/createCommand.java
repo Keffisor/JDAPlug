@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
+import com.Keffisor21.JDAExpansion.JDAExpansion;
 
 import ch.qos.logback.core.joran.conditional.ElseAction;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

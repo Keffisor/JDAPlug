@@ -11,6 +11,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
@@ -46,13 +50,11 @@ public class PluginManager {
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
 		
-		fList.stream().filter(s -> hasExtensionJar(s)).collect(Collectors.toList())
-		.forEach(f2 -> {
-			try {
-			PluginConfigurationObject getClassInf = getMainClass(f2);
-			
+		doFilterList(fList).forEach(getClassInf -> {
+			try {			
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
+			File f2 = getClassInf.file;
 			
 			if(classMain == null) return;
 			if(name == null) return;
@@ -94,6 +96,10 @@ public class PluginManager {
 			}
 		});
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
+	}
+	
+	private Stream<PluginConfigurationObject> doFilterList(List<File> fileList) {
+		return fileList.stream().filter(s -> hasExtensionJar(s)).map(this::getMainClass).filter(classInfo -> {return classInfo.main != null && classInfo.name != null;});
 	}
 	
 	private File createPluginsDirectory() {
@@ -172,7 +178,7 @@ public class PluginManager {
 			
 	        InputStream is = zipFile.getInputStream(zipEntry);
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-	        PluginConfigurationObject result = extract(f.getName(), reader.lines());
+	        PluginConfigurationObject result = extract(f, reader.lines());
 	        
 	        if(result.main != null && result.name != null) {
 	        		return result;
@@ -189,12 +195,9 @@ public class PluginManager {
 		}
 		
 	}
-	private PluginConfigurationObject extract(String nameJar, Stream<String> list) {
- 		String name = null;
-		String main = null;
-		String author = null;
-		String description = null;
-		String version = null;
+	private PluginConfigurationObject extract(File f, Stream<String> list) {
+		
+ 		String name = null, main = null, author = null, description = null, version = null;
 		List<String> depends = null;
 		
 		for (String string : list.collect(Collectors.toList())) {
@@ -215,18 +218,15 @@ public class PluginManager {
 			}
 			if(string.contains("depend")) {
 				string = string.replace(" ", "").replace("[", "").replace("]", "");
-				
 				if(string.contains(",")) {
 				String[] split = string.split(",");
 				 depends = Arrays.asList(split);
 				} else {
 					depends = Arrays.asList(string);
 				}
-				
 			}
 		}
-		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, author, description, version, depends, nameJar);
-		return configurationObject;
+		return new PluginConfigurationObject(f, name, main, author, description, version, depends);
 	}
 
 }

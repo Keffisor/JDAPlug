@@ -15,7 +15,6 @@ import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleReader;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
-import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
 import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
 
 import net.dv8tion.jda.api.AccountType;

@@ -19,9 +19,9 @@ import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.Plugins.JDAExpansion;
 import com.google.api.Files;
 
 public class FileConfiguration {

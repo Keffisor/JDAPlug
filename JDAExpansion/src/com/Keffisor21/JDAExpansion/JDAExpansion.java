@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Plugins;
+package com.Keffisor21.JDAExpansion;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,13 +6,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.Keffisor21.JDAExpansion.Main;
-import com.Keffisor21.JDAExpansion.Utils;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleReader;
 import com.Keffisor21.JDAExpansion.EventsHandler.setupCommands;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.NMS.JDAType;
+import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
