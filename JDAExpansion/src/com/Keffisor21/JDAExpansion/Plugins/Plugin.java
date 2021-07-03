@@ -1,6 +1,7 @@
 package com.Keffisor21.JDAExpansion.Plugins;
 
 import java.nio.file.Path;
+import java.util.List;
 
 public class Plugin {
     
@@ -10,14 +11,16 @@ public class Plugin {
 	private String author = null;
 	private String description = null;
 	private String version = null;
+	private List<String> depends = null;
 	
-	public Plugin(String path, String name, PluginListener main, String author, String description, String version) {
+	public Plugin(String path, String name, PluginListener main, String author, String description, String version, List<String> depends) {
     	this.path = path;
     	this.name = name;
     	this.main = main;
     	this.author = author;
     	this.description = description;
     	this.version = version;
+    	this.depends = depends;
     }
 	
 	public String getName() {
@@ -42,6 +45,10 @@ public class Plugin {
 	
 	public String getVersion() {
 		if(version == null) return "v1.0";
-	  return version;	
-	}	
+	    return version;	
+	}
+	
+	public List<String> getDependencies() {
+		return depends;
+	}
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -33,20 +34,18 @@ public class PluginManager {
 		
 	}
 	
-	public List<Plugin> getPlugins() {
+	public List<Plugin> getInstalledPlugins() {
 		return loadedPlugins;
 	}
 	
 	public void loadPlugins(JDANMS jda) {
-		File f = new File("plugins");
-		if(!f.exists()) {
-			f.mkdir();
-		}
+		File f = createPluginsDirectory();
 		//clear data
 		unloadPlugins(jda);
 		
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
+		
 		fList.stream().filter(s -> hasExtensionJar(s)).collect(Collectors.toList())
 		.forEach(f2 -> {
 			try {
@@ -59,8 +58,8 @@ public class PluginManager {
 			if(name == null) return;
 			
  		     	try {
- 				        //instance convert Class<?> to Object
  		     		try {
+ 				        //instance convert Class<?> to Object
 				        Object o = Class.forName(classMain, true, syncClassPlugin(f2)).newInstance();
 				        if(o instanceof PluginListener) {
 				        	if(registedClass.get(name) != null) {
@@ -82,7 +81,7 @@ public class PluginManager {
 				    		initPlugin(f2, getClassInf, lPluginListener);
 				        }
  		     		} catch(ClassNotFoundException e) {
- 		     			new MainNotFound(name, e);
+ 		     			new MainNotFound(name, e).printStackTrace();
  		     		}
 				        
 			} catch (MalformedURLException | InstantiationException | IllegalAccessException e ) {
@@ -97,6 +96,14 @@ public class PluginManager {
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
 	
+	private File createPluginsDirectory() {
+		File f = new File("plugins");
+		if(!f.exists()) {
+			f.mkdir();
+		}
+		return f;
+	}
+	
 	private URLClassLoader syncClassPlugin(File f2) throws MalformedURLException {
 		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
 		URLClassLoader child = new URLClassLoader (
@@ -106,7 +113,7 @@ public class PluginManager {
 	}
 	
 	private void initPlugin(File f2, PluginConfigurationObject getClassInf, PluginListener o) {
-		Plugin plugin = new Plugin(f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version);
+		Plugin plugin = new Plugin(f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version, getClassInf.depends);
 		loadedPlugins.add(plugin);
     	registedClass.put(plugin.getName(), plugin);
 
@@ -171,7 +178,8 @@ public class PluginManager {
 	        		return result;
 	         
 	        } else {
-	        	throw new InvalidPluginYML(null);
+                new InvalidPluginYML(null).printStackTrace();
+                return null;
 	        	//Console.logger.info(ConsoleColor.RED_BRIGHT+"The plugin.yml of "+f.getName()+" is invalid"+ConsoleColor.RESET);
 	        }
 	        
@@ -187,6 +195,7 @@ public class PluginManager {
 		String author = null;
 		String description = null;
 		String version = null;
+		List<String> depends = null;
 		
 		for (String string : list.collect(Collectors.toList())) {
 			if(string.contains("main: ")) {
@@ -204,8 +213,19 @@ public class PluginManager {
 			if(string.contains("version")) {
 				version = string.replace("version: ", "");
 			}
+			if(string.contains("depend")) {
+				string = string.replace(" ", "").replace("[", "").replace("]", "");
+				
+				if(string.contains(",")) {
+				String[] split = string.split(",");
+				 depends = Arrays.asList(split);
+				} else {
+					depends = Arrays.asList(string);
+				}
+				
+			}
 		}
-		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, author, description, version, nameJar);
+		PluginConfigurationObject configurationObject = new PluginConfigurationObject(name, main, author, description, version, depends, nameJar);
 		return configurationObject;
 	}
 
