@@ -46,7 +46,7 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 		if(msg.startsWith("> ") || msg.equals(">")) { 
 			System.out.println(msg);
 		} else {
-			System.out.println("[INFO]: "+msg);
+			System.out.println(String.format("[%s INFO]: %s", Utils.getTime(), msg));
 		}	
 		System.out.print("> ");
 	}

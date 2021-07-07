@@ -3,17 +3,14 @@ package com.Keffisor21.JDAExpansion;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
-import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 
 public class Utils {
 
@@ -84,6 +81,9 @@ public class Utils {
 		} 
 	  public static String getCharDelete() {
 		    	 return "\033[K";
+	  }
+	  public static String getTime() {
+		  return new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 	  }
 	  
 	  /*public static void dispachMethod (Object o, String name) {

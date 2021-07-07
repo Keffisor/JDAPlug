@@ -6,59 +6,71 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
+import com.Keffisor21.JDAExpansion.Events.Command;
+import com.Keffisor21.JDAExpansion.Events.CommandSender;
+import com.Keffisor21.JDAExpansion.Events.ConsoleCommand;
+import com.Keffisor21.JDAExpansion.Events.SlashCommand;
 
-import ch.qos.logback.core.joran.conditional.ElseAction;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.Command; 
+import net.dv8tion.jda.api.interactions.commands.build.CommandData; 
 
 public abstract class createCommand extends ListenerAdapter {
     private String command;
     private String contentRaw = "";
     private List<String> aliases = new ArrayList<String>();
-    private CommandEvent event = null;
+    private Command event = null;
     private String prefix;
     
-    public createCommand(String prefix, String cmd, String... args) {
+    public createCommand(CommandData commandData, String prefix, String cmd, String... args) {
     	this.prefix = prefix;
     	this.command = prefix+cmd;
     	if(args.length != 0) {
     	this.aliases = Arrays.asList(args);
     	}
+    	if(commandData != null) {
+    		JDAExpansion.getJDA().updateCommands().addCommands(commandData).queue();
+    	}
     }
    
+    //possible events
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
     	if(e.getAuthor().isBot()) return;
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = new CommandEvent(e);
-    	  
-     	  isExecuted(Args(), event);
+    	  event = new Command(e);
+     	  isExecuted(getArgs(), event);
       }
+    }
+    @Override
+    public void onSlashCommand(SlashCommandEvent e) {
+    	if(e.getUser().isBot()) return;
+    	if(e.getName().equals(command.replaceFirst("\\"+prefix, "")) || aliases.contains(command.replaceFirst("\\"+prefix, ""))) {
+    	   String[] args = e.getCommandPath().split("/");
+    	   isExecuted(args, new SlashCommand(e));
+    	}
     }
    public boolean onConsoleMessageReceived(String content) {
 	   if(isCommand(content, command.replaceFirst("\\"+prefix, "")) || getAliases(content, true)) {
 	    contentRaw = content;
-	   isExecutedConsole(Args());
+	   isExecuted(getArgs(), new ConsoleCommand());
 	   return true;
 	      }
 	   return false;
    }
+   //
+   protected abstract void isExecuted(String[] args, CommandSender sender);   
    
-   protected abstract void isExecuted(String[] args, CommandEvent e);
-   protected abstract void isExecutedConsole(String[] args);
-   
-    private String[] Args() {
+    private String[] getArgs() {
     	if(contentRaw.replace("  ", " ").split(" ").length != 0) {
     		return contentRaw.replace("  ", " ").split(" ");
     	}
     	return null;
     }
-    public CommandEvent eventCommand() {
-    	return this.event;
-    }
+    
     private boolean getAliases(String contentRaw, boolean console) {
     if(this.aliases.isEmpty()) {
     	return false;

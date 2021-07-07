@@ -23,5 +23,14 @@ public class PluginConfigurationObject {
 		this.version = version;
 		this.file = file;
 		this.depends = depends;
+	}	
+	public String getName() {
+		return name;
+	}
+	public List<String> getDependencies() {
+		return depends;
+	}
+	public PluginConfigurationObject getClazz() {
+		return this;
 	}
 }

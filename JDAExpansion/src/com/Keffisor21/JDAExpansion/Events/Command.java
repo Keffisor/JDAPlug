@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.EventsHandler;
+package com.Keffisor21.JDAExpansion.Events;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -11,10 +11,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class CommandEvent {
+public class Command implements CommandSender {
 	private MessageReceivedEvent e;
 	
-	public CommandEvent(MessageReceivedEvent e) {
+	public Command(MessageReceivedEvent e) {
 		this.e = e;
 		
 	}
@@ -78,5 +78,8 @@ public class CommandEvent {
 	public boolean isWebhookMessage() {
 		return e.isWebhookMessage();
 	}
-	
+
+	public void sendMessage(String message) {
+		e.getChannel().sendMessage(message).queue();
+	}
 }

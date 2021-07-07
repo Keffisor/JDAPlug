@@ -11,11 +11,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -50,7 +53,7 @@ public class PluginManager {
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
 		
-		doFilterList(fList).forEach(getClassInf -> {
+		getObjectsWithSync(doFilterList(fList)).forEach((o, getClassInf) -> {
 			try {			
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
@@ -59,10 +62,6 @@ public class PluginManager {
 			if(classMain == null) return;
 			if(name == null) return;
 			
- 		     	try {
- 		     		try {
- 				        //instance convert Class<?> to Object
-				        Object o = Class.forName(classMain, true, syncClassPlugin(f2)).newInstance();
 				        if(o instanceof PluginListener) {
 				        	if(registedClass.get(name) != null) {
 				        		Console.logger.info(ConsoleColor.RED_BRIGHT+"There is already a plugin with the same name \""+name+"\""+ConsoleColor.RESET);
@@ -73,7 +72,7 @@ public class PluginManager {
 				        	jda.addEventListener(lPluginListener);
 				        	try {
 				        	lPluginListener.onEnable();
-				        	} catch(Exception e) {
+				        	} catch(Exception | NoClassDefFoundError e) {
 				        		if(JDAExpansion.DEBUG) 
 				        		e.printStackTrace();
 				        		else
@@ -82,24 +81,18 @@ public class PluginManager {
 				        	//create plugin
 				    		initPlugin(f2, getClassInf, lPluginListener);
 				        }
- 		     		} catch(ClassNotFoundException e) {
- 		     			new MainNotFound(name, e).printStackTrace();
- 		     		}
-				        
-			} catch (MalformedURLException | InstantiationException | IllegalAccessException e ) {
-				if(JDAExpansion.DEBUG)
-				e.printStackTrace();
-			}  
+ 		      
 			} catch(Exception e) {
 				if(JDAExpansion.DEBUG)
 				e.printStackTrace();
 			}
 		});
+
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
 	
 	private Stream<PluginConfigurationObject> doFilterList(List<File> fileList) {
-		return fileList.stream().filter(s -> hasExtensionJar(s)).map(this::getMainClass).filter(classInfo -> {return classInfo.main != null && classInfo.name != null;});
+		return fileList.stream().filter(this::hasExtensionJar).map(this::getMainClass).filter(classInfo -> classInfo.main != null && classInfo.name != null);
 	}
 	
 	private File createPluginsDirectory() {
@@ -110,10 +103,48 @@ public class PluginManager {
 		return f;
 	}
 	
+	private Stream<PluginConfigurationObject> orderPluginsFilter (Stream<PluginConfigurationObject> classInfo) {
+		
+		LinkedList<PluginConfigurationObject> filtered = new LinkedList<>(classInfo.filter(r -> r.depends != null).collect(Collectors.toList()));
+		
+		Stream<PluginConfigurationObject> collec = classInfo.filter(r -> r.depends != null);
+		HashMap<String, PluginConfigurationObject> map = new HashMap<String, PluginConfigurationObject>(collec.collect(Collectors.toMap(PluginConfigurationObject::getName, PluginConfigurationObject::getClazz)));
+		
+		collec.map(PluginConfigurationObject::getDependencies).forEach(d -> {
+				PluginConfigurationObject plugin = map.get(d);
+				if(plugin == null || filtered.contains(plugin)) {
+					return;
+				}
+				 filtered.add(plugin);
+			});
+		filtered.addAll(collec.filter(r -> !filtered.contains(r)).collect(Collectors.toList()));
+		
+		return filtered.stream();
+	}
+	
+	private HashMap<Object, PluginConfigurationObject> getObjectsWithSync(Stream<PluginConfigurationObject> stream) {
+		return (HashMap)stream.collect(Collectors.toMap(this::getObject, PluginConfigurationObject::getClazz));
+	}
+	
+	private Object getObject(PluginConfigurationObject pluginInfo) {
+	try {
+         try {
+			return Class.forName(pluginInfo.main, true, syncClassPlugin(pluginInfo.file)).newInstance();
+		} catch (InstantiationException | IllegalAccessException  | MalformedURLException e) {
+			if(JDAExpansion.DEBUG)
+			e.printStackTrace();
+			else 
+				Console.logger.info(e.getMessage());
+		}
+		} catch(ClassNotFoundException e) {
+  			new MainNotFound(pluginInfo.name, e).printStackTrace();
+		}
+	return null;
+	}
+	
 	private URLClassLoader syncClassPlugin(File f2) throws MalformedURLException {
 		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
-		URLClassLoader child = new URLClassLoader (
-		new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
+		URLClassLoader child = new URLClassLoader (new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
     	Thread.currentThread().setContextClassLoader(child);
         return child;
 	}

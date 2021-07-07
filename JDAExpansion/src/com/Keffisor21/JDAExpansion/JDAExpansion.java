@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.Keffisor21.JDAExpansion.Commands.setupCommands;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleReader;
-import com.Keffisor21.JDAExpansion.EventsHandler.setupCommands;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.NMS.JDAType;
 import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
