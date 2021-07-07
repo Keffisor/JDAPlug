@@ -75,6 +75,13 @@ public class JDAExpansion {
 			registratedClassPlugin.add(o);
 		}
 	}
+	public static void registerEvents(Object... o) {
+		for(Object o2 : o) {
+			if(o2 instanceof ListenerAdapter) {
+				registratedClassPlugin.add(o2);
+			}
+		}
+	}
    public static String getAbsolutePath() {
 	   return new File("").getAbsolutePath();
    }   
