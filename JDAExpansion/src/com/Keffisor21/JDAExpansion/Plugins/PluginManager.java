@@ -69,7 +69,7 @@ public class PluginManager {
 				        	}
 					        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
 				        	PluginListener lPluginListener = (PluginListener)o;
-				        	Console.logger.info(String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.version));
+				        	Console.logger.info(String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.getVersion()));
 				        	try {
 				        	lPluginListener.onEnable();
 				        	jda.addEventListener(lPluginListener);
