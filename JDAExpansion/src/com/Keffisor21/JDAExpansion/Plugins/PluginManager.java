@@ -69,14 +69,17 @@ public class PluginManager {
 				        	}
 					        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
 				        	PluginListener lPluginListener = (PluginListener)o;
-				        	jda.addEventListener(lPluginListener);
+				        	Console.logger.info(String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.version));
 				        	try {
 				        	lPluginListener.onEnable();
-				        	} catch(Exception | NoClassDefFoundError e) {
+				        	jda.addEventListener(lPluginListener);
+				        	} catch(Exception | NoClassDefFoundError | NoSuchMethodError e) {
 				        		if(JDAExpansion.DEBUG) 
 				        		e.printStackTrace();
 				        		else
 				        			JDAExpansion.getLogger().info(e.getMessage());
+				        		
+				        		//return;
 				        	}
 				        	//create plugin
 				    		initPlugin(f2, getClassInf, lPluginListener);
@@ -85,6 +88,8 @@ public class PluginManager {
 			} catch(Exception e) {
 				if(JDAExpansion.DEBUG)
 				e.printStackTrace();
+				else
+					JDAExpansion.getLogger().info(e.getMessage());
 			}
 		});
 
@@ -155,9 +160,9 @@ public class PluginManager {
     	registedClass.put(plugin.getName(), plugin);
 
 		if(plugin.getAuthor() == null)
-    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("%s %s has been loaded successfully", plugin.getName(), plugin.getVersion())+ConsoleColor.RESET);
+    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("[%s] %s %s has been loaded successfully", plugin.getName(), plugin.getName(), plugin.getVersion())+ConsoleColor.RESET);
 		else
-	    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("%s %s by %s has been loaded successfully", plugin.getName(), plugin.getVersion(), plugin.getAuthor())+ConsoleColor.RESET);
+	    	Console.logger.info(ConsoleColor.GREEN_BRIGHT+String.format("[%s] %s %s by %s has been loaded successfully", plugin.getName(), plugin.getName(), plugin.getVersion(), plugin.getAuthor())+ConsoleColor.RESET);
 	}
 	
 	public void unloadPlugins(JDANMS jda) {

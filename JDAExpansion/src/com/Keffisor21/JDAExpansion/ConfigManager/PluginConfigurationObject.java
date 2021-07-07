@@ -12,7 +12,7 @@ public class PluginConfigurationObject {
     public File file = null;
     public String author = null;
     public String description = null;
-    public String version = null;
+    public String version = "v1.0";
     public List<String> depends = null;
     
 	public PluginConfigurationObject(File file, String name, String main, String author, String description, String version, List<String> depends) {
