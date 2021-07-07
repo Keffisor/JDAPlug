@@ -23,21 +23,23 @@ public static void main(String[] args) throws LoginException {
 
 ### Creating commands for Discord and the Console
 ```
-createCommand command = new createCommand("!", "principalcommand", "aliase1", "anotheraliase") {
-			@Override
-			protected void isExecutedConsole(String[] args) {
-			        JDAExtension.getLogger().info(ConsoleColor.RED+"Exiting the bot..."+ConsoleColor.RESET);
-				System.exit(0);
-			}
-			@Override
-			protected void isExecuted(String[] args, CommandEvent e) {
-				if(e.getMember().getPermissions().contains(Permission.ADMINISTRATOR)) {
-					System.exit(0);
-					} else {
-				  e.getChannel().sendMessage("No permission").queue();  
-					}
+createCommand command = new createCommand(new CommandData("principalcommand", "Some description for slash command"), "!", "principalcommand", "aliase1", "anotheraliase") {
+	@Override
+	protected void isExecuted(String[] args, CommandSender sender) {
+		if(sender instanceof ConsoleCommand) {
+			ConsoleCommand e = (ConsoleCommand)sender;
+			JDAExpansion.getLogger().info("Hey! This is just a test command for the console :D");
+		}
+		if(sender instanceof Command) {
+			Command e = (Command)sender;
+			e.getChannel().sendMessage("Hey! This is just a test command without slash commands :D").queue();
+		}
+		if(sender instanceof SlashCommand) {
+			SlashCommand e = (SlashCommand)sender;
+			e.reply("Hey! This is just a test command by slash commands :D").queue();
+		}
+		sender.sendMessage("This message will sent without caring about the type");
 	}
-	
      }; 
 }
 ```
@@ -74,6 +76,7 @@ In case that you need to register a class with events you must to call this func
         @Override
 	protected void onEnable() {
 		JDAExpansion.registerEvent(new EventClass());
+		JDAExpansion.registerEvents(new Event1(), new Event2(), new Event3());
 	}
 ```
 After compiling the plugin, you have to move the jar into the plugins folder created by the Bot. You can reload the plugins with the command !reload o !rl and you can see the plugins installed with !plugins or !pl.
