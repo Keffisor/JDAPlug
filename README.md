@@ -105,6 +105,7 @@ config.set("something", 1); //set data to the config
 ```
 <h2><strong>Screenshots</strong></h2>
 <img src="https://i.imgur.com/2H7QF8o.png" alt="Console of JDAExpansion">
+<img src="https://i.imgur.com/3nJ8tBS.png" alt="Files of the JDAExpansion">
 <br>
 <h2><strong>Example</strong></h2>
 <p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
