@@ -1,6 +1,7 @@
 package com.Keffisor21.JDAExpansion.ConsoleHandler;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,8 @@ import jline.console.ConsoleReader;
 public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILoggingEvent> {
 	public static List<String> lines = new ArrayList<String>();
     public static Logger logger = LoggerFactory.getLogger(Console.class);
-    private final ConsoleReader reader;
-    
-    public Console(ConsoleReader reader) {
-    	this.reader = reader;
-    }
+    public static ConsoleReader reader = null;
+    public static PrintStream previousPrintStream = null;
     
 	@Override
 	protected void append(ILoggingEvent e) {
@@ -49,13 +47,13 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 			JDAExpansion.getLogsManager().writeLog(msg);
 		} else {
 			String format = String.format("[%s INFO]: %s", Utils.getTime(), msg);
-			System.out.println(format);
+			Console.previousPrintStream.println(format);
 			JDAExpansion.getLogsManager().writeLog(format);
 		}	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.print("> ");
+		Console.previousPrintStream.print("> ");
 	}
 	
 	public static void info(ConsoleColor color, String msg) {

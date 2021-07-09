@@ -12,6 +12,7 @@ import com.Keffisor21.JDAExpansion.Commands.setupCommands;
 import com.Keffisor21.JDAExpansion.ConfigManager.FileConfiguration;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleInterceptorErr;
+import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleInterceptorOut;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ThreadConsoleReader;
 import com.Keffisor21.JDAExpansion.Logs.LogsManager;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
@@ -37,24 +38,25 @@ public class JDAExpansion {
 		start((Object)shardManager);
 	}
 	private static void start(Object o) {
-		ConsoleReader reader = getConsoleReader();
-		System.setErr(new ConsoleInterceptorErr(System.err));
+		setConsoleConfig();
 		Console.logger.info("Loading libraries...");
 		JDANMS jda = new JDANMS(getJDAType(o));
 		Main.JdaNMS = jda;
 		//create thread of reading the console
- 	    new ThreadConsoleReader(jda, reader).start();
+ 	    new ThreadConsoleReader(jda, Console.reader).start();
 		setupCommands.loadCommands(jda);
-	    new Console(reader).start();
+	    new Console().start();
 	    pluginManager.loadPlugins(jda);
 	}
 	
-	private static ConsoleReader getConsoleReader() {
+	private static void setConsoleConfig() {
+		System.setErr(new ConsoleInterceptorErr(System.err));
+		Console.previousPrintStream = System.out;
+		System.setOut(new ConsoleInterceptorOut(System.out));
 		try {
-			return new ConsoleReader();
+			Console.reader =  new ConsoleReader();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
 	}
 	

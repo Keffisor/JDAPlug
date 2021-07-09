@@ -17,7 +17,7 @@ public class ConsoleInterceptorOut extends PrintStream
         @Override
         public void println(String s)
         {
-        	super.print("["+Utils.getTime()+"INFO]: "+s+"\n");
+        	JDAExpansion.getLogger().info(s);
         }
         
         @Override
