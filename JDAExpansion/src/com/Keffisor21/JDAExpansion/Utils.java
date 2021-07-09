@@ -92,11 +92,7 @@ public class Utils {
 		  return new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 	  }
 	  public static void printStackTrace(Throwable e) {
-		String format = String.format("[%s INFO]: ", Utils.getTime());
-		Console.removeLine("> ");
-		System.out.print(format);
 		e.printStackTrace();
-		JDAExpansion.getLogger().info(format+e.getMessage());
 	  }
 	  
 	  public static String convertToColors(ConsoleColor color, String msg) {

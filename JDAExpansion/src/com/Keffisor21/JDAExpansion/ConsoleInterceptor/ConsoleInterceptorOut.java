@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.ConsoleHandler;
+package com.Keffisor21.JDAExpansion.ConsoleInterceptor;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -25,5 +25,25 @@ public class ConsoleInterceptorOut extends PrintStream
         {
         	JDAExpansion.getLogger().info(s);
        	}
+        
+        @Override
+        public void println(Object o) {
+        	JDAExpansion.getLogger().info(String.valueOf(o));
+        }
+        
+        @Override
+        public void print(Object o) {
+        	JDAExpansion.getLogger().info(String.valueOf(o));
+        }
+        
+        @Override
+        public void println(int i) {
+        	JDAExpansion.getLogger().info(String.valueOf(i));
+        }
+        
+        @Override
+        public void print(int i) {
+        	JDAExpansion.getLogger().info(String.valueOf(i));
+        }
         
     }

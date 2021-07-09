@@ -65,7 +65,7 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 	}
 	
 	
-	public static void removeLine(String text) {
+	/*public static void removeLine(String text) {
 		String[] split = text.split("\n");
 		if(split.length == 1) {
   			System.out.print("\033[F");
@@ -79,5 +79,5 @@ public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILog
 	        System.out.print("\033[F");
 		}
 		System.out.print(Utils.getCharDelete());
-  }
+  }*/
 }

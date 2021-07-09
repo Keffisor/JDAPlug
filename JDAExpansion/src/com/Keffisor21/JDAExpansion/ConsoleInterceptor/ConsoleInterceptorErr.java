@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.ConsoleHandler;
+package com.Keffisor21.JDAExpansion.ConsoleInterceptor;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
