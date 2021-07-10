@@ -33,6 +33,9 @@ public class PluginConfigurationObject {
 	public PluginConfigurationObject getClazz() {
 		return this;
 	}
+	public File getFile() {
+		return file;
+	}
 	public String getVersion() {
 		if(version == null) return "v1.0";
 		return version;

@@ -5,20 +5,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -32,6 +30,7 @@ import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.Exception.InvalidPluginYML;
 import com.Keffisor21.JDAExpansion.Exception.MainNotFound;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
+import com.Keffisor21.JDAExpansion.Reflection.ClassPathLoader;
 
 public class PluginManager {
 	public ConcurrentHashMap<String, Plugin> registedClass = new ConcurrentHashMap<String, Plugin>();
@@ -53,9 +52,11 @@ public class PluginManager {
 		
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
+				 
 		
 		getObjectsWithSync(doFilterList(fList)).forEach((o, getClassInf) -> {
-			try {			
+			try {
+			
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
 			File f2 = getClassInf.file;
@@ -89,13 +90,13 @@ public class PluginManager {
 		});
 		
 		//make the sync again for debug
-		getInstalledPlugins().stream().map(Plugin::getFile).forEach(t -> {
+		/*getInstalledPlugins().stream().map(Plugin::getFile).forEach(t -> {
 			try {
 				syncClassPlugin(t);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
-		});
+		});*/
 		
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
@@ -151,9 +152,17 @@ public class PluginManager {
 	private URLClassLoader syncClassPlugin(File f2) throws MalformedURLException {
 		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
 		URLClassLoader child = new URLClassLoader (new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
-    	Thread.currentThread().setContextClassLoader(child);
+		//start sync class
+		ClassPathLoader classPathLoader = new ClassPathLoader(f2.toURL());
+		classPathLoader.addURL();
+		return child;
+	}
+	
+	private URLClassLoader getSync(File f2, ClassLoader currentThreadClassLoader) throws MalformedURLException {
+		URLClassLoader child = new URLClassLoader (new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
         return child;
 	}
+	
 	
 	private void initPlugin(File f2, PluginConfigurationObject getClassInf, PluginListener o) {
 		Plugin plugin = new Plugin(f2, f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version, getClassInf.depends);
@@ -183,6 +192,10 @@ public class PluginManager {
         	}
 			});
 		}
+		
+		//clear sync
+		ClassPathLoader.clearPaths();
+		ClassPathLoader.clearURLs();
 		JDAExpansion.registratedClassPlugin.forEach(jda::removeEventListener);
 		registedClass.clear();
 		PluginConfigurationObject.getPluginInformation.clear();
