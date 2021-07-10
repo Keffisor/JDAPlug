@@ -87,7 +87,16 @@ public class PluginManager {
 				Utils.printStackTrace(e);
 			}
 		});
-
+		
+		//make the sync again for debug
+		getInstalledPlugins().stream().map(Plugin::getFile).forEach(t -> {
+			try {
+				syncClassPlugin(t);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		});
+		
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
 	
@@ -147,7 +156,7 @@ public class PluginManager {
 	}
 	
 	private void initPlugin(File f2, PluginConfigurationObject getClassInf, PluginListener o) {
-		Plugin plugin = new Plugin(f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version, getClassInf.depends);
+		Plugin plugin = new Plugin(f2, f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version, getClassInf.depends);
 		loadedPlugins.add(plugin);
     	registedClass.put(plugin.getName(), plugin);
 

@@ -1,10 +1,12 @@
 package com.Keffisor21.JDAExpansion.Plugins;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
 public class Plugin {
-    
+
+	private File file = null;
 	private String path;
 	private String name;
 	private PluginListener main;
@@ -13,8 +15,9 @@ public class Plugin {
 	private String version = null;
 	private List<String> depends = null;
 	
-	public Plugin(String path, String name, PluginListener main, String author, String description, String version, List<String> depends) {
-    	this.path = path;
+	public Plugin(File file, String path, String name, PluginListener main, String author, String description, String version, List<String> depends) {
+    	this.file = file;
+		this.path = path;
     	this.name = name;
     	this.main = main;
     	this.author = author;
@@ -50,5 +53,9 @@ public class Plugin {
 	
 	public List<String> getDependencies() {
 		return depends;
+	}
+	
+	public File getFile() {
+		return file;
 	}
 }

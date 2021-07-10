@@ -15,7 +15,6 @@ import com.Keffisor21.JDAExpansion.Events.ConsoleCommand;
 import com.Keffisor21.JDAExpansion.Events.SlashCommand;
 import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -32,6 +31,10 @@ public class PluginsCommand extends createCommand {
 		if(sender instanceof ConsoleCommand && Utils.hasSupportColors()) {
 			JDAExpansion.getLogger().info("Plugins ("+ConsoleColor.GREEN_BRIGHT+plugins.size()+ConsoleColor.RESET+"): "
 				+ConsoleColor.GREEN_BRIGHT+plugins.toString().replace("[", "").replace("]", "")+ConsoleColor.RESET);
+			return;
+		}
+		if(JDAExpansion.getConfiguration().getBoolean("HidePlugins")) {
+			sendMessage(sender, "You don't have permission to do this "+sender.getMember().getAsMention());
 			return;
 		}
 		sendMessage(sender, "Plugins ("+plugins.size()+"): "+plugins.toString().replace("[", "").replace("]", ""));
