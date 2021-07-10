@@ -194,8 +194,14 @@ public class PluginManager {
 		}
 		
 		//clear sync
+		try {
 		ClassPathLoader.clearPaths();
 		ClassPathLoader.clearURLs();
+
+		} catch(Throwable e) {
+			e.printStackTrace();
+		}
+		
 		JDAExpansion.registratedClassPlugin.forEach(jda::removeEventListener);
 		registedClass.clear();
 		PluginConfigurationObject.getPluginInformation.clear();
