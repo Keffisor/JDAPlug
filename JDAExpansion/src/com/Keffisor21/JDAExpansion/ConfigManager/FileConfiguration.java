@@ -1,11 +1,13 @@
 package com.Keffisor21.JDAExpansion.ConfigManager;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,8 +20,8 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.reader.UnicodeReader;
 
-import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.google.api.Files;
@@ -41,7 +43,10 @@ public class FileConfiguration {
 		try {
 			
 			DumperOptions options = new DumperOptions();
+			options.setAllowUnicode(true);
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			options.setPrettyFlow(true);
+
 			yaml = new Yaml(options);
 
 	//		InputStream is = o.getClass().getClassLoader().getResourceAsStream(nameFile);
@@ -50,13 +55,25 @@ public class FileConfiguration {
 			if(!isValid(file, o, nameFile)) {
 				InputStream is = o.getClass().getClassLoader().getResourceAsStream(nameFile);
 				Files.write(file, IOUtils.toString(is, StandardCharsets.UTF_8));
+				is.close();
 			}
 			
-			data = yaml.load(new FileInputStream(file));
-
-			Writer writer = new FileWriter(file.getAbsoluteFile());
+			InputStream is = new FileInputStream(file);
+			data = yaml.load(is);
+			is.close();
+			
+			if(data == null) {
+				data = new HashMap<String, Object>();
+				return;
+			}
+			
+			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
-	    	writer.close();	
+
+			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath());
+			bw.write(writer.toString());
+			bw.close();
+
 		
 		} catch(IOException e2) { 
 			Console.info(ConsoleColor.RED_BRIGHT, "Error on creating the file "+file.getAbsolutePath());
@@ -83,7 +100,11 @@ public class FileConfiguration {
 	 }
   }
 	public void set(String x, Object o) {
+		if(x.contains(".") && data.get(x) != null) {
 	    setElementMap(x, data.get(x), o);
+		} else {
+		data.put(x, o);
+		}
 		try {
 	    Writer writer = new FileWriter(file.getAbsoluteFile());
 	    yaml.dump(data, writer);
@@ -118,12 +139,13 @@ public class FileConfiguration {
 
 			return false;
 		}
-		Map<String, Object> first = new Yaml().load(new FileInputStream(configFile.getAbsolutePath()));
+		Map<String, Object> first = new Yaml().load(new UnicodeReader(new FileInputStream(configFile.getAbsolutePath())));
 		Map<String, Object> second = new Yaml().load(obj.getClass().getClassLoader().getResourceAsStream(nameFile));
+				
+		if(first == null || second == null || first.isEmpty() || second.isEmpty()) return true;
 		
 		List<String> firstNames = new ArrayList<String>();
 		List<String> secondNames = new ArrayList<String>();
-		if(first == null || first.isEmpty()) return false;
 		
 		first.forEach((k, v) -> {firstNames.add(k);});
 		second.forEach((k, v) -> {secondNames.add(k);});
@@ -133,9 +155,10 @@ public class FileConfiguration {
 				return false;
 			}
 		}
+		
 		return true;
 		
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
