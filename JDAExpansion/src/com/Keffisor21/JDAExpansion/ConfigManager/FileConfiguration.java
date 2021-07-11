@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ public class FileConfiguration {
 
 			DumperOptions options = new DumperOptions();
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			options.setAllowUnicode(true);
 			yaml = new Yaml(options);
 
 	//		InputStream is = o.getClass().getClassLoader().(nameFile);
@@ -63,7 +65,7 @@ public class FileConfiguration {
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
 
-			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath());
+			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"));
 			bw.write(writer.toString());
 			bw.close();
 
@@ -128,7 +130,6 @@ public class FileConfiguration {
 			configFile.createNewFile();
 			configFile.setReadable(true, false);
 			configFile.setWritable(true, false);
-
 			return false;
 		}
 		
