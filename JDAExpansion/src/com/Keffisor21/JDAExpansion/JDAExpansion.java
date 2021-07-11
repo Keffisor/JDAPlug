@@ -29,7 +29,7 @@ public class JDAExpansion {
 	public static List<Object> registratedClassPlugin = new ArrayList<Object>(); 
 	private static PluginManager pluginManager = new PluginManager();
 	private static LogsManager logsManager = new LogsManager();
-	private static FileConfiguration configuration = new FileConfiguration(JDAExpansion.getAbsolutePath(), "JDAExpansion.yml", new JDAExpansion());
+	private static FileConfiguration configuration = new FileConfiguration(new File(JDAExpansion.class.getProtectionDomain().getCodeSource().getLocation().getFile()), JDAExpansion.getAbsolutePath(), "JDAExpansion.yml", new JDAExpansion());
 	
 	public static void start(JDA jda) {
 		start((Object)jda);
