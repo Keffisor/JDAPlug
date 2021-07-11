@@ -35,6 +35,7 @@ import com.Keffisor21.JDAExpansion.Reflection.ClassPathLoader;
 public class PluginManager {
 	public ConcurrentHashMap<String, Plugin> registedClass = new ConcurrentHashMap<String, Plugin>();
 	public List<Plugin> loadedPlugins = new ArrayList<Plugin>();
+	private List<File> filteredList = new ArrayList<File>();
 	public static ClassLoader previusClassLoader = null;
 	
 	public PluginManager() {
@@ -50,9 +51,12 @@ public class PluginManager {
 		//clear data
 		unloadPlugins(jda);
 		
+		//unsafe to use the fList
 		List<File> fList = Arrays.asList(f.listFiles());
 		if(fList.isEmpty()) return;
 				 
+			
+		filteredList = doFilterList(fList).map(PluginConfigurationObject::getFile).collect(Collectors.toList());
 		
 		getObjectsWithSync(doFilterList(fList)).forEach((o, getClassInf) -> {
 			try {
@@ -60,7 +64,7 @@ public class PluginManager {
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
 			File f2 = getClassInf.file;
-			
+						
 			if(classMain == null) return;
 			if(name == null) return;
 			
@@ -76,7 +80,7 @@ public class PluginManager {
 				        	lPluginListener.onEnable();
 				        	jda.addEventListener(lPluginListener);
 				        	} catch(Exception | NoClassDefFoundError | NoSuchMethodError e) {
-			    				Utils.printStackTrace(e);
+			    				e.printStackTrace();
 				        		
 				        		//return;
 				        	}
@@ -85,7 +89,7 @@ public class PluginManager {
 				        }
  		      
 			} catch(Exception e) {
-				Utils.printStackTrace(e);
+				e.printStackTrace();
 			}
 		});
 		
@@ -150,12 +154,27 @@ public class PluginManager {
 	}
 	
 	private URLClassLoader syncClassPlugin(File f2) throws MalformedURLException {
+		try {
 		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
 		URLClassLoader child = new URLClassLoader (new URL[] {new URL("file:///"+f2.getAbsolutePath())}, currentThreadClassLoader);
-		//start sync class
-		ClassPathLoader classPathLoader = new ClassPathLoader(f2.toURL());
-		classPathLoader.addURL();
+		Class URLLoader = child.getClass();
+		  
+		Method method = URLLoader.getDeclaredMethod("addURL", new Class[] { URL.class });
+		method.setAccessible(true);
+		
+		filteredList.stream().forEach(file -> {
+			try {
+				method.invoke(child, new Object[] { file.toURL() });
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
+		Thread.currentThread().setContextClassLoader(child);
 		return child;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 	private URLClassLoader getSync(File f2, ClassLoader currentThreadClassLoader) throws MalformedURLException {
@@ -191,15 +210,6 @@ public class PluginManager {
 				Utils.printStackTrace(e);
         	}
 			});
-		}
-		
-		//clear sync
-		try {
-		ClassPathLoader.clearPaths();
-		ClassPathLoader.clearURLs();
-
-		} catch(Throwable e) {
-			e.printStackTrace();
 		}
 		
 		JDAExpansion.registratedClassPlugin.forEach(jda::removeEventListener);

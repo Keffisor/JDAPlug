@@ -1,19 +1,28 @@
 package com.Keffisor21.JDAExpansion.Reflection;
 
+import java.util.List;
+import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLStreamHandler;
-import java.util.ArrayList;
 import java.util.Stack;
-
-import com.Keffisor21.JDAExpansion.JDAExpansion;
-import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
+import java.util.stream.Collectors;
 
 public class ClassPathLoader {
+
+}
+
+	/*
+	 * OLD Code. With the code of below you can add to the class path of the program any file (jars, images, etc).
+	 * It's very effective, but when it's added for the first time you will be not able to reload the class path.
+	 */
+
+	/*
+public class ClassPathLoader {
 	private URL url;
-	public static Object previousClassPath;
 	
 	public ClassPathLoader(URL url) {
 		this.url = url;
@@ -27,7 +36,7 @@ public class ClassPathLoader {
 		  Method method= URLLoader.getDeclaredMethod("addURL", new Class[] { URL.class });
 		  method.setAccessible(true);
 		  method.invoke(classLoader, new Object[] { url });*/
-		  
+		  /*
 		  URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 		  Class URLLoader = URLClassLoader.class;
 			  
@@ -47,7 +56,7 @@ public class ClassPathLoader {
 		  ArrayList<URL> path = getPaths();
 		  path.add(url);
 		  field2.set(URLClassPath, path);*/
-		  
+		  /*
 		  
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -165,24 +174,4 @@ public class ClassPathLoader {
 			} catch(NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
-	}
-	
-	public static void disableAllLookupCaches() {
-		try {
-			  URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-			  Class URLLoader = URLClassLoader.class;
-			  
-			  Field URLClassPathField = URLLoader.getDeclaredField("ucp");
-			  URLClassPathField.setAccessible(true);
-			  Object URLClassPath =  URLClassPathField.get(classLoader);
-			  
-			  Field field = URLClassPath.getClass().getDeclaredField("lookupCacheEnabled");
-			  field.setAccessible(true);
-			  field.set(URLClassPath, true);
-			  
-			  
-			} catch(NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-	}
-}
+	}*/

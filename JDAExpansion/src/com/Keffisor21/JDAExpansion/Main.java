@@ -30,6 +30,8 @@ public class Main extends ListenerAdapter {
 		}
        JDA jda =  JDABuilder.createDefault(token).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
        Jda = jda;
+       try {
    	   JDAExpansion.start(jda);  
+       } catch(Exception e) {}
 	}
 }
