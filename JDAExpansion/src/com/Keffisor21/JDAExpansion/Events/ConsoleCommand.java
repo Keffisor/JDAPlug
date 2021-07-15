@@ -15,7 +15,11 @@ public class ConsoleCommand implements CommandSender {
 	public void sendMessage(String message) {
 		JDAExpansion.getLogger().info(message);
 	}
-
+	
+	public void replyMessage(String message) {
+		JDAExpansion.getLogger().info(message);
+	}
+	
 	public Member getMember() {
 		return null;
 	}

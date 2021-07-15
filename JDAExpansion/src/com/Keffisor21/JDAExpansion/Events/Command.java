@@ -82,4 +82,8 @@ public class Command implements CommandSender {
 	public void sendMessage(String message) {
 		e.getChannel().sendMessage(message).queue();
 	}
+
+	public void replyMessage(String message) {
+		e.getMessage().reply(message).queue();
+	}
 }

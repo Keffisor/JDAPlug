@@ -88,5 +88,10 @@ public class SlashCommand implements CommandSender, CommandInteraction {
 
 	public void sendMessage(String message) {
 		e.getChannel().sendMessage(message).queue();
-	}	
+	}
+	
+	public void replyMessage(String message) {
+		e.reply(message).queue();
+	}
+	
 }

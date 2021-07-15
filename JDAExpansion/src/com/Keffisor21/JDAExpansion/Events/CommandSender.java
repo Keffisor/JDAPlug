@@ -10,6 +10,8 @@ public interface CommandSender {
 	
 	public void sendMessage(String message);
 	
+	public void replyMessage(String message);
+	
 	public Member getMember();
 		
 }
