@@ -13,5 +13,7 @@ public interface CommandSender {
 	public void replyMessage(String message);
 	
 	public Member getMember();
+	
+	public String getCommand();
 		
 }

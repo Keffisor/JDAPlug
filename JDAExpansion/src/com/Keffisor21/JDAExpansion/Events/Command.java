@@ -13,10 +13,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Command implements CommandSender {
 	private MessageReceivedEvent e;
+	private String command;
 	
-	public Command(MessageReceivedEvent e) {
+	public Command(MessageReceivedEvent e, String command) {
 		this.e = e;
-		
+		this.command = command;
 	}
 	
 	public TextChannel getTextChannel() {
@@ -85,5 +86,9 @@ public class Command implements CommandSender {
 
 	public void replyMessage(String message) {
 		e.getMessage().reply(message).queue();
+	}
+
+	public String getCommand() {
+		return command;
 	}
 }

@@ -41,7 +41,7 @@ public abstract class createCommand extends ListenerAdapter {
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = new Command(e);
+    	  event = new Command(e, getCommand(contentRaw));
      	  isExecuted(getArgs(), event);
       }
     }
@@ -50,13 +50,13 @@ public abstract class createCommand extends ListenerAdapter {
     	if(e.getUser().isBot()) return;
     	if(e.getName().equals(command.replaceFirst("\\"+prefix, "")) || aliases.contains(command.replaceFirst("\\"+prefix, ""))) {
     	   String[] args = e.getCommandPath().split("/");
-    	   isExecuted(args, new SlashCommand(e));
+    	   isExecuted(args, new SlashCommand(e, getCommand(e.getName())));
     	}
     }
    public boolean onConsoleMessageReceived(String content) {
 	   if(isCommand(content, command.replaceFirst("\\"+prefix, "")) || getAliases(content, true)) {
 	    contentRaw = content;
-	   isExecuted(getArgs(), new ConsoleCommand());
+	   isExecuted(getArgs(), new ConsoleCommand(getCommand(content)));
 	   return true;
 	      }
 	   return false;
@@ -86,5 +86,9 @@ public abstract class createCommand extends ListenerAdapter {
 			String cmd = message.split(" ")[0];
 			return cmd.equalsIgnoreCase(command);
 		}
+    }
+    private String getCommand(String content) {
+    	if(!content.contains(" ")) return content.replaceFirst("\\"+prefix, "");
+    	return content.split(" ")[0].replaceFirst("\\"+prefix, "");
     }
 }

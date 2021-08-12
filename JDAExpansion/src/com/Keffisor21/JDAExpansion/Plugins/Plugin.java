@@ -48,7 +48,7 @@ public class Plugin {
 	
 	public String getVersion() {
 		if(version == null) return "v1.0";
-	    return version;	
+	    return version;
 	}
 	
 	public List<String> getDependencies() {

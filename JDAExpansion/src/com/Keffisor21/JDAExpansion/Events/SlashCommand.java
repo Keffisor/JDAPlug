@@ -17,9 +17,11 @@ import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
 public class SlashCommand implements CommandSender, CommandInteraction {
 
 	private SlashCommandEvent e;
+	private String command;
 	
-	public SlashCommand(SlashCommandEvent e) {
+	public SlashCommand(SlashCommandEvent e, String command) {
 		this.e = e;
+		this.command = command;
 	}
 	
 	public JDA getJDA() {
@@ -92,6 +94,10 @@ public class SlashCommand implements CommandSender, CommandInteraction {
 	
 	public void replyMessage(String message) {
 		e.reply(message).queue();
+	}
+
+	public String getCommand() {
+		return command;
 	}
 	
 }

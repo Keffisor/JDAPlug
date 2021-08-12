@@ -7,6 +7,11 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
 public class ConsoleCommand implements CommandSender {
+	private String command;
+	
+	public ConsoleCommand(String command) {
+		this.command = command;
+	}
 	
 	public JDA getJDA() {
 		return JDAExpansion.getJDA();
@@ -22,5 +27,9 @@ public class ConsoleCommand implements CommandSender {
 	
 	public Member getMember() {
 		return null;
+	}
+
+	public String getCommand() {
+		return command;
 	}
 }

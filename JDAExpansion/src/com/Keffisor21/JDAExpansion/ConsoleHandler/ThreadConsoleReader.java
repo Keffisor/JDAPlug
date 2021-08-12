@@ -46,7 +46,7 @@ public class ThreadConsoleReader extends Thread {
     private void detectCommand(String command) {
     	if(jda.getEventManager().stream().filter(obj -> {
     		if(obj instanceof ConsoleEvents) {
-    			((ConsoleEvents)obj).onMessageConsoleReceive(command);
+    			return ((ConsoleEvents)obj).onMessageConsoleReceive(command);
     		}
     		if(obj instanceof createCommand) {
    				return ((createCommand) obj).onConsoleMessageReceived(command);
