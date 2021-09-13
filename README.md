@@ -84,13 +84,11 @@ After compiling the plugin, you have to move the jar into the plugins folder cre
 ### Creating configs for plugins
 ```
 public class Main extends PluginListener {
-	public static FileConfiguration config;
+	public static FileConfiguration config = getConfig("config.yml");
 	
 	@Override
 	protected void onEnable() {
-		JDAExpansion.registerEvent(new Event());		
-		config = getConfig("config.yml");
- 		
+		JDAExpansion.registerEvent(new Event()); 		
 	}
 	
 	@Override
