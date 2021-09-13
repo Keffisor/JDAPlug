@@ -42,6 +42,8 @@ public class JDAExpansion {
 	private static void start(Object o) {
 		setConsoleConfig();
 		Console.logger.info("Loading libraries...");
+		if(o instanceof JDA)
+			try { ((JDA)o).awaitReady(); } catch (InterruptedException e) { e.printStackTrace(); }
 		JDANMS jda = new JDANMS(getJDAType(o));
 		Main.JdaNMS = jda;
 		//create thread of reading the console

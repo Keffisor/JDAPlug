@@ -3,11 +3,13 @@ package com.Keffisor21.JDAExpansion;
 import javax.security.auth.login.LoginException;
 
 import com.Keffisor21.JDAExpansion.ConfigManager.TokenConfiguration;
+import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.JDA.Status;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.ShardManager;

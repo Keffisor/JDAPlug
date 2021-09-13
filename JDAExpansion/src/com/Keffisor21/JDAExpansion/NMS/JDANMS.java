@@ -92,6 +92,12 @@ public class JDANMS {
 		  }
 		  return null;
 	}
+	
+	public void awaitReady() throws InterruptedException {
+		if(type.jda != null) {
+			type.jda.awaitReady();
+		 }
+	}
 
 	public Object getType() {
 		//Type that can return: JDA or ShardManager. You can detect it with instanceof

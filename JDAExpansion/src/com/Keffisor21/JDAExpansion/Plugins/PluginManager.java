@@ -60,7 +60,7 @@ public class PluginManager {
 
 		filteredFileList = filteredList.stream().map(PluginConfigurationObject::getFile).collect(Collectors.toList());
 		
-		getObjectsWithSync(filteredList).forEach((o, getClassInf) -> {
+		getObjectsWithSync((filteredList)).forEach((o, getClassInf) -> {
 			try {
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
@@ -115,23 +115,27 @@ public class PluginManager {
 		return f;
 	}
 	
-	private Stream<PluginConfigurationObject> orderPluginsFilter (Stream<PluginConfigurationObject> classInfo) {
+	private LinkedList<PluginConfigurationObject> orderPluginsFilter (List<PluginConfigurationObject> classInfo) {
 		
-		LinkedList<PluginConfigurationObject> filtered = new LinkedList<>(classInfo.filter(r -> r.depends != null).collect(Collectors.toList()));
+		LinkedList<PluginConfigurationObject> filtered = new LinkedList<>(classInfo.stream().filter(r -> r.depends != null).collect(Collectors.toList()));
 		
-		Stream<PluginConfigurationObject> collec = classInfo.filter(r -> r.depends != null);
-		HashMap<String, PluginConfigurationObject> map = new HashMap<String, PluginConfigurationObject>(collec.collect(Collectors.toMap(PluginConfigurationObject::getName, PluginConfigurationObject::getClazz)));
+		List<PluginConfigurationObject> collec = classInfo.stream().filter(r -> r.depends != null).collect(Collectors.toList());
+		HashMap<String, PluginConfigurationObject> map = new HashMap<String, PluginConfigurationObject>(collec.stream().collect(Collectors.toMap(PluginConfigurationObject::getName, PluginConfigurationObject::getClazz)));
 		
-		collec.map(PluginConfigurationObject::getDependencies).forEach(d -> {
+		collec.stream().map(PluginConfigurationObject::getDependencies).forEach(d -> {
 				PluginConfigurationObject plugin = map.get(d);
 				if(plugin == null || filtered.contains(plugin)) {
 					return;
 				}
-				 filtered.add(plugin);
-			});
-		filtered.addAll(collec.filter(r -> !filtered.contains(r)).collect(Collectors.toList()));
+				filtered.add(plugin);
+		});
 		
-		return filtered.stream();
+		filtered.forEach(o -> {
+			if(filtered.contains(o)) return;
+			filtered.add(o);
+		});
+		
+		return filtered;
 	}
 	
 	private HashMap<Object, PluginConfigurationObject> getObjectsWithSync(List<PluginConfigurationObject> list) {
@@ -230,6 +234,7 @@ public class PluginManager {
 		if(!name.contains(".jar")) return false;
 		return true;
 	}
+	
 	private PluginConfigurationObject getMainClass(File f) {
 	    try {
 			ZipFile zipFile = new ZipFile("plugins/"+f.getName());
