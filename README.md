@@ -101,6 +101,10 @@ The config file is created into a directory with the name of the plugin in the d
 e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
 config.set("something", 1); //set data to the config
 ```
+<h2>Images</h2>
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177554029838416/68747470733a2f2f692e696d6775722e636f6d2f3248375146386f2e706e67.png">
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177575106740254/68747470733a2f2f692e696d6775722e636f6d2f336e4a387442532e706e67.png">
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177591308419112/68747470733a2f2f692e696d6775722e636f6d2f4f7136775930672e706e67.png">
 <h2><strong>Example</strong></h2>
 <p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
 <br>
