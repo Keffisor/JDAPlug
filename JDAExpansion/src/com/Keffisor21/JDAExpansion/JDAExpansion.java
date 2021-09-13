@@ -46,7 +46,7 @@ public class JDAExpansion {
 		Main.JdaNMS = jda;
 		//create thread of reading the console
  	    new ThreadConsoleReader(jda, Console.reader).start();
-		JDAExpansion.registerEvents(new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand());
+		getJDA().addEventListener(new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand());
 	    new Console().start();
 	    pluginManager.loadPlugins(jda);
 	}

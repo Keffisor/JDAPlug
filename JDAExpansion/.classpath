@@ -17,5 +17,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/NetBeans/zTEST/mysql-connector-java-5.1.48.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

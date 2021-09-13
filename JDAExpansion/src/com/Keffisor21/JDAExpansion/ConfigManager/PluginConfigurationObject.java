@@ -1,12 +1,14 @@
 package com.Keffisor21.JDAExpansion.ConfigManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PluginConfigurationObject {
 	
 	public static ConcurrentHashMap<Object, PluginConfigurationObject> getPluginInformation = new ConcurrentHashMap<Object, PluginConfigurationObject>();
+	public static List<PluginConfigurationObject> filteredList = new ArrayList<>();
 	public String name = null;
     public String main = null;
     public File file = null;

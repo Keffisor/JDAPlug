@@ -27,7 +27,7 @@ public abstract class createCommand extends ListenerAdapter {
     	this.prefix = prefix;
     	this.command = prefix+cmd;
     	if(args.length != 0) {
-    	this.aliases = Arrays.asList(args);
+    		this.aliases = Arrays.asList(args);
     	}
     	if(commandData != null) {
     		JDAExpansion.getJDA().updateCommands().addCommands(commandData).queue();

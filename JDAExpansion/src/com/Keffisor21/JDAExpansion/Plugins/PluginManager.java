@@ -35,7 +35,7 @@ import com.Keffisor21.JDAExpansion.Reflection.ClassPathLoader;
 public class PluginManager {
 	public ConcurrentHashMap<String, Plugin> registedClass = new ConcurrentHashMap<String, Plugin>();
 	public List<Plugin> loadedPlugins = new ArrayList<Plugin>();
-	private List<File> filteredList = new ArrayList<File>();
+	private List<File> filteredFileList = new ArrayList<File>();
 	public static ClassLoader previusClassLoader = null;
 	
 	public PluginManager() {
@@ -53,14 +53,15 @@ public class PluginManager {
 		
 		//unsafe to use the fList
 		List<File> fList = Arrays.asList(f.listFiles());
+
 		if(fList.isEmpty()) return;
-				 
-			
-		filteredList = doFilterList(fList).map(PluginConfigurationObject::getFile).collect(Collectors.toList());
+		List<PluginConfigurationObject> filteredList = doFilterList(fList);
+		PluginConfigurationObject.filteredList = filteredList;
+
+		filteredFileList = filteredList.stream().map(PluginConfigurationObject::getFile).collect(Collectors.toList());
 		
-		getObjectsWithSync(doFilterList(fList)).forEach((o, getClassInf) -> {
+		getObjectsWithSync(filteredList).forEach((o, getClassInf) -> {
 			try {
-			
 			String classMain = getClassInf.main;
 			String name = getClassInf.name;
 			File f2 = getClassInf.file;
@@ -68,26 +69,23 @@ public class PluginManager {
 			if(classMain == null) return;
 			if(name == null) return;
 			
-				        if(o instanceof PluginListener) {
-				        	if(registedClass.get(name) != null) {
-				        		Console.info(ConsoleColor.RED_BRIGHT, "There is already a plugin with the same name \""+name+"\"");
-				        		return;
-				        	}
-					        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
-				        	PluginListener lPluginListener = (PluginListener)o;
-				        	Console.info(ConsoleColor.YELLOW_BRIGHT, String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.getVersion()));
-				        	try {
-				        	lPluginListener.onEnable();
-				        	jda.addEventListener(lPluginListener);
-				        	} catch(Exception | NoClassDefFoundError | NoSuchMethodError e) {
-			    				e.printStackTrace();
-				        		
-				        		//return;
-				        	}
-				        	//create plugin
-				    		initPlugin(f2, getClassInf, lPluginListener);
-				        }
- 		      
+			if(o instanceof PluginListener) {
+	        	if(registedClass.get(name) != null) {
+	        		Console.info(ConsoleColor.RED_BRIGHT, "There is already a plugin with the same name \""+name+"\"");
+	        		return;
+	        	}
+		        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
+	        	PluginListener lPluginListener = (PluginListener)o;
+	        	Console.info(ConsoleColor.YELLOW_BRIGHT, String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.getVersion()));
+	        	try {
+	        	lPluginListener.onEnable();
+	        	jda.addEventListener(lPluginListener);
+	        	} catch(Exception | NoClassDefFoundError | NoSuchMethodError e) {
+    				e.printStackTrace();
+	        	}
+	        	//create plugin
+	    		initPlugin(f2, getClassInf, lPluginListener);
+	        }
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -105,8 +103,8 @@ public class PluginManager {
 		JDAExpansion.registratedClassPlugin.forEach(jda::addEventListener);
 	}
 	
-	private Stream<PluginConfigurationObject> doFilterList(List<File> fileList) {
-		return fileList.stream().filter(this::hasExtensionJar).map(this::getMainClass).filter(classInfo -> classInfo.main != null && classInfo.name != null);
+	private List<PluginConfigurationObject> doFilterList(List<File> fileList) {
+		return fileList.stream().filter(this::hasExtensionJar).map(this::getMainClass).filter(classInfo -> classInfo.main != null && classInfo.name != null).collect(Collectors.toList());
 	}
 	
 	private File createPluginsDirectory() {
@@ -136,16 +134,16 @@ public class PluginManager {
 		return filtered.stream();
 	}
 	
-	private HashMap<Object, PluginConfigurationObject> getObjectsWithSync(Stream<PluginConfigurationObject> stream) {
-		return (HashMap)stream.collect(Collectors.toMap(this::getObject, PluginConfigurationObject::getClazz));
+	private HashMap<Object, PluginConfigurationObject> getObjectsWithSync(List<PluginConfigurationObject> list) {
+		return (HashMap)list.stream().collect(Collectors.toMap(this::getObject, PluginConfigurationObject::getClazz));
 	}
 	
 	private Object getObject(PluginConfigurationObject pluginInfo) {
-	try {
+		try {
          try {
 			return Class.forName(pluginInfo.main, true, syncClassPlugin(pluginInfo.file)).newInstance();
 		} catch (InstantiationException | IllegalAccessException  | MalformedURLException e) {
-			Utils.printStackTrace(e);
+			e.printStackTrace();
 		}
 		} catch(ClassNotFoundException e) {
   			new MainNotFound(pluginInfo.name, e).printStackTrace();
@@ -162,7 +160,7 @@ public class PluginManager {
 		Method method = URLLoader.getDeclaredMethod("addURL", new Class[] { URL.class });
 		method.setAccessible(true);
 		
-		filteredList.stream().forEach(file -> {
+		filteredFileList.stream().forEach(file -> {
 			try {
 				method.invoke(child, new Object[] { file.toURL() });
 			} catch (Exception e) {
@@ -207,7 +205,7 @@ public class PluginManager {
 					else
 				 Console.info(ConsoleColor.RED_BRIGHT, String.format("%s %s by %s has been unloaded successfully", plugin.getName(), plugin.getVersion(), plugin.getAuthor()));
 			} catch(Exception e) {
-				Utils.printStackTrace(e);
+				e.printStackTrace();
         	}
 			});
 		}

@@ -32,6 +32,8 @@ public class Main extends ListenerAdapter {
        Jda = jda;
        try {
    	   JDAExpansion.start(jda);  
-       } catch(Exception e) {}
+       } catch(Exception e) {
+    	   e.printStackTrace();
+       }
 	}
 }

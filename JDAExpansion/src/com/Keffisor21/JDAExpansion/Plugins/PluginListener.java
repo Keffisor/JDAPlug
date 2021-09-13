@@ -1,6 +1,7 @@
 package com.Keffisor21.JDAExpansion.Plugins;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.ConfigManager.FileConfiguration;
@@ -12,7 +13,7 @@ public abstract class PluginListener extends ListenerAdapter {
 	
 	   protected abstract void onEnable();
 	   protected abstract void onDisable();
-		
+	   
 	   public FileConfiguration getConfig(String configName) {
 		   if(!configName.contains(".yml")) {
 			   configName = configName+".yml";
@@ -21,9 +22,15 @@ public abstract class PluginListener extends ListenerAdapter {
 	   }
 	   
 	   public String getPluginName() {
-		   return PluginConfigurationObject.getPluginInformation.get(this).name;
+		   return getPluginConfigurationObject().name;
 	   }
+	   
+	   private PluginConfigurationObject getPluginConfigurationObject() {
+		   String main = this.getClass().getName();
+		   return PluginConfigurationObject.filteredList.stream().filter(o -> o.main.equals(main)).collect(Collectors.toList()).get(0);
+	   }
+	   
 	   public File getPluginFile() {
-		   return PluginConfigurationObject.getPluginInformation.get(this).file;
+		   return getPluginConfigurationObject().file;
 	   }
 }
