@@ -9,7 +9,7 @@ import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public abstract class PluginListener extends ListenerAdapter {
+public abstract class JavaPlugin extends ListenerAdapter {
 	
 	   protected abstract void onEnable();
 	   protected abstract void onDisable();

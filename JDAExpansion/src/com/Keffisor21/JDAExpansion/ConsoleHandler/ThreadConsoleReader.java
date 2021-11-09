@@ -6,8 +6,8 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
-import com.Keffisor21.JDAExpansion.EventsHandler.ConsoleEvents;
-import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
+import com.Keffisor21.JDAExpansion.Event.API.ConsoleEvents;
+import com.Keffisor21.JDAExpansion.Event.API.createCommand;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 import jline.console.ConsoleReader;

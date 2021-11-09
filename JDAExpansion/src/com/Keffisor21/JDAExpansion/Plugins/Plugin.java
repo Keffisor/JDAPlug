@@ -9,13 +9,13 @@ public class Plugin {
 	private File file = null;
 	private String path;
 	private String name;
-	private PluginListener main;
+	private JavaPlugin main;
 	private String author = null;
 	private String description = null;
 	private String version = null;
 	private List<String> depends = null;
 	
-	public Plugin(File file, String path, String name, PluginListener main, String author, String description, String version, List<String> depends) {
+	public Plugin(File file, String path, String name, JavaPlugin main, String author, String description, String version, List<String> depends) {
     	this.file = file;
 		this.path = path;
     	this.name = name;
@@ -34,7 +34,7 @@ public class Plugin {
 		return path;
 	}
 	
-	public PluginListener getMainClass() {
+	public JavaPlugin getMainClass() {
 		return main;
 	}
 	

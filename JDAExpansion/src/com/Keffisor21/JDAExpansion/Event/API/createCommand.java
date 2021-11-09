@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.EventsHandler;
+package com.Keffisor21.JDAExpansion.Event.API;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
-import com.Keffisor21.JDAExpansion.Events.Command;
-import com.Keffisor21.JDAExpansion.Events.CommandSender;
-import com.Keffisor21.JDAExpansion.Events.ConsoleCommand;
-import com.Keffisor21.JDAExpansion.Events.SlashCommand;
+import com.Keffisor21.JDAExpansion.CommandHandler.Command;
+import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
+import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
+import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -41,10 +41,11 @@ public abstract class createCommand extends ListenerAdapter {
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = new Command(e, getCommand(contentRaw));
+    	  event = new Command(e, getCommand(contentRaw), getPrefix());
      	  isExecuted(getArgs(), event);
       }
     }
+    
     @Override
     public void onSlashCommand(SlashCommandEvent e) {
     	if(e.getUser().isBot()) return;
@@ -52,13 +53,14 @@ public abstract class createCommand extends ListenerAdapter {
     	   String[] args = e.getCommandPath().split("/");
     	   isExecuted(args, new SlashCommand(e, getCommand(e.getName())));
     	}
-    }
+   }
+    
    public boolean onConsoleMessageReceived(String content) {
 	   if(isCommand(content, command.replaceFirst("\\"+prefix, "")) || getAliases(content, true)) {
-	    contentRaw = content;
-	   isExecuted(getArgs(), new ConsoleCommand(getCommand(content)));
-	   return true;
-	      }
+		   contentRaw = content;
+		   isExecuted(getArgs(), new ConsoleCommand(getCommand(content)));
+		   return true;
+	   }
 	   return false;
    }
    //
@@ -66,20 +68,21 @@ public abstract class createCommand extends ListenerAdapter {
    
     private String[] getArgs() {
     	if(contentRaw.replace("  ", " ").split(" ").length != 0) {
-    		return contentRaw.replace("  ", " ").split(" ");
+    		return contentRaw.replace("  ", " ").replace(contentRaw.split(" ")[0]+" ", "").split(" ");
     	}
     	return null;
     }
     
     private boolean getAliases(String contentRaw, boolean console) {
-    if(this.aliases.isEmpty()) {
-    	return false;
+	    if(this.aliases.isEmpty()) {
+	    	return false;
+	    }
+	    if(contentRaw.isEmpty()) {
+	    	return false;
+	    }
+	    return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;} return isCommand(contentRaw, sT);}).collect(Collectors.toList()).isEmpty();
     }
-    if(contentRaw.isEmpty()) {
-    	return false;
-    }
-    	return !this.aliases.stream().filter(sT -> {if(!console) {sT = prefix+sT;} return isCommand(contentRaw, sT);}).collect(Collectors.toList()).isEmpty();
-    }
+    
     private boolean isCommand(String message, String command) {
     	if(!message.contains(" ")) return message.equalsIgnoreCase(command);
     	else {
@@ -87,8 +90,14 @@ public abstract class createCommand extends ListenerAdapter {
 			return cmd.equalsIgnoreCase(command);
 		}
     }
+    
     private String getCommand(String content) {
-    	if(!content.contains(" ")) return content.replaceFirst("\\"+prefix, "");
-    	return content.split(" ")[0].replaceFirst("\\"+prefix, "");
+    	if(!content.contains(" ")) return content.replaceFirst("\\"+getPrefix(), "");
+    	return content.split(" ")[0].replaceFirst("\\"+getPrefix(), "");
     }
+    
+    private String getPrefix() {
+    	return prefix;
+    }
+    
 }

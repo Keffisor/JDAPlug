@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Events;
+package com.Keffisor21.JDAExpansion.CommandHandler;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
 
@@ -32,4 +32,5 @@ public class ConsoleCommand implements CommandSender {
 	public String getCommand() {
 		return command;
 	}
+	
 }

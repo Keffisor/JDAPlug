@@ -22,8 +22,9 @@ public class Main extends ListenerAdapter {
  	public static JDANMS JdaNMS = null;
  	
 	public static void main(String[] args) throws LoginException {
+		Utils.isOpenByConsole();
 		Utils.executeCommand("cls", "clear"); //for fix the ansi codes
-
+		
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {
 			Utils.executeCommand("cls", "clear");
@@ -34,8 +35,9 @@ public class Main extends ListenerAdapter {
        Jda = jda;
        try {
    	   JDAExpansion.start(jda);  
-       } catch(Exception e) {
+       } catch(Throwable e) {
     	   e.printStackTrace();
+    	   throw (Error)e;
        }
 	}
 }

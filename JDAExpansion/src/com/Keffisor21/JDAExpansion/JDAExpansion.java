@@ -2,6 +2,7 @@ package com.Keffisor21.JDAExpansion;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,15 @@ import com.Keffisor21.JDAExpansion.Commands.ClearConsoleCommand;
 import com.Keffisor21.JDAExpansion.Commands.PluginsCommand;
 import com.Keffisor21.JDAExpansion.Commands.ReloadCommand;
 import com.Keffisor21.JDAExpansion.Commands.StopCommand;
+import com.Keffisor21.JDAExpansion.Commands.VersionCommand;
 import com.Keffisor21.JDAExpansion.ConfigManager.FileConfiguration;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ThreadConsoleReader;
 import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorErr;
 import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorOut;
+import com.Keffisor21.JDAExpansion.Event.EventHandler;
+import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
+import com.Keffisor21.JDAExpansion.Event.PluginListener;
 import com.Keffisor21.JDAExpansion.Logs.LogsManager;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.NMS.JDAType;
@@ -36,9 +41,11 @@ public class JDAExpansion {
 	public static void start(JDA jda) {
 		start((Object)jda);
 	}
+	
 	public static void start(ShardManager shardManager) {
 		start((Object)shardManager);
 	}
+	
 	private static void start(Object o) {
 		setConsoleConfig();
 		Console.logger.info("Loading libraries...");
@@ -48,7 +55,7 @@ public class JDAExpansion {
 		Main.JdaNMS = jda;
 		//create thread of reading the console
  	    new ThreadConsoleReader(jda, Console.reader).start();
-		getJDA().addEventListener(new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand());
+		getJDA().addEventListener(new EventsRegistration(), new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand(), new VersionCommand());
 	    new Console().start();
 	    pluginManager.loadPlugins(jda);
 	}
@@ -57,6 +64,7 @@ public class JDAExpansion {
 		System.setErr(new ConsoleInterceptorErr(System.err));
 		Console.previousPrintStream = System.out;
 		System.setOut(new ConsoleInterceptorOut(System.out));
+
 		try {
 			Console.reader =  new ConsoleReader();
 		} catch (IOException e) {
@@ -104,19 +112,26 @@ public class JDAExpansion {
 	public static ShardManager getShardManager() {
 		return Main.shardManager;
 	}
+	
 	public static void registerEvent(Object o) {
 		if(o instanceof ListenerAdapter) {
 			registratedClassPlugin.add(o);
+		if(o instanceof PluginListener)
+			EventsRegistration.loadEvent((PluginListener)o);
+
 		}
 	}
+	
 	public static void registerEvents(Object... o) {
 		for(Object o2 : o) {
-			if(o2 instanceof ListenerAdapter) {
+			if(o2 instanceof ListenerAdapter)
 				registratedClassPlugin.add(o2);
-			}
+			if(o2 instanceof PluginListener)
+				EventsRegistration.loadEvent((PluginListener)o2);
 		}
 	}
-   public static String getAbsolutePath() {
-	   return new File("").getAbsolutePath();
-   }   
+	
+	public static String getAbsolutePath() {
+		return new File("").getAbsolutePath();
+	} 
 }

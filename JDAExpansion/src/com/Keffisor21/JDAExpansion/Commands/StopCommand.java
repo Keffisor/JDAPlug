@@ -3,11 +3,11 @@ package com.Keffisor21.JDAExpansion.Commands;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
 
-import com.Keffisor21.JDAExpansion.Events.Command;
-import com.Keffisor21.JDAExpansion.Events.CommandSender;
-import com.Keffisor21.JDAExpansion.Events.ConsoleCommand;
-import com.Keffisor21.JDAExpansion.Events.SlashCommand;
-import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
+import com.Keffisor21.JDAExpansion.CommandHandler.Command;
+import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
+import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
+import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
+import com.Keffisor21.JDAExpansion.Event.API.createCommand;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

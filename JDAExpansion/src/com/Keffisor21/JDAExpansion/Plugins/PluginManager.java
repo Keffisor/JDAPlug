@@ -38,10 +38,6 @@ public class PluginManager {
 	private List<File> filteredFileList = new ArrayList<File>();
 	public static ClassLoader previusClassLoader = null;
 	
-	public PluginManager() {
-		
-	}
-	
 	public List<Plugin> getInstalledPlugins() {
 		return loadedPlugins;
 	}
@@ -69,17 +65,17 @@ public class PluginManager {
 			if(classMain == null) return;
 			if(name == null) return;
 			
-			if(o instanceof PluginListener) {
+			if(o instanceof JavaPlugin) {
 	        	if(registedClass.get(name) != null) {
 	        		Console.info(ConsoleColor.RED_BRIGHT, "There is already a plugin with the same name \""+name+"\"");
 	        		return;
 	        	}
 		        PluginConfigurationObject.getPluginInformation.put(o, getClassInf);
-	        	PluginListener lPluginListener = (PluginListener)o;
+	        	JavaPlugin lPluginListener = (JavaPlugin)o;
 	        	Console.info(ConsoleColor.YELLOW_BRIGHT, String.format("[%s] Loading %s %s", getClassInf.getName(), getClassInf.getName(), getClassInf.getVersion()));
 	        	try {
-	        	lPluginListener.onEnable();
-	        	jda.addEventListener(lPluginListener);
+		        	lPluginListener.onEnable();
+		        	jda.addEventListener(lPluginListener);
 	        	} catch(Exception | NoClassDefFoundError | NoSuchMethodError e) {
     				e.printStackTrace();
 	        	}
@@ -185,7 +181,7 @@ public class PluginManager {
 	}
 	
 	
-	private void initPlugin(File f2, PluginConfigurationObject getClassInf, PluginListener o) {
+	private void initPlugin(File f2, PluginConfigurationObject getClassInf, JavaPlugin o) {
 		Plugin plugin = new Plugin(f2, f2.getPath(), getClassInf.name, o, getClassInf.author, getClassInf.description, getClassInf.version, getClassInf.depends);
 		loadedPlugins.add(plugin);
     	registedClass.put(plugin.getName(), plugin);
@@ -200,7 +196,7 @@ public class PluginManager {
 		if(!registedClass.isEmpty()) {
 			registedClass.forEach((k, v) -> {
 				Plugin plugin = v;
-				PluginListener pluginListener = (PluginListener)plugin.getMainClass();
+				JavaPlugin pluginListener = (JavaPlugin)plugin.getMainClass();
 				jda.removeEventListener(pluginListener);
 			try {
 				pluginListener.onDisable();
@@ -258,7 +254,7 @@ public class PluginManager {
 	        }
 	        
 	    } catch (IOException e) {
-			Console.info(ConsoleColor.RED_BRIGHT, "No se pudo cargar "+f.getName());
+			Console.info(ConsoleColor.RED_BRIGHT, "Failed to load "+f.getName());
 			return null;
 		}
 		

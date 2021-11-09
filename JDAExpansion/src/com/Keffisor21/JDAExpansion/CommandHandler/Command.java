@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Events;
+package com.Keffisor21.JDAExpansion.CommandHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -14,10 +14,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class Command implements CommandSender {
 	private MessageReceivedEvent e;
 	private String command;
+	private String prefix;
 	
-	public Command(MessageReceivedEvent e, String command) {
+	public Command(MessageReceivedEvent e, String command, String prefix) {
 		this.e = e;
 		this.command = command;
+		this.prefix = prefix;
 	}
 	
 	public TextChannel getTextChannel() {
@@ -90,5 +92,9 @@ public class Command implements CommandSender {
 
 	public String getCommand() {
 		return command;
+	}
+	
+	public String getPrefix() {
+		return prefix;
 	}
 }

@@ -81,7 +81,15 @@ public class Utils {
 		         Runtime.getRuntime().exec(command);
 		         System.out.print("\033[H\033[2J");
 		    } catch (IOException | InterruptedException ex) {}
-		} 
+	  }
+	  
+	  public static void isOpenByConsole() {
+		  if(System.console() == null) {
+				executeCommand("start cmd.exe /k java -jar \""+Main.class.getProtectionDomain().getCodeSource().getLocation().getFile().replace("%20", " ").replace("/C:", "C:")+"\"", "");
+				System.exit(0);
+		  }
+	  }
+	  
 	  public static String getCharDelete() {
 		    	 return "\033[K";
 	  }

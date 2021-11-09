@@ -1,23 +1,19 @@
 package com.Keffisor21.JDAExpansion.Commands;
 
-import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
-import static net.dv8tion.jda.api.interactions.commands.OptionType.USER;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.Utils;
+import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
+import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
+import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.Events.Command;
-import com.Keffisor21.JDAExpansion.Events.CommandSender;
-import com.Keffisor21.JDAExpansion.Events.ConsoleCommand;
-import com.Keffisor21.JDAExpansion.Events.SlashCommand;
-import com.Keffisor21.JDAExpansion.EventsHandler.createCommand;
+import com.Keffisor21.JDAExpansion.Event.EventHandler;
+import com.Keffisor21.JDAExpansion.Event.API.createCommand;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
-import net.dv8tion.jda.api.Permission;
+
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class PluginsCommand extends createCommand {
 
@@ -46,4 +42,5 @@ public class PluginsCommand extends createCommand {
 		}
 		sender.sendMessage(message);
 	}
+	
 }

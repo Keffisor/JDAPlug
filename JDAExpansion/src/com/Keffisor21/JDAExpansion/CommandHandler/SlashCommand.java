@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Events;
+package com.Keffisor21.JDAExpansion.CommandHandler;
 
 import java.util.List;
 

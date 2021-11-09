@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Events;
+package com.Keffisor21.JDAExpansion.CommandHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,5 +15,5 @@ public interface CommandSender {
 	public Member getMember();
 	
 	public String getCommand();
-		
+			
 }
