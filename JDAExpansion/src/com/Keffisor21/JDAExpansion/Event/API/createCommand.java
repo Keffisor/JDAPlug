@@ -68,9 +68,10 @@ public abstract class createCommand extends ListenerAdapter {
    
     private String[] getArgs() {
     	if(contentRaw.replace("  ", " ").split(" ").length != 0) {
-    		return contentRaw.replace("  ", " ").replace(contentRaw.split(" ")[0]+" ", "").split(" ");
+    		String[] args = contentRaw.replace("  ", " ").split(" ");
+    		return Arrays.copyOfRange(args, 1, args.length);
     	}
-    	return null;
+    	return new String[] {};
     }
     
     private boolean getAliases(String contentRaw, boolean console) {
