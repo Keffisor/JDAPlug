@@ -73,7 +73,7 @@ public class Main extends JavaPlugin {
 ```
 You can use the api of events by the JDAExpansion without using the ListenerAdapter
 ```
-public class EventTest extends PluginListener {
+public class EventTest implements PluginListener {
 	/*
 	With the new system of events in JDAExpansion you will be able to declare any event with a custom name, you can repeat in the same class
 	any event and you can set the priority of execution of that event.
