@@ -3,7 +3,7 @@
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/Keffisor/JDAExpansion)](https://github.com/Keffisor/JDAExpansion/commits/master)
 <br>
 # JDAExpansion
-**JDAExpansion** - Add a console and install/create plugins with a easy api to your bot. It's based on the Discord library [JDA](https://github.com/DV8FromTheWorld/JDA). This library have been inspired by [Bukkit](https://dev.bukkit.org/).
+**JDAExpansion** - Add a console and install/create plugins with a easy api to your bot. It's based on the Discord library [JDA](https://github.com/DV8FromTheWorld/JDA). This library it's inspired of [Bukkit](https://dev.bukkit.org/).
 
 # Features
 - Create a console on the Bot for execute commands.
@@ -16,7 +16,7 @@
 ```
 public static void main(String[] args) throws LoginException {
        JDA jda = new JDABuilder(AccountType.BOT).setToken(token).build(); //any call of jda
-   	   JDAExpansion.start(jda);  
+       JDAExpansion.start(jda);  
 }
 ```
 
@@ -58,7 +58,7 @@ version: v2.3
 ```
 Now you will have to create a class extending the PluginListener class
 ```
-public class Main extends PluginListener {
+public class Main extends JavaPlugin {
 
 	@Override
 	protected void onEnable() {
@@ -69,6 +69,26 @@ public class Main extends PluginListener {
 	protected void onDisable() {
 		JDAExtension.getLogger().info("Plugin disabled");
 	}
+}
+```
+You can use the api of events by the JDAExpansion without using the ListenerAdapter
+```
+public class EventTest extends PluginListener {
+	/*
+	With the new system of events in JDAExpansion you will be able to declare any event with a custom name, you can repeat in the same class
+	any event and you can set the priority of execution of that event.
+        */
+	
+	@EventHandler(priority = EventPriority.MONITOR) //set the priority of the event, if it's not set, it will be NORMAL by default.
+  	public void test(MessageReceivedEvent e) {
+	        System.out.println(e.getMessage().getContentRaw());
+  	}
+
+	@EventHandler
+	public void test2(MessageReceivedEvent e) {
+		System.out.println(e.getAuthor().getAsTag());
+	}
+
 }
 ```
 In case that you need to register a class with events you must to call this function
@@ -83,7 +103,7 @@ After compiling the plugin, you have to move the jar into the plugins folder cre
 
 ### Creating configs for plugins
 ```
-public class Main extends PluginListener {
+public class Main extends JavaPlugin {
 	public static FileConfiguration config;
 	
 	@Override
@@ -103,6 +123,10 @@ The config file is created into a directory with the name of the plugin in the d
 e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
 config.set("something", 1); //set data to the config
 ```
+<h2><strong>Screenshots</strong></h2>
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177554029838416/68747470733a2f2f692e696d6775722e636f6d2f3248375146386f2e706e67.png">
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177575106740254/68747470733a2f2f692e696d6775722e636f6d2f336e4a387442532e706e67.png">
+<img src="https://cdn.discordapp.com/attachments/628711840175620106/863177591308419112/68747470733a2f2f692e696d6775722e636f6d2f4f7136775930672e706e67.png">
 <h2><strong>Example</strong></h2>
 <p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
 <br>
