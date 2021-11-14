@@ -24,23 +24,20 @@ public class PluginsCommand extends createCommand {
 	@Override
 	protected void isExecuted(String[] args, CommandSender sender) {
 		List<String> plugins = JDAExpansion.getPluginManager().getInstalledPlugins().stream().map(Plugin::getName).collect(Collectors.toList());
-		if(sender instanceof ConsoleCommand && Utils.hasSupportColors()) {
-			JDAExpansion.getLogger().info("Plugins ("+ConsoleColor.GREEN_BRIGHT+plugins.size()+ConsoleColor.RESET+"): "
-				+ConsoleColor.GREEN_BRIGHT+plugins.toString().replace("[", "").replace("]", "")+ConsoleColor.RESET);
+		if(sender instanceof ConsoleCommand) {
+			if(Utils.hasSupportColors())
+				JDAExpansion.getLogger().info("Plugins ("+ConsoleColor.GREEN_BRIGHT+plugins.size()+ConsoleColor.RESET+"): "
+					+ConsoleColor.GREEN_BRIGHT+plugins.toString().replace("[", "").replace("]", "")+ConsoleColor.RESET);
+			else
+				JDAExpansion.getLogger().info("Plugins ("+plugins.size()+"): "
+						+plugins.toString().replace("[", "").replace("]", ""));
 			return;
 		}
-		if(JDAExpansion.getConfiguration().getBoolean("HidePlugins")) {
-			sendMessage(sender, "You don't have permission to do this "+sender.getMember().getAsMention());
+		if(JDAExpansion.getConfiguration().getBoolean("Commands.Plugins.Disabled")) {
+			sender.replyMessage(JDAExpansion.getConfiguration().getString("Commands.Plugins.Message"));
 			return;
 		}
-		sendMessage(sender, "Plugins ("+plugins.size()+"): "+plugins.toString().replace("[", "").replace("]", ""));
-	}
-	public void sendMessage(CommandSender sender, String message) {
-		if(sender instanceof SlashCommand) {
-			((SlashCommand)sender).reply(message).queue();
-			return;
-		}
-		sender.sendMessage(message);
+		sender.replyMessage("Plugins ("+plugins.size()+"): "+plugins.toString().replace("[", "").replace("]", ""));
 	}
 	
 }

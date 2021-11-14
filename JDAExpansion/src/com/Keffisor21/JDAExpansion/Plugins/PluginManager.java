@@ -27,6 +27,7 @@ import com.Keffisor21.JDAExpansion.Utils;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
+import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
 import com.Keffisor21.JDAExpansion.Exception.InvalidPluginYML;
 import com.Keffisor21.JDAExpansion.Exception.MainNotFound;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
@@ -221,7 +222,7 @@ public class PluginManager {
 		} else {
 			Thread.currentThread().setContextClassLoader(previusClassLoader);
 		}
-		
+		EventsRegistration.registered.clear();
 	}
 	
 	private boolean hasExtensionJar(File f) {

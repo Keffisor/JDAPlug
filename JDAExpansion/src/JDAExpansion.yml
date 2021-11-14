@@ -1,1 +1,6 @@
-HidePlugins: false
+Commands:
+    Plugins:
+        Disabled: false
+        Message: "You don't have permission to see this"
+    Version:
+        Disabled: false
