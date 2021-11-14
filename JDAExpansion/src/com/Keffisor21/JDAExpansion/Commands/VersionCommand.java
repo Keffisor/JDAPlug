@@ -13,7 +13,7 @@ public class VersionCommand extends createCommand {
 
 	@Override
 	protected void isExecuted(String[] args, CommandSender sender) {
-		sender.replyMessage("Running JDAExpansion BETA v1.9");
+		sender.replyMessage("Running JDAExpansion BETA v2.0");
 	}
 
 }

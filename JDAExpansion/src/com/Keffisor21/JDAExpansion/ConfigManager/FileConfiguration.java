@@ -55,7 +55,11 @@ public class FileConfiguration {
 	//		Files.write(file, IOUtils.toString(is, StandardCharsets.UTF_8));
 
 			if(!isValid(file, o, nameFile)) {
-				extractConfig(true);
+				try {
+					extractConfig(true);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
 			
 			data = yaml.load(new FileInputStream(file));
@@ -244,13 +248,12 @@ public class FileConfiguration {
 		ZipEntry zipEntry = zipFile.getEntry(file.getName());
 		if(zipEntry == null) {
 		   Console.info(ConsoleColor.RED_BRIGHT, "The "+file.getName()+" was not found in "+jarFile.getName());
-			return null;	
+		   return null;	
 		}
-		InputStream is = zipFile.getInputStream(zipEntry);
 		if(write) {
-			FileUtils.copyInputStreamToFile(is, file);
+			FileUtils.copyInputStreamToFile(zipFile.getInputStream(zipEntry), file);
 		}
-		return new Yaml().load(is);
+		return new Yaml().load(zipFile.getInputStream(zipEntry));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
