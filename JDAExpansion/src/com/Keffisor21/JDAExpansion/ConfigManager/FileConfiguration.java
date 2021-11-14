@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -73,12 +74,15 @@ public class FileConfiguration {
 			e2.printStackTrace();
 		}
 	}
+	
 	public String getPath() {
 		return this.file.getPath();
 	}
+	
 	public Object get(String x) {
 		return getElementMap(x, data.get(x), data);
 	}
+	
 	public Map<String, Object> getElements() {
 		return data;
 	}
@@ -156,12 +160,24 @@ public class FileConfiguration {
 
 		first.forEach((k, v) -> {firstNames.add(k);});
 		second.forEach((k, v) -> {secondNames.add(k);});
-
+		
+		
+		boolean status = true;
+		
 		for (String s : secondNames) {
 			if(!firstNames.contains(s)) {
-				return false;
+				status = false;
 			}
 		}
+		
+		if(!status) {
+			data = first;
+			second.forEach((k, v) -> {
+				data.put(k, v);
+			});
+			saveConfig();
+		}
+		
 		return true;
 
 		} catch (IOException e) {
