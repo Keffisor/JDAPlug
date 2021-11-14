@@ -160,22 +160,16 @@ public class FileConfiguration {
 
 		first.forEach((k, v) -> {firstNames.add(k);});
 		second.forEach((k, v) -> {secondNames.add(k);});
-		
-		
-		boolean status = true;
-		
+				
 		for (String s : secondNames) {
 			if(!firstNames.contains(s)) {
-				status = false;
+				data = first;
+				second.forEach((k, v) -> {
+					data.put(k, v);
+				});
+				saveConfig();
+				return false;
 			}
-		}
-		
-		if(!status) {
-			data = first;
-			second.forEach((k, v) -> {
-				data.put(k, v);
-			});
-			saveConfig();
 		}
 		
 		return true;
