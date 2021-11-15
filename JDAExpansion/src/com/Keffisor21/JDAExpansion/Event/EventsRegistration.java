@@ -2,15 +2,15 @@ package com.Keffisor21.JDAExpansion.Event;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+
+import com.Keffisor21.JDAExpansion.Event.API.MessageConsoleReceivedEvent;
 
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
@@ -233,6 +233,7 @@ public class EventsRegistration extends ListenerAdapter {
 			if(nonnull == null) continue;
 			cls.add(method.getParameters()[0].getType());
 		}
+		cls.add(MessageConsoleReceivedEvent.class);
 		return cls;
 	}
 	
@@ -492,5 +493,10 @@ public class EventsRegistration extends ListenerAdapter {
     @Override public void onGenericEmote(GenericEmoteEvent event) {executeClass(GenericEmoteEvent.class, event);}
     @Override public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event) {executeClass(GenericEmoteUpdateEvent.class, event);}
     @Override public void onGenericPermissionOverride(GenericPermissionOverrideEvent event) {executeClass(GenericPermissionOverrideEvent.class, event);}
+
+    public void onMessageConsoleReceived(MessageConsoleReceivedEvent event) {
+    	executeClass(MessageConsoleReceivedEvent.class, event);
+    }
+
 	
 }

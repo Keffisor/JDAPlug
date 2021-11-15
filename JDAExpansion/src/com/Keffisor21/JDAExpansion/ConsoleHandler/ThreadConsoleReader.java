@@ -1,12 +1,9 @@
 package com.Keffisor21.JDAExpansion.ConsoleHandler;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import com.Keffisor21.JDAExpansion.JDAExpansion;
-import com.Keffisor21.JDAExpansion.Event.API.ConsoleEvents;
+import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
+import com.Keffisor21.JDAExpansion.Event.API.MessageConsoleReceivedEvent;
 import com.Keffisor21.JDAExpansion.Event.API.createCommand;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
@@ -44,13 +41,14 @@ public class ThreadConsoleReader extends Thread {
 	}
          
     private void detectCommand(String command) {
+		new EventsRegistration().onMessageConsoleReceived(new MessageConsoleReceivedEvent(command));
+
     	if(jda.getEventManager().stream().filter(obj -> {
-    		if(obj instanceof ConsoleEvents) {
-    			return ((ConsoleEvents)obj).onMessageConsoleReceive(command);
-    		}
+    		
     		if(obj instanceof createCommand) {
    				return ((createCommand) obj).onConsoleMessageReceived(command);
    			}
+    		
    			return false;
    		}).collect(Collectors.toList()).isEmpty())  {
 			 Console.logger.info("Unknown command");	

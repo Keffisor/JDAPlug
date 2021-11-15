@@ -114,12 +114,10 @@ public class JDAExpansion {
 	}
 	
 	public static void registerEvent(Object o) {
-		if(o instanceof ListenerAdapter) {
+		if(o instanceof ListenerAdapter)
 			registratedClassPlugin.add(o);
 		if(o instanceof PluginListener)
 			EventsRegistration.loadEvent((PluginListener)o);
-
-		}
 	}
 	
 	public static void registerEvents(Object... o) {
