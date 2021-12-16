@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData; 
 
 public abstract class createCommand extends ListenerAdapter {
+	public static List<CommandData> commandsData = new ArrayList<>();
+	
     private String command;
     private String contentRaw = "";
     private List<String> aliases = new ArrayList<String>();
@@ -30,7 +32,7 @@ public abstract class createCommand extends ListenerAdapter {
     		this.aliases = Arrays.asList(args);
     	}
     	if(commandData != null) {
-    		JDAExpansion.getJDA().updateCommands().addCommands(commandData).queue();
+    		commandsData.add(commandData);
     	}
     }
    

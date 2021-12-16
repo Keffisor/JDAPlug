@@ -21,6 +21,7 @@ import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorOut;
 import com.Keffisor21.JDAExpansion.Event.EventHandler;
 import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
 import com.Keffisor21.JDAExpansion.Event.PluginListener;
+import com.Keffisor21.JDAExpansion.Event.API.createCommand;
 import com.Keffisor21.JDAExpansion.Logs.LogsManager;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.NMS.JDAType;
@@ -56,8 +57,10 @@ public class JDAExpansion {
 		//create thread of reading the console
  	    new ThreadConsoleReader(jda, Console.reader).start();
 		getJDA().addEventListener(new EventsRegistration(), new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand(), new VersionCommand());
-	    new Console().start();
+		new Console().start();
 	    pluginManager.loadPlugins(jda);
+	    //load commanddata for slashcommands
+	    getJDA().updateCommands().addCommands(createCommand.commandsData).queue();
 	}
 	
 	private static void setConsoleConfig() {
