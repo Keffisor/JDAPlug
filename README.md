@@ -3,7 +3,7 @@
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/Keffisor/JDAExpansion)](https://github.com/Keffisor/JDAExpansion/commits/master)
 <br>
 # JDAExpansion
-**JDAExpansion** - Add a console and install/create plugins with a easy api to your bot. It's based on the Discord library [JDA](https://github.com/DV8FromTheWorld/JDA). This library it's inspired of [Bukkit](https://dev.bukkit.org/).
+**JDAExpansion** - Add a console and install/create plugins with a easy api to your bot. It's based on the Discord library [JDA](https://github.com/DV8FromTheWorld/JDA) and inspired on [Bukkit](https://dev.bukkit.org/).
 
 # Features
 - Create a console on the Bot for execute commands.
