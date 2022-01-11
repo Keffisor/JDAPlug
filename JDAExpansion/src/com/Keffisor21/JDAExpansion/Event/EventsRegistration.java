@@ -11,6 +11,9 @@ import javax.annotation.Nonnull;
 
 import com.Keffisor21.JDAExpansion.Event.API.MessageConsoleReceivedEvent;
 
+import net.dv8tion.jda.annotations.DeprecatedSince;
+import net.dv8tion.jda.annotations.ForRemoval;
+import net.dv8tion.jda.annotations.ReplaceWith;
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.GatewayPingEvent;
@@ -22,6 +25,10 @@ import net.dv8tion.jda.api.events.ResumedEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.StatusChangeEvent;
 import net.dv8tion.jda.api.events.UpdateEvent;
+import net.dv8tion.jda.api.events.application.ApplicationCommandCreateEvent;
+import net.dv8tion.jda.api.events.application.ApplicationCommandDeleteEvent;
+import net.dv8tion.jda.api.events.application.ApplicationCommandUpdateEvent;
+import net.dv8tion.jda.api.events.application.GenericApplicationCommandEvent;
 import net.dv8tion.jda.api.events.channel.category.CategoryCreateEvent;
 import net.dv8tion.jda.api.events.channel.category.CategoryDeleteEvent;
 import net.dv8tion.jda.api.events.channel.category.GenericCategoryEvent;
@@ -59,6 +66,7 @@ import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateNameEve
 import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateParentEvent;
 import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePermissionsEvent;
 import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdatePositionEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateRegionEvent;
 import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateUserLimitEvent;
 import net.dv8tion.jda.api.events.emote.EmoteAddedEvent;
 import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
@@ -88,6 +96,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberUpdateEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GenericGuildMemberUpdateEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
@@ -110,6 +119,7 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateLocaleEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMFALevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxMembersEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateMaxPresencesEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateNSFWLevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNotificationLevelEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateOwnerEvent;
@@ -127,12 +137,19 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceRequestToSpeakEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfMuteEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceStreamEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSuppressEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceVideoEvent;
 import net.dv8tion.jda.api.events.http.HttpRequestEvent;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.GenericComponentInteractionCreateEvent;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -168,6 +185,7 @@ import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.role.update.GenericRoleUpdateEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateColorEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateHoistedEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateIconEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateMentionableEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdatePermissionsEvent;
@@ -177,6 +195,12 @@ import net.dv8tion.jda.api.events.self.SelfUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateMFAEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateNameEvent;
 import net.dv8tion.jda.api.events.self.SelfUpdateVerifiedEvent;
+import net.dv8tion.jda.api.events.stage.GenericStageInstanceEvent;
+import net.dv8tion.jda.api.events.stage.StageInstanceCreateEvent;
+import net.dv8tion.jda.api.events.stage.StageInstanceDeleteEvent;
+import net.dv8tion.jda.api.events.stage.update.GenericStageInstanceUpdateEvent;
+import net.dv8tion.jda.api.events.stage.update.StageInstanceUpdatePrivacyLevelEvent;
+import net.dv8tion.jda.api.events.stage.update.StageInstanceUpdateTopicEvent;
 import net.dv8tion.jda.api.events.user.GenericUserEvent;
 import net.dv8tion.jda.api.events.user.UserActivityEndEvent;
 import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
@@ -256,242 +280,315 @@ public class EventsRegistration extends ListenerAdapter {
 		return result;
 	}
 	
-	@Override public void onTextChannelUpdatePermissions(TextChannelUpdatePermissionsEvent event) {executeClass(TextChannelUpdatePermissionsEvent.class, event);}
-	
-	@Override public void onStoreChannelUpdatePermissions(StoreChannelUpdatePermissionsEvent event) {executeClass(StoreChannelUpdatePermissionsEvent.class, event);}
+	//jda events ListenerAdapter.class
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.0")
+    @ReplaceWith("onPermissionOverrideUpdate(), onPermissionOverrideCreate(), and onPermissionOverrideDelete()")
+    @Override public void onTextChannelUpdatePermissions(@Nonnull TextChannelUpdatePermissionsEvent event) {executeClass(TextChannelUpdatePermissionsEvent.class, event);}
 
-    @Override public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event) {executeClass(VoiceChannelUpdatePermissionsEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.0")
+    @ReplaceWith("onPermissionOverrideUpdate(), onPermissionOverrideCreate(), and onPermissionOverrideDelete()")
+    @Override public void onStoreChannelUpdatePermissions(@Nonnull StoreChannelUpdatePermissionsEvent event) {executeClass(StoreChannelUpdatePermissionsEvent.class, event);}
 
-    @Override public void onCategoryUpdatePermissions(CategoryUpdatePermissionsEvent event) {executeClass(CategoryUpdatePermissionsEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.0")
+    @ReplaceWith("onPermissionOverrideUpdate(), onPermissionOverrideCreate(), and onPermissionOverrideDelete()")
+    @Override public void onVoiceChannelUpdatePermissions(@Nonnull VoiceChannelUpdatePermissionsEvent event) {executeClass(VoiceChannelUpdatePermissionsEvent.class, event);}
 
-    @Override public void onGuildMemberLeave(GuildMemberLeaveEvent event) {executeClass(GuildMemberLeaveEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.0")
+    @ReplaceWith("onPermissionOverrideUpdate(), onPermissionOverrideCreate(), and onPermissionOverrideDelete()")
+    @Override public void onCategoryUpdatePermissions(@Nonnull CategoryUpdatePermissionsEvent event) {executeClass(CategoryUpdatePermissionsEvent.class, event);}
 
-    @Override public void onResume(ResumedEvent event) {executeClass(ResumedEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.0")
+    @ReplaceWith("onGuildMemberRemove(GuildMemberRemoveEvent)")
+    @Override public void onGuildMemberLeave(@Nonnull GuildMemberLeaveEvent event) {executeClass(GuildMemberLeaveEvent.class, event);}
 
-    @Override public void onReconnect(ReconnectedEvent event) {executeClass(ReconnectedEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.1")
+    @ReplaceWith("onResumed(ResumedEvent)")
+    @Override public void onResume(@Nonnull ResumedEvent event) {executeClass(ResumedEvent.class, event);}
 
-    @Override public void onGenericEvent(GenericEvent event) {executeClass(GenericEvent.class, event);}
-    @Override public void onGenericUpdate(UpdateEvent<?, ?> event) {executeClass(UpdateEvent.class, event);}
-	@Override public void onRawGateway(RawGatewayEvent event) {executeClass(RawGatewayEvent.class, event);}
-	@Override public void onGatewayPing(GatewayPingEvent event) {executeClass(GatewayPingEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.2.1")
+    @ReplaceWith("onReconnected(ReconnectedEvent)")
+    @Override public void onReconnect(@Nonnull ReconnectedEvent event) {executeClass(ReconnectedEvent.class, event);}
+
+    @Override public void onGenericEvent(@Nonnull GenericEvent event) {executeClass(GenericEvent.class, event);}
+    @Override public void onGenericUpdate(@Nonnull UpdateEvent<?, ?> event) {executeClass(UpdateEvent.class, event);}
+    @Override public void onRawGateway(@Nonnull RawGatewayEvent event) {executeClass(RawGatewayEvent.class, event);}
+    @Override public void onGatewayPing(@Nonnull GatewayPingEvent event) {executeClass(GatewayPingEvent.class, event);}
 
     //JDA Events
-	@Override public void onReady(ReadyEvent event) {executeClass(ReadyEvent.class, event);}
-	@Override public void onResumed(ResumedEvent event) {executeClass(ResumedEvent.class, event);}
-	@Override public void onReconnected(ReconnectedEvent event) {executeClass(ReconnectedEvent.class, event);}
-	@Override public void onDisconnect(DisconnectEvent event) {executeClass(DisconnectEvent.class, event);}
-	@Override public void onShutdown(ShutdownEvent event) {executeClass(ShutdownEvent.class, event);}
-	@Override public void onStatusChange(StatusChangeEvent event) {executeClass(StatusChangeEvent.class, event);}
-	@Override public void onException(ExceptionEvent event) {executeClass(ExceptionEvent.class, event);}
+    @Override public void onReady(@Nonnull ReadyEvent event) {executeClass(ReadyEvent.class, event);}
+    @Override public void onResumed(@Nonnull ResumedEvent event) {executeClass(ResumedEvent.class, event);}
+    @Override public void onReconnected(@Nonnull ReconnectedEvent event) {executeClass(ReconnectedEvent.class, event);}
+    @Override public void onDisconnect(@Nonnull DisconnectEvent event) {executeClass(DisconnectEvent.class, event);}
+    @Override public void onShutdown(@Nonnull ShutdownEvent event) {executeClass(ShutdownEvent.class, event);}
+    @Override public void onStatusChange(@Nonnull StatusChangeEvent event) {executeClass(StatusChangeEvent.class, event);}
+    @Override public void onException(@Nonnull ExceptionEvent event) {executeClass(ExceptionEvent.class, event);}
+
+    //Interaction Events
+    @Override public void onSlashCommand(@Nonnull SlashCommandEvent event) {executeClass(SlashCommandEvent.class, event);}
+    @Override public void onButtonClick(@Nonnull ButtonClickEvent event) {executeClass(ButtonClickEvent.class, event);}
+    @Override public void onSelectionMenu(@Nonnull SelectionMenuEvent event) {executeClass(SelectionMenuEvent.class, event);}
+
+    //Application Events
+    @Override public void onApplicationCommandUpdate(@Nonnull ApplicationCommandUpdateEvent event) {executeClass(ApplicationCommandUpdateEvent.class, event);}
+    @Override public void onApplicationCommandDelete(@Nonnull ApplicationCommandDeleteEvent event) {executeClass(ApplicationCommandDeleteEvent.class, event);}
+    @Override public void onApplicationCommandCreate(@Nonnull ApplicationCommandCreateEvent event) {executeClass(ApplicationCommandCreateEvent.class, event);}
 
     //User Events
-	@Override public void onUserUpdateName(UserUpdateNameEvent event) {executeClass(UserUpdateNameEvent.class, event);}
-	@Override public void onUserUpdateDiscriminator(UserUpdateDiscriminatorEvent event) {executeClass(UserUpdateDiscriminatorEvent.class, event);}
-	@Override public void onUserUpdateAvatar(UserUpdateAvatarEvent event) {executeClass(UserUpdateAvatarEvent.class, event);}
-	@Override public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {executeClass(UserUpdateOnlineStatusEvent.class, event);}
-	@Override public void onUserUpdateActivityOrder(UserUpdateActivityOrderEvent event) {executeClass(UserUpdateActivityOrderEvent.class, event);}
-	@Override public void onUserUpdateFlags(UserUpdateFlagsEvent event) {executeClass(UserUpdateFlagsEvent.class, event);}
-	@Override public void onUserTyping(UserTypingEvent event) {executeClass(UserTypingEvent.class, event);}
-	@Override public void onUserActivityStart(UserActivityStartEvent event) {executeClass(UserActivityStartEvent.class, event);}
-	@Override public void onUserActivityEnd(UserActivityEndEvent event) {executeClass(UserActivityEndEvent.class, event);}
-	@Override public void onUserUpdateActivities(UserUpdateActivitiesEvent event) {executeClass(UserUpdateActivitiesEvent.class, event);}
+    @Override public void onUserUpdateName(@Nonnull UserUpdateNameEvent event) {executeClass(UserUpdateNameEvent.class, event);}
+    @Override public void onUserUpdateDiscriminator(@Nonnull UserUpdateDiscriminatorEvent event) {executeClass(UserUpdateDiscriminatorEvent.class, event);}
+    @Override public void onUserUpdateAvatar(@Nonnull UserUpdateAvatarEvent event) {executeClass(UserUpdateAvatarEvent.class, event);}
+    @Override public void onUserUpdateOnlineStatus(@Nonnull UserUpdateOnlineStatusEvent event) {executeClass(UserUpdateOnlineStatusEvent.class, event);}
+    @Override public void onUserUpdateActivityOrder(@Nonnull UserUpdateActivityOrderEvent event) {executeClass(UserUpdateActivityOrderEvent.class, event);}
+    @Override public void onUserUpdateFlags(@Nonnull UserUpdateFlagsEvent event) {executeClass(UserUpdateFlagsEvent.class, event);}
+    @Override public void onUserTyping(@Nonnull UserTypingEvent event) {executeClass(UserTypingEvent.class, event);}
+    @Override public void onUserActivityStart(@Nonnull UserActivityStartEvent event) {executeClass(UserActivityStartEvent.class, event);}
+    @Override public void onUserActivityEnd(@Nonnull UserActivityEndEvent event) {executeClass(UserActivityEndEvent.class, event);}
+    @Override public void onUserUpdateActivities(@Nonnull UserUpdateActivitiesEvent event) {executeClass(UserUpdateActivitiesEvent.class, event);}
 
     //Self Events. Fires only in relation to the currently logged in account.
-	@Override public void onSelfUpdateAvatar(SelfUpdateAvatarEvent event) {executeClass(SelfUpdateAvatarEvent.class, event);}
-	@Override public void onSelfUpdateMFA(SelfUpdateMFAEvent event) {executeClass(SelfUpdateMFAEvent.class, event);}
-	@Override public void onSelfUpdateName(SelfUpdateNameEvent event) {executeClass(SelfUpdateNameEvent.class, event);}
-	@Override public void onSelfUpdateVerified(SelfUpdateVerifiedEvent event) {executeClass(SelfUpdateVerifiedEvent.class, event);}
+    @Override public void onSelfUpdateAvatar(@Nonnull SelfUpdateAvatarEvent event) {executeClass(SelfUpdateAvatarEvent.class, event);}
+    @Override public void onSelfUpdateMFA(@Nonnull SelfUpdateMFAEvent event) {executeClass(SelfUpdateMFAEvent.class, event);}
+    @Override public void onSelfUpdateName(@Nonnull SelfUpdateNameEvent event) {executeClass(SelfUpdateNameEvent.class, event);}
+    @Override public void onSelfUpdateVerified(@Nonnull SelfUpdateVerifiedEvent event) {executeClass(SelfUpdateVerifiedEvent.class, event);}
 
     //Message Events
     //Guild (TextChannel) Message Events
-	@Override public void onGuildMessageReceived(GuildMessageReceivedEvent event) {executeClass(GuildMessageReceivedEvent.class, event);}
-	@Override public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {executeClass(GuildMessageUpdateEvent.class, event);}
-	@Override public void onGuildMessageDelete(GuildMessageDeleteEvent event) {executeClass(GuildMessageDeleteEvent.class, event);}
-	@Override public void onGuildMessageEmbed(GuildMessageEmbedEvent event) {executeClass(GuildMessageEmbedEvent.class, event);}
-	@Override public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {executeClass(GuildMessageReactionAddEvent.class, event);}
-	@Override public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent event) {executeClass(GuildMessageReactionRemoveEvent.class, event);}
-	@Override public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent event) {executeClass(GuildMessageReactionRemoveAllEvent.class, event);}
-	@Override public void onGuildMessageReactionRemoveEmote(GuildMessageReactionRemoveEmoteEvent event) {executeClass(GuildMessageReactionRemoveEmoteEvent.class, event);}
+    @Override public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {executeClass(GuildMessageReceivedEvent.class, event);}
+    @Override public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {executeClass(GuildMessageUpdateEvent.class, event);}
+    @Override public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {executeClass(GuildMessageDeleteEvent.class, event);}
+    @Override public void onGuildMessageEmbed(@Nonnull GuildMessageEmbedEvent event) {executeClass(GuildMessageEmbedEvent.class, event);}
+    @Override public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {executeClass(GuildMessageReactionAddEvent.class, event);}
+    @Override public void onGuildMessageReactionRemove(@Nonnull GuildMessageReactionRemoveEvent event) {executeClass(GuildMessageReactionRemoveEvent.class, event);}
+    @Override public void onGuildMessageReactionRemoveAll(@Nonnull GuildMessageReactionRemoveAllEvent event) {executeClass(GuildMessageReactionRemoveAllEvent.class, event);}
+    @Override public void onGuildMessageReactionRemoveEmote(@Nonnull GuildMessageReactionRemoveEmoteEvent event) {executeClass(GuildMessageReactionRemoveEmoteEvent.class, event);}
 
     //Private Message Events
-	@Override public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {executeClass(PrivateMessageReceivedEvent.class, event);}
-	@Override public void onPrivateMessageUpdate(PrivateMessageUpdateEvent event) {executeClass(PrivateMessageUpdateEvent.class, event);}
-	@Override public void onPrivateMessageDelete(PrivateMessageDeleteEvent event) {executeClass(PrivateMessageDeleteEvent.class, event);}
-	@Override public void onPrivateMessageEmbed(PrivateMessageEmbedEvent event) {executeClass(PrivateMessageEmbedEvent.class, event);}
-	@Override public void onPrivateMessageReactionAdd(PrivateMessageReactionAddEvent event) {executeClass(PrivateMessageReactionAddEvent.class, event);}
-	@Override public void onPrivateMessageReactionRemove(PrivateMessageReactionRemoveEvent event) {executeClass(PrivateMessageReactionRemoveEvent.class, event);}
+    @Override public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {executeClass(PrivateMessageReceivedEvent.class, event);}
+    @Override public void onPrivateMessageUpdate(@Nonnull PrivateMessageUpdateEvent event) {executeClass(PrivateMessageUpdateEvent.class, event);}
+    @Override public void onPrivateMessageDelete(@Nonnull PrivateMessageDeleteEvent event) {executeClass(PrivateMessageDeleteEvent.class, event); }
+    @Override public void onPrivateMessageEmbed(@Nonnull PrivateMessageEmbedEvent event) {executeClass(PrivateMessageEmbedEvent.class, event);}
+    @Override public void onPrivateMessageReactionAdd(@Nonnull PrivateMessageReactionAddEvent event) {executeClass(PrivateMessageReactionAddEvent.class, event);}
+    @Override public void onPrivateMessageReactionRemove(@Nonnull PrivateMessageReactionRemoveEvent event) {executeClass(PrivateMessageReactionRemoveEvent.class, event);}
 
     //Combined Message Events (Combines Guild and Private message into 1 event)
-	@Override public void onMessageReceived(MessageReceivedEvent event) {executeClass(MessageReceivedEvent.class, event);}
-	@Override public void onMessageUpdate(MessageUpdateEvent event) {executeClass(MessageUpdateEvent.class, event);}
-	@Override public void onMessageDelete(MessageDeleteEvent event) {executeClass(MessageDeleteEvent.class, event);}
-	@Override public void onMessageBulkDelete(MessageBulkDeleteEvent event) {executeClass(MessageBulkDeleteEvent.class, event);}
-	@Override public void onMessageEmbed(MessageEmbedEvent event) {executeClass(MessageEmbedEvent.class, event);}
-	@Override public void onMessageReactionAdd(MessageReactionAddEvent event) {executeClass(MessageReactionAddEvent.class, event);}
-	@Override public void onMessageReactionRemove(MessageReactionRemoveEvent event) {executeClass(MessageReactionRemoveEvent.class, event);}
-	@Override public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {executeClass(MessageReactionRemoveAllEvent.class, event);}
-	@Override public void onMessageReactionRemoveEmote(MessageReactionRemoveEmoteEvent event) {executeClass(MessageReactionRemoveEvent.class, event);}
+    @Override public void onMessageReceived(@Nonnull MessageReceivedEvent event) {executeClass(MessageReceivedEvent.class, event);}
+    @Override public void onMessageUpdate(@Nonnull MessageUpdateEvent event) {executeClass(MessageUpdateEvent.class, event);}
+    @Override public void onMessageDelete(@Nonnull MessageDeleteEvent event) {executeClass(MessageDeleteEvent.class, event);}
+    @Override public void onMessageBulkDelete(@Nonnull MessageBulkDeleteEvent event) {executeClass(MessageBulkDeleteEvent.class, event);}
+    @Override public void onMessageEmbed(@Nonnull MessageEmbedEvent event) {executeClass(MessageEmbedEvent.class, event);}
+    @Override public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {executeClass(MessageReactionAddEvent.class, event);}
+    @Override public void onMessageReactionRemove(@Nonnull MessageReactionRemoveEvent event) {executeClass(MessageReactionRemoveEvent.class, event);}
+    @Override public void onMessageReactionRemoveAll(@Nonnull MessageReactionRemoveAllEvent event) {executeClass(MessageReactionRemoveAllEvent.class, event);}
+    @Override public void onMessageReactionRemoveEmote(@Nonnull MessageReactionRemoveEmoteEvent event) {executeClass(MessageReactionRemoveEmoteEvent.class, event);}
 
     //PermissionOverride Events
-	@Override public void onPermissionOverrideDelete(PermissionOverrideDeleteEvent event) {executeClass(PermissionOverrideDeleteEvent.class, event);}
-	@Override public void onPermissionOverrideUpdate(PermissionOverrideUpdateEvent event) {executeClass(PermissionOverrideUpdateEvent.class, event);}
-	@Override public void onPermissionOverrideCreate(PermissionOverrideCreateEvent event) {executeClass(PermissionOverrideCreateEvent.class, event);}
+    @Override public void onPermissionOverrideDelete(@Nonnull PermissionOverrideDeleteEvent event) {executeClass(PermissionOverrideDeleteEvent.class, event);}
+    @Override public void onPermissionOverrideUpdate(@Nonnull PermissionOverrideUpdateEvent event) {executeClass(PermissionOverrideUpdateEvent.class, event);}
+    @Override public void onPermissionOverrideCreate(@Nonnull PermissionOverrideCreateEvent event) {executeClass(PermissionOverrideCreateEvent.class, event);}
 
     //StoreChannel Events
-	@Override public void onStoreChannelDelete(StoreChannelDeleteEvent event) {executeClass(StoreChannelDeleteEvent.class, event);}
-	@Override public void onStoreChannelUpdateName(StoreChannelUpdateNameEvent event) {executeClass(StoreChannelUpdateNameEvent.class, event);}
-	@Override public void onStoreChannelUpdatePosition(StoreChannelUpdatePositionEvent event) {executeClass(StoreChannelUpdatePositionEvent.class, event);}
-	@Override public void onStoreChannelCreate(StoreChannelCreateEvent event) {executeClass(StoreChannelCreateEvent.class, event);}
+    @Override public void onStoreChannelDelete(@Nonnull StoreChannelDeleteEvent event) {executeClass(StoreChannelDeleteEvent.class, event);}
+    @Override public void onStoreChannelUpdateName(@Nonnull StoreChannelUpdateNameEvent event) {executeClass(StoreChannelUpdateNameEvent.class, event);}
+    @Override public void onStoreChannelUpdatePosition(@Nonnull StoreChannelUpdatePositionEvent event) {executeClass(StoreChannelUpdatePositionEvent.class, event);}
+    @Override public void onStoreChannelCreate(@Nonnull StoreChannelCreateEvent event) {executeClass(StoreChannelCreateEvent.class, event);}
 
     //TextChannel Events
-	@Override public void onTextChannelDelete(TextChannelDeleteEvent event) {executeClass(TextChannelDeleteEvent.class, event);}
-	@Override public void onTextChannelUpdateName(TextChannelUpdateNameEvent event) {executeClass(TextChannelUpdateNameEvent.class, event);}
-	@Override public void onTextChannelUpdateTopic(TextChannelUpdateTopicEvent event) {executeClass(TextChannelUpdateTopicEvent.class, event);}
-	@Override public void onTextChannelUpdatePosition(TextChannelUpdatePositionEvent event) {executeClass(TextChannelUpdatePositionEvent.class, event);}
-	@Override public void onTextChannelUpdateNSFW(TextChannelUpdateNSFWEvent event) {executeClass(TextChannelUpdateNSFWEvent.class, event);}
-	@Override public void onTextChannelUpdateParent(TextChannelUpdateParentEvent event) {executeClass(TextChannelUpdateParentEvent.class, event);}
-	@Override public void onTextChannelUpdateSlowmode(TextChannelUpdateSlowmodeEvent event) {executeClass(TextChannelUpdateSlowmodeEvent.class, event);}
-	@Override public void onTextChannelUpdateNews(TextChannelUpdateNewsEvent event) {executeClass(TextChannelUpdateNewsEvent.class, event);}
-	@Override public void onTextChannelCreate(TextChannelCreateEvent event) {executeClass(TextChannelCreateEvent.class, event);}
+    @Override public void onTextChannelDelete(@Nonnull TextChannelDeleteEvent event) {executeClass(TextChannelDeleteEvent.class, event);}
+    @Override public void onTextChannelUpdateName(@Nonnull TextChannelUpdateNameEvent event) {executeClass(TextChannelUpdateNameEvent.class, event);}
+    @Override public void onTextChannelUpdateTopic(@Nonnull TextChannelUpdateTopicEvent event) {executeClass(TextChannelUpdateTopicEvent.class, event);}
+    @Override public void onTextChannelUpdatePosition(@Nonnull TextChannelUpdatePositionEvent event) {executeClass(TextChannelUpdatePositionEvent.class, event);}
+    @Override public void onTextChannelUpdateNSFW(@Nonnull TextChannelUpdateNSFWEvent event) {executeClass(TextChannelUpdateNSFWEvent.class, event);}
+    @Override public void onTextChannelUpdateParent(@Nonnull TextChannelUpdateParentEvent event) {executeClass(TextChannelUpdateParentEvent.class, event);}
+    @Override public void onTextChannelUpdateSlowmode(@Nonnull TextChannelUpdateSlowmodeEvent event) {executeClass(TextChannelUpdateSlowmodeEvent.class, event);}
+    @Override public void onTextChannelUpdateNews(@Nonnull TextChannelUpdateNewsEvent event) {executeClass(TextChannelUpdateNewsEvent.class, event);}
+    @Override public void onTextChannelCreate(@Nonnull TextChannelCreateEvent event) {executeClass(TextChannelCreateEvent.class, event);}
 
     //VoiceChannel Events
-	@Override public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {executeClass(VoiceChannelDeleteEvent.class, event);}
-	@Override public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event) {executeClass(VoiceChannelUpdateNameEvent.class, event);}
-	@Override public void onVoiceChannelUpdatePosition(VoiceChannelUpdatePositionEvent event) {executeClass(VoiceChannelUpdatePositionEvent.class, event);}
-	@Override public void onVoiceChannelUpdateUserLimit(VoiceChannelUpdateUserLimitEvent event) {executeClass(VoiceChannelUpdateUserLimitEvent.class, event);}
-	@Override public void onVoiceChannelUpdateBitrate(VoiceChannelUpdateBitrateEvent event) {executeClass(VoiceChannelUpdateBitrateEvent.class, event);}
-	@Override public void onVoiceChannelUpdateParent(VoiceChannelUpdateParentEvent event) {executeClass(VoiceChannelUpdateParentEvent.class, event);}
-	@Override public void onVoiceChannelCreate(VoiceChannelCreateEvent event) {executeClass(VoiceChannelCreateEvent.class, event);}
+    @Override public void onVoiceChannelDelete(@Nonnull VoiceChannelDeleteEvent event) {executeClass(VoiceChannelDeleteEvent.class, event);}
+    @Override public void onVoiceChannelUpdateName(@Nonnull VoiceChannelUpdateNameEvent event) {executeClass(VoiceChannelUpdateNameEvent.class, event);}
+    @Override public void onVoiceChannelUpdatePosition(@Nonnull VoiceChannelUpdatePositionEvent event) {executeClass(VoiceChannelUpdatePositionEvent.class, event);}
+    @Override public void onVoiceChannelUpdateUserLimit(@Nonnull VoiceChannelUpdateUserLimitEvent event) {executeClass(VoiceChannelUpdateUserLimitEvent.class, event);}
+    @Override public void onVoiceChannelUpdateBitrate(@Nonnull VoiceChannelUpdateBitrateEvent event) {executeClass(VoiceChannelUpdateBitrateEvent.class, event);}
+    @Override public void onVoiceChannelUpdateParent(@Nonnull VoiceChannelUpdateParentEvent event) {executeClass(VoiceChannelUpdateParentEvent.class, event);}
+    @Override public void onVoiceChannelUpdateRegion(@Nonnull VoiceChannelUpdateRegionEvent event) {executeClass(VoiceChannelUpdateRegionEvent.class, event);}
+    @Override public void onVoiceChannelCreate(@Nonnull VoiceChannelCreateEvent event) {executeClass(VoiceChannelCreateEvent.class, event);}
 
     //Category Events
-	@Override public void onCategoryDelete(CategoryDeleteEvent event) {executeClass(CategoryDeleteEvent.class, event);}
-    @Override public void onCategoryUpdateName(CategoryUpdateNameEvent event) {executeClass(CategoryUpdateNameEvent.class, event);}
-    @Override public void onCategoryUpdatePosition(CategoryUpdatePositionEvent event) {executeClass(CategoryUpdatePositionEvent.class, event);}
-    @Override public void onCategoryCreate(CategoryCreateEvent event) {executeClass(CategoryCreateEvent.class, event);}
+    @Override public void onCategoryDelete(@Nonnull CategoryDeleteEvent event) {executeClass(CategoryDeleteEvent.class, event);}
+    @Override public void onCategoryUpdateName(@Nonnull CategoryUpdateNameEvent event) {executeClass(CategoryUpdateNameEvent.class, event);}
+    @Override public void onCategoryUpdatePosition(@Nonnull CategoryUpdatePositionEvent event) {executeClass(CategoryUpdatePositionEvent.class, event);}
+    @Override public void onCategoryCreate(@Nonnull CategoryCreateEvent event) {executeClass(CategoryCreateEvent.class, event);}
 
     //PrivateChannel Events
-    @Override public void onPrivateChannelCreate(PrivateChannelCreateEvent event) {executeClass(PrivateChannelCreateEvent.class, event);}
-    @Override public void onPrivateChannelDelete(PrivateChannelDeleteEvent event) {executeClass(PrivateChannelDeleteEvent.class, event);}
+
+    /**
+     * @deprecated This event is no longer supported by discord
+     */
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.3.0")
+    @Override public void onPrivateChannelCreate(@Nonnull PrivateChannelCreateEvent event) {executeClass(PrivateChannelCreateEvent.class, event);}
+    @Deprecated
+    @ForRemoval(deadline = "4.4.0")
+    @DeprecatedSince("4.3.0")
+    @Override public void onPrivateChannelDelete(@Nonnull PrivateChannelDeleteEvent event) {executeClass(PrivateChannelDeleteEvent.class, event);}
+
+    //StageInstance Event
+    @Override public void onStageInstanceDelete(@Nonnull StageInstanceDeleteEvent event) {executeClass(StageInstanceDeleteEvent.class, event);}
+    @Override public void onStageInstanceUpdateTopic(@Nonnull StageInstanceUpdateTopicEvent event) {executeClass(StageInstanceUpdateTopicEvent.class, event);}
+    @Override public void onStageInstanceUpdatePrivacyLevel(@Nonnull StageInstanceUpdatePrivacyLevelEvent event) {executeClass(StageInstanceUpdatePrivacyLevelEvent.class, event);}
+    @Override public void onStageInstanceCreate(@Nonnull StageInstanceCreateEvent event) {executeClass(StageInstanceCreateEvent.class, event);}
 
     //Guild Events
-    @Override public void onGuildReady(GuildReadyEvent event) {executeClass(GuildReadyEvent.class, event);}
-    @Override public void onGuildTimeout(GuildTimeoutEvent event) {executeClass(GuildTimeoutEvent.class, event);}
-    @Override public void onGuildJoin(GuildJoinEvent event) {executeClass(GuildJoinEvent.class, event);}
-    @Override public void onGuildLeave(GuildLeaveEvent event) {executeClass(GuildLeaveEvent.class, event);}
-    @Override public void onGuildAvailable(GuildAvailableEvent event) {executeClass(GuildAvailableEvent.class, event);}
-    @Override public void onGuildUnavailable(GuildUnavailableEvent event) {executeClass(GuildUnavailableEvent.class, event);}
-    @Override public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {executeClass(UnavailableGuildJoinedEvent.class, event);}
-    @Override public void onUnavailableGuildLeave(UnavailableGuildLeaveEvent event) {executeClass(UnavailableGuildLeaveEvent.class, event);}
-    @Override public void onGuildBan(GuildBanEvent event) {executeClass(GuildBanEvent.class, event);}
-    @Override public void onGuildUnban(GuildUnbanEvent event) {executeClass(GuildUnbanEvent.class, event);}
-    @Override public void onGuildMemberRemove(GuildMemberRemoveEvent event) {executeClass(GuildMemberRemoveEvent.class, event);}
+    @Override public void onGuildReady(@Nonnull GuildReadyEvent event) {executeClass(GuildReadyEvent.class, event);}
+    @Override public void onGuildTimeout(@Nonnull GuildTimeoutEvent event) {executeClass(GuildTimeoutEvent.class, event);}
+    @Override public void onGuildJoin(@Nonnull GuildJoinEvent event) {executeClass(GuildJoinEvent.class, event);}
+    @Override public void onGuildLeave(@Nonnull GuildLeaveEvent event) {executeClass(GuildLeaveEvent.class, event);}
+    @Override public void onGuildAvailable(@Nonnull GuildAvailableEvent event) {executeClass(GuildAvailableEvent.class, event);}
+    @Override public void onGuildUnavailable(@Nonnull GuildUnavailableEvent event) {executeClass(GuildUnavailableEvent.class, event);}
+    @Override public void onUnavailableGuildJoined(@Nonnull UnavailableGuildJoinedEvent event) {executeClass(UnavailableGuildJoinedEvent.class, event);}
+    @Override public void onUnavailableGuildLeave(@Nonnull UnavailableGuildLeaveEvent event) {executeClass(UnavailableGuildLeaveEvent.class, event);}
+    @Override public void onGuildBan(@Nonnull GuildBanEvent event) {executeClass(GuildBanEvent.class, event);}
+    @Override public void onGuildUnban(@Nonnull GuildUnbanEvent event) {executeClass(GuildUnbanEvent.class, event);}
+    @Override public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {executeClass(GuildMemberRemoveEvent.class, event);}
 
     //Guild Update Events
-    @Override public void onGuildUpdateAfkChannel(GuildUpdateAfkChannelEvent event) {executeClass(GuildUpdateAfkChannelEvent.class, event);}
-    @Override public void onGuildUpdateSystemChannel(GuildUpdateSystemChannelEvent event) {executeClass(GuildUpdateSystemChannelEvent.class, event);}
-    @Override public void onGuildUpdateRulesChannel(GuildUpdateRulesChannelEvent event) {executeClass(GuildUpdateRulesChannelEvent.class, event);}
-    @Override public void onGuildUpdateCommunityUpdatesChannel(GuildUpdateCommunityUpdatesChannelEvent event) {executeClass(GuildUpdateCommunityUpdatesChannelEvent.class, event);}
-    @Override public void onGuildUpdateAfkTimeout(GuildUpdateAfkTimeoutEvent event) {executeClass(GuildUpdateAfkTimeoutEvent.class, event);}
-    @Override public void onGuildUpdateExplicitContentLevel(GuildUpdateExplicitContentLevelEvent event) {executeClass(GuildUpdateExplicitContentLevelEvent.class, event);}
-    @Override public void onGuildUpdateIcon(GuildUpdateIconEvent event) {executeClass(GuildUpdateIconEvent.class, event);}
-    @Override public void onGuildUpdateMFALevel(GuildUpdateMFALevelEvent event) {executeClass(GuildUpdateMFALevelEvent.class, event);}
-    @Override public void onGuildUpdateName(GuildUpdateNameEvent event){executeClass(GuildUpdateNameEvent.class, event);}
-    @Override public void onGuildUpdateNotificationLevel(GuildUpdateNotificationLevelEvent event) {executeClass(GuildUpdateNotificationLevelEvent.class, event);}
-    @Override public void onGuildUpdateOwner(GuildUpdateOwnerEvent event) {executeClass(GuildUpdateOwnerEvent.class, event);}
-    @Override public void onGuildUpdateRegion(GuildUpdateRegionEvent event) {executeClass(GuildUpdateRegionEvent.class, event);}
-    @Override public void onGuildUpdateSplash(GuildUpdateSplashEvent event) {executeClass(GuildUpdateSplashEvent.class, event);}
-    @Override public void onGuildUpdateVerificationLevel(GuildUpdateVerificationLevelEvent event) {executeClass(GuildUpdateVerificationLevelEvent.class, event);}
-    @Override public void onGuildUpdateLocale(GuildUpdateLocaleEvent event) {executeClass(GuildUpdateLocaleEvent.class, event);}
-    @Override public void onGuildUpdateFeatures(GuildUpdateFeaturesEvent event) {executeClass(GuildUpdateFeaturesEvent.class, event);}
-    @Override public void onGuildUpdateVanityCode(GuildUpdateVanityCodeEvent event) {executeClass(GuildUpdateVanityCodeEvent.class, event);}
-    @Override public void onGuildUpdateBanner(GuildUpdateBannerEvent event) {executeClass(GuildUpdateBannerEvent.class, event);}
-    @Override public void onGuildUpdateDescription(GuildUpdateDescriptionEvent event) {executeClass(GuildUpdateDescriptionEvent.class, event);}
-    @Override public void onGuildUpdateBoostTier(GuildUpdateBoostTierEvent event) {executeClass(GuildUpdateBoostTierEvent.class, event);}
-    @Override public void onGuildUpdateBoostCount(GuildUpdateBoostCountEvent event) {executeClass(GuildUpdateBoostCountEvent.class, event);}
-    @Override public void onGuildUpdateMaxMembers(GuildUpdateMaxMembersEvent event) {executeClass(GuildUpdateMaxMembersEvent.class, event);}
-    @Override public void onGuildUpdateMaxPresences(GuildUpdateMaxPresencesEvent event) {executeClass(GuildUpdateMaxPresencesEvent.class, event);}
+    @Override public void onGuildUpdateAfkChannel(@Nonnull GuildUpdateAfkChannelEvent event) {executeClass(GuildUpdateAfkChannelEvent.class, event);}
+    @Override public void onGuildUpdateSystemChannel(@Nonnull GuildUpdateSystemChannelEvent event) {executeClass(GuildUpdateSystemChannelEvent.class, event);}
+    @Override public void onGuildUpdateRulesChannel(@Nonnull GuildUpdateRulesChannelEvent event) {executeClass(GuildUpdateRulesChannelEvent.class, event);}
+    @Override public void onGuildUpdateCommunityUpdatesChannel(@Nonnull GuildUpdateCommunityUpdatesChannelEvent event) {executeClass(GuildUpdateCommunityUpdatesChannelEvent.class, event);}
+    @Override public void onGuildUpdateAfkTimeout(@Nonnull GuildUpdateAfkTimeoutEvent event) {executeClass(GuildUpdateAfkTimeoutEvent.class, event);}
+    @Override public void onGuildUpdateExplicitContentLevel(@Nonnull GuildUpdateExplicitContentLevelEvent event) {executeClass(GuildUpdateExplicitContentLevelEvent.class, event);}
+    @Override public void onGuildUpdateIcon(@Nonnull GuildUpdateIconEvent event) {executeClass(GuildUpdateIconEvent.class, event);}
+    @Override public void onGuildUpdateMFALevel(@Nonnull GuildUpdateMFALevelEvent event) {executeClass(GuildUpdateMFALevelEvent.class, event);}
+    @Override public void onGuildUpdateName(@Nonnull GuildUpdateNameEvent event){executeClass(GuildUpdateNameEvent.class, event);}
+    @Override public void onGuildUpdateNotificationLevel(@Nonnull GuildUpdateNotificationLevelEvent event) {executeClass(GuildUpdateNotificationLevelEvent.class, event);}
+    @Override public void onGuildUpdateOwner(@Nonnull GuildUpdateOwnerEvent event) {executeClass(GuildUpdateOwnerEvent.class, event);}
+
+    /**
+     * @deprecated This event is no longer supported by discord, use {@link #onVoiceChannelUpdateRegion(VoiceChannelUpdateRegionEvent)} instead.
+     */
+    @Deprecated
+    @ForRemoval(deadline = "5.0.0")
+    @ReplaceWith("VoiceChannelUpdateRegionEvent")
+    @Override public void onGuildUpdateRegion(@Nonnull GuildUpdateRegionEvent event) {executeClass(GuildUpdateRegionEvent.class, event);}
+    @Override public void onGuildUpdateSplash(@Nonnull GuildUpdateSplashEvent event) {executeClass(GuildUpdateSplashEvent.class, event);}
+    @Override public void onGuildUpdateVerificationLevel(@Nonnull GuildUpdateVerificationLevelEvent event) {executeClass(GuildUpdateVerificationLevelEvent.class, event);}
+    @Override public void onGuildUpdateLocale(@Nonnull GuildUpdateLocaleEvent event) {executeClass(GuildUpdateLocaleEvent.class, event);}
+    @Override public void onGuildUpdateFeatures(@Nonnull GuildUpdateFeaturesEvent event) {executeClass(GuildUpdateFeaturesEvent.class, event);}
+    @Override public void onGuildUpdateVanityCode(@Nonnull GuildUpdateVanityCodeEvent event) {executeClass(GuildUpdateVanityCodeEvent.class, event);}
+    @Override public void onGuildUpdateBanner(@Nonnull GuildUpdateBannerEvent event) {executeClass(GuildUpdateBannerEvent.class, event);}
+    @Override public void onGuildUpdateDescription(@Nonnull GuildUpdateDescriptionEvent event) {executeClass(GuildUpdateDescriptionEvent.class, event);}
+    @Override public void onGuildUpdateBoostTier(@Nonnull GuildUpdateBoostTierEvent event) {executeClass(GuildUpdateBoostTierEvent.class, event);}
+    @Override public void onGuildUpdateBoostCount(@Nonnull GuildUpdateBoostCountEvent event) {executeClass(GuildUpdateBoostCountEvent.class, event);}
+    @Override public void onGuildUpdateMaxMembers(@Nonnull GuildUpdateMaxMembersEvent event) {executeClass(GuildUpdateMaxMembersEvent.class, event);}
+    @Override public void onGuildUpdateMaxPresences(@Nonnull GuildUpdateMaxPresencesEvent event) {executeClass(GuildUpdateMaxPresencesEvent.class, event);}
+    @Override public void onGuildUpdateNSFWLevel(@Nonnull GuildUpdateNSFWLevelEvent event) {executeClass(GuildUpdateNSFWLevelEvent.class, event);}
 
     //Guild Invite Events
-    @Override public void onGuildInviteCreate(GuildInviteCreateEvent event) {executeClass(GuildInviteCreateEvent.class, event);}
-    @Override public void onGuildInviteDelete(GuildInviteDeleteEvent event) {executeClass(GuildInviteDeleteEvent.class, event);}
+    @Override public void onGuildInviteCreate(@Nonnull GuildInviteCreateEvent event) {executeClass(GuildInviteCreateEvent.class, event);}
+    @Override public void onGuildInviteDelete(@Nonnull GuildInviteDeleteEvent event) {executeClass(GuildInviteDeleteEvent.class, event);}
 
     //Guild Member Events
-    @Override public void onGuildMemberJoin(GuildMemberJoinEvent event) {executeClass(GuildMemberJoinEvent.class, event);}
-    @Override public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event) {executeClass(GuildMemberRoleAddEvent.class, event);}
-    @Override public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {executeClass(GuildMemberRoleRemoveEvent.class, event);}
+    @Override public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {executeClass(GuildMemberJoinEvent.class, event);}
+    @Override public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {executeClass(GuildMemberRoleAddEvent.class, event);}
+    @Override public void onGuildMemberRoleRemove(@Nonnull GuildMemberRoleRemoveEvent event) {executeClass(GuildMemberRoleRemoveEvent.class, event);}
 
     //Guild Member Update Events
-    @Override public void onGuildMemberUpdate(GuildMemberUpdateEvent event) {executeClass(GuildMemberUpdateEvent.class, event);}
-    @Override public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event) {executeClass(GuildMemberUpdateNicknameEvent.class, event);}
-    @Override public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent event) {executeClass(GuildMemberUpdateBoostTimeEvent.class, event);}
-    @Override public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event) {executeClass(GuildMemberUpdatePendingEvent.class, event);}
+    @Override public void onGuildMemberUpdate(@Nonnull GuildMemberUpdateEvent event) {executeClass(GuildMemberUpdateEvent.class, event);}
+    @Override public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {executeClass(GuildMemberUpdateNicknameEvent.class, event);}
+    @Override public void onGuildMemberUpdateAvatar(@Nonnull GuildMemberUpdateAvatarEvent event) {executeClass(GuildMemberUpdateAvatarEvent.class, event);}
+    @Override public void onGuildMemberUpdateBoostTime(@Nonnull GuildMemberUpdateBoostTimeEvent event) {executeClass(GuildMemberUpdateBoostTimeEvent.class, event);}
+    @Override public void onGuildMemberUpdatePending(@Nonnull GuildMemberUpdatePendingEvent event) {executeClass(GuildMemberUpdatePendingEvent.class, event);}
 
     //Guild Voice Events
-    @Override public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {executeClass(GuildVoiceUpdateEvent.class, event);}
-    @Override public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {executeClass(GuildVoiceJoinEvent.class, event);}
-    @Override public void onGuildVoiceMove(GuildVoiceMoveEvent event) {executeClass(GuildVoiceMoveEvent.class, event);}
-    @Override public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {executeClass(GuildVoiceLeaveEvent.class, event);}
-    @Override public void onGuildVoiceMute(GuildVoiceMuteEvent event) {executeClass(GuildVoiceMuteEvent.class, event);}
-    @Override public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {executeClass(GuildVoiceDeafenEvent.class, event);}
-    @Override public void onGuildVoiceGuildMute(GuildVoiceGuildMuteEvent event) {executeClass(GuildVoiceGuildMuteEvent.class, event);}
-    @Override public void onGuildVoiceGuildDeafen(GuildVoiceGuildDeafenEvent event) {executeClass(GuildVoiceGuildDeafenEvent.class, event);}
-    @Override public void onGuildVoiceSelfMute(GuildVoiceSelfMuteEvent event) {executeClass(GuildVoiceSelfMuteEvent.class, event);}
-    @Override public void onGuildVoiceSelfDeafen(GuildVoiceSelfDeafenEvent event) {executeClass(GuildVoiceSelfDeafenEvent.class, event);}
-    @Override public void onGuildVoiceSuppress(GuildVoiceSuppressEvent event) {executeClass(GuildVoiceSuppressEvent.class, event);}
-    @Override public void onGuildVoiceStream(GuildVoiceStreamEvent event) {executeClass(GuildVoiceStreamEvent.class, event);}
+    @Override public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event) {executeClass(GuildVoiceUpdateEvent.class, event);}
+    @Override public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {executeClass(GuildVoiceJoinEvent.class, event);}
+    @Override public void onGuildVoiceMove(@Nonnull GuildVoiceMoveEvent event) {executeClass(GuildVoiceMoveEvent.class, event);}
+    @Override public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {executeClass(GuildVoiceLeaveEvent.class, event);}
+    @Override public void onGuildVoiceMute(@Nonnull GuildVoiceMuteEvent event) {executeClass(GuildVoiceMuteEvent.class, event);}
+    @Override public void onGuildVoiceDeafen(@Nonnull GuildVoiceDeafenEvent event) {executeClass(GuildVoiceDeafenEvent.class, event);}
+    @Override public void onGuildVoiceGuildMute(@Nonnull GuildVoiceGuildMuteEvent event) {executeClass(GuildVoiceGuildMuteEvent.class, event);}
+    @Override public void onGuildVoiceGuildDeafen(@Nonnull GuildVoiceGuildDeafenEvent event) {executeClass(GuildVoiceGuildDeafenEvent.class, event);}
+    @Override public void onGuildVoiceSelfMute(@Nonnull GuildVoiceSelfMuteEvent event) {executeClass(GuildVoiceSelfMuteEvent.class, event);}
+    @Override public void onGuildVoiceSelfDeafen(@Nonnull GuildVoiceSelfDeafenEvent event) {executeClass(GuildVoiceSelfDeafenEvent.class, event);}
+    @Override public void onGuildVoiceSuppress(@Nonnull GuildVoiceSuppressEvent event) {executeClass(GuildVoiceSuppressEvent.class, event);}
+    @Override public void onGuildVoiceStream(@Nonnull GuildVoiceStreamEvent event) {executeClass(GuildVoiceStreamEvent.class, event);}
+    @Override public void onGuildVoiceVideo(@Nonnull GuildVoiceVideoEvent event) {executeClass(GuildVoiceVideoEvent.class, event);}
+    @Override public void onGuildVoiceRequestToSpeak(@Nonnull GuildVoiceRequestToSpeakEvent event) {executeClass(GuildVoiceRequestToSpeakEvent.class, event);}
 
     //Role events
-    @Override public void onRoleCreate(RoleCreateEvent event) {executeClass(RoleCreateEvent.class, event);}
-    @Override public void onRoleDelete(RoleDeleteEvent event) {executeClass(RoleDeleteEvent.class, event);}
+    @Override public void onRoleCreate(@Nonnull RoleCreateEvent event) {executeClass(RoleCreateEvent.class, event);}
+    @Override public void onRoleDelete(@Nonnull RoleDeleteEvent event) {executeClass(RoleDeleteEvent.class, event);}
 
     //Role Update Events
-    @Override public void onRoleUpdateColor(RoleUpdateColorEvent event) {executeClass(RoleUpdateColorEvent.class, event);}
-    @Override public void onRoleUpdateHoisted(RoleUpdateHoistedEvent event) {executeClass(RoleUpdateHoistedEvent.class, event);}
-    @Override public void onRoleUpdateMentionable(RoleUpdateMentionableEvent event) {executeClass(RoleUpdateMentionableEvent.class, event);}
-    @Override public void onRoleUpdateName(RoleUpdateNameEvent event) {executeClass(RoleUpdateNameEvent.class, event);}
-    @Override public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent event) {executeClass(RoleUpdatePermissionsEvent.class, event);}
-    @Override public void onRoleUpdatePosition(RoleUpdatePositionEvent event) {executeClass(RoleUpdatePositionEvent.class, event);}
+    @Override public void onRoleUpdateColor(@Nonnull RoleUpdateColorEvent event) {executeClass(RoleUpdateColorEvent.class, event);}
+    @Override public void onRoleUpdateHoisted(@Nonnull RoleUpdateHoistedEvent event) {executeClass(RoleUpdateHoistedEvent.class, event);}
+    @Override public void onRoleUpdateIcon(@Nonnull RoleUpdateIconEvent event) {executeClass(RoleUpdateIconEvent.class, event);}
+    @Override public void onRoleUpdateMentionable(@Nonnull RoleUpdateMentionableEvent event) {executeClass(RoleUpdateMentionableEvent.class, event);}
+    @Override public void onRoleUpdateName(@Nonnull RoleUpdateNameEvent event) {executeClass(RoleUpdateNameEvent.class, event);}
+    @Override public void onRoleUpdatePermissions(@Nonnull RoleUpdatePermissionsEvent event) {executeClass(RoleUpdatePermissionsEvent.class, event);}
+    @Override public void onRoleUpdatePosition(@Nonnull RoleUpdatePositionEvent event) {executeClass(RoleUpdatePositionEvent.class, event);}
 
     //Emote Events
-    @Override public void onEmoteAdded(EmoteAddedEvent event) {executeClass(EmoteAddedEvent.class, event);}
-    @Override public void onEmoteRemoved(EmoteRemovedEvent event) {executeClass(EmoteRemovedEvent.class, event);}
+    @Override public void onEmoteAdded(@Nonnull EmoteAddedEvent event) {executeClass(EmoteAddedEvent.class, event);}
+    @Override public void onEmoteRemoved(@Nonnull EmoteRemovedEvent event) {executeClass(EmoteRemovedEvent.class, event);}
 
     //Emote Update Events
-    @Override public void onEmoteUpdateName(EmoteUpdateNameEvent event) {executeClass(EmoteUpdateNameEvent.class, event);}
-    @Override public void onEmoteUpdateRoles(EmoteUpdateRolesEvent event) {executeClass(EmoteUpdateRolesEvent.class, event);}
+    @Override public void onEmoteUpdateName(@Nonnull EmoteUpdateNameEvent event) {executeClass(EmoteUpdateNameEvent.class, event);}
+    @Override public void onEmoteUpdateRoles(@Nonnull EmoteUpdateRolesEvent event) {executeClass(EmoteUpdateRolesEvent.class, event);}
 
     // Debug Events
-    @Override public void onHttpRequest(HttpRequestEvent event) {executeClass(HttpRequestEvent.class, event);}
+    @Override public void onHttpRequest(@Nonnull HttpRequestEvent event) {executeClass(HttpRequestEvent.class, event);}
 
     //Generic Events
-    @Override public void onGenericMessage(GenericMessageEvent event) {executeClass(GenericMessageEvent.class, event);}
-    @Override public void onGenericMessageReaction(GenericMessageReactionEvent event) {executeClass(GenericMessageReactionEvent.class, event);}
-    @Override public void onGenericGuildMessage(GenericGuildMessageEvent event) {executeClass(GenericGuildMessageEvent.class, event);}
-    @Override public void onGenericGuildMessageReaction(GenericGuildMessageReactionEvent event) {executeClass(GenericGuildMessageReactionEvent.class, event);}
-    @Override public void onGenericPrivateMessage(GenericPrivateMessageEvent event) {executeClass(GenericPrivateMessageEvent.class, event);}
-    @Override public void onGenericPrivateMessageReaction(GenericPrivateMessageReactionEvent event) {executeClass(GenericPrivateMessageReactionEvent.class, event);}
-    @Override public void onGenericUser(GenericUserEvent event) {executeClass(GenericUserEvent.class, event);}
-    @Override public void onGenericUserPresence(GenericUserPresenceEvent event) {executeClass(GenericUserPresenceEvent.class, event);}
-    @Override public void onGenericSelfUpdate(GenericSelfUpdateEvent event) {executeClass(GenericSelfUpdateEvent.class, event);}
-    @Override public void onGenericStoreChannel(GenericStoreChannelEvent event) {executeClass(GenericStoreChannelEvent.class, event);}
-    @Override public void onGenericStoreChannelUpdate(GenericStoreChannelUpdateEvent event) {executeClass(GenericStoreChannelUpdateEvent.class, event);}
-    @Override public void onGenericTextChannel(GenericTextChannelEvent event) {executeClass(GenericTextChannelEvent.class, event);}
-    @Override public void onGenericTextChannelUpdate(GenericTextChannelUpdateEvent event) {executeClass(GenericTextChannelUpdateEvent.class, event);}
-    @Override public void onGenericVoiceChannel(GenericVoiceChannelEvent event) {executeClass(GenericVoiceChannelEvent.class, event);}
-    @Override public void onGenericVoiceChannelUpdate(GenericVoiceChannelUpdateEvent event) {executeClass(GenericVoiceChannelUpdateEvent.class, event);}
-    @Override public void onGenericCategory(GenericCategoryEvent event) {executeClass(GenericCategoryEvent.class, event);}
-    @Override public void onGenericCategoryUpdate(GenericCategoryUpdateEvent event) {executeClass(GenericCategoryUpdateEvent.class, event);}
-    @Override public void onGenericGuild(GenericGuildEvent event) {executeClass(GenericGuildEvent.class, event);}
-    @Override public void onGenericGuildUpdate(GenericGuildUpdateEvent event) {executeClass(GenericGuildUpdateEvent.class, event);}
-    @Override public void onGenericGuildInvite(GenericGuildInviteEvent event) {executeClass(GenericGuildInviteEvent.class, event);}
-    @Override public void onGenericGuildMember(GenericGuildMemberEvent event) {executeClass(GenericGuildMemberEvent.class, event);}
-    @Override public void onGenericGuildMemberUpdate(GenericGuildMemberUpdateEvent event) {executeClass(GenericGuildMemberUpdateEvent.class, event);}
-    @Override public void onGenericGuildVoice(GenericGuildVoiceEvent event) {executeClass(GenericGuildVoiceEvent.class, event);}
-    @Override public void onGenericRole(GenericRoleEvent event) {executeClass(GenericRoleEvent.class, event);}
-    @Override public void onGenericRoleUpdate(GenericRoleUpdateEvent event) {executeClass(GenericRoleUpdateEvent.class, event);}
-    @Override public void onGenericEmote(GenericEmoteEvent event) {executeClass(GenericEmoteEvent.class, event);}
-    @Override public void onGenericEmoteUpdate(GenericEmoteUpdateEvent event) {executeClass(GenericEmoteUpdateEvent.class, event);}
-    @Override public void onGenericPermissionOverride(GenericPermissionOverrideEvent event) {executeClass(GenericPermissionOverrideEvent.class, event);}
+    @Override public void onGenericApplicationCommand(@Nonnull GenericApplicationCommandEvent event) {executeClass(GenericApplicationCommandEvent.class, event);}
+    @Override public void onGenericInteractionCreate(@Nonnull GenericInteractionCreateEvent event) {executeClass(GenericInteractionCreateEvent.class, event);}
+    @Override public void onGenericComponentInteractionCreate(@Nonnull GenericComponentInteractionCreateEvent event) {executeClass(GenericComponentInteractionCreateEvent.class, event);}
+    @Override public void onGenericMessage(@Nonnull GenericMessageEvent event) {executeClass(GenericMessageEvent.class, event);}
+    @Override public void onGenericMessageReaction(@Nonnull GenericMessageReactionEvent event) {executeClass(GenericMessageReactionEvent.class, event);}
+    @Override public void onGenericGuildMessage(@Nonnull GenericGuildMessageEvent event) {executeClass(GenericGuildMessageEvent.class, event);}
+    @Override public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {executeClass(GenericGuildMessageReactionEvent.class, event);}
+    @Override public void onGenericPrivateMessage(@Nonnull GenericPrivateMessageEvent event) {executeClass(GenericPrivateMessageEvent.class, event);}
+    @Override public void onGenericPrivateMessageReaction(@Nonnull GenericPrivateMessageReactionEvent event) {executeClass(GenericPrivateMessageReactionEvent.class, event);}
+    @Override public void onGenericUser(@Nonnull GenericUserEvent event) {executeClass(GenericUserEvent.class, event);}
+    @Override public void onGenericUserPresence(@Nonnull GenericUserPresenceEvent event) {executeClass(GenericUserPresenceEvent.class, event);}
+    @Override public void onGenericSelfUpdate(@Nonnull GenericSelfUpdateEvent event) {executeClass(GenericSelfUpdateEvent.class, event);}
+    @Override public void onGenericStoreChannel(@Nonnull GenericStoreChannelEvent event) {executeClass(GenericStoreChannelEvent.class, event);}
+    @Override public void onGenericStoreChannelUpdate(@Nonnull GenericStoreChannelUpdateEvent event) {executeClass(GenericStoreChannelUpdateEvent.class, event);}
+    @Override public void onGenericTextChannel(@Nonnull GenericTextChannelEvent event) {executeClass(GenericTextChannelEvent.class, event);}
+    @Override public void onGenericTextChannelUpdate(@Nonnull GenericTextChannelUpdateEvent event) {executeClass(GenericTextChannelUpdateEvent.class, event);}
+    @Override public void onGenericVoiceChannel(@Nonnull GenericVoiceChannelEvent event) {executeClass(GenericVoiceChannelEvent.class, event);}
+    @Override public void onGenericVoiceChannelUpdate(@Nonnull GenericVoiceChannelUpdateEvent event) {executeClass(GenericVoiceChannelUpdateEvent.class, event);}
+    @Override public void onGenericCategory(@Nonnull GenericCategoryEvent event) {executeClass(GenericCategoryEvent.class, event);}
+    @Override public void onGenericCategoryUpdate(@Nonnull GenericCategoryUpdateEvent event) {executeClass(GenericCategoryUpdateEvent.class, event);}
+    @Override public void onGenericStageInstance(@Nonnull GenericStageInstanceEvent event) {executeClass(GenericStageInstanceEvent.class, event);}
+    @Override public void onGenericStageInstanceUpdate(@Nonnull GenericStageInstanceUpdateEvent event) {executeClass(GenericStageInstanceUpdateEvent.class, event);}
+    @Override public void onGenericGuild(@Nonnull GenericGuildEvent event) {executeClass(GenericGuildEvent.class, event);}
+    @Override public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {executeClass(GenericGuildUpdateEvent.class, event);}
+    @Override public void onGenericGuildInvite(@Nonnull GenericGuildInviteEvent event) {executeClass(GenericGuildInviteEvent.class, event);}
+    @Override public void onGenericGuildMember(@Nonnull GenericGuildMemberEvent event) {executeClass(GenericGuildMemberEvent.class, event);}
+    @Override public void onGenericGuildMemberUpdate(@Nonnull GenericGuildMemberUpdateEvent event) {executeClass(GenericGuildMemberUpdateEvent.class, event);}
+    @Override public void onGenericGuildVoice(@Nonnull GenericGuildVoiceEvent event) {executeClass(GenericGuildVoiceEvent.class, event);}
+    @Override public void onGenericRole(@Nonnull GenericRoleEvent event) {executeClass(GenericRoleEvent.class, event);}
+    @Override public void onGenericRoleUpdate(@Nonnull GenericRoleUpdateEvent event) {executeClass(GenericRoleUpdateEvent.class, event);}
+    @Override public void onGenericEmote(@Nonnull GenericEmoteEvent event) {executeClass(GenericEmoteEvent.class, event);}
+    @Override public void onGenericEmoteUpdate(@Nonnull GenericEmoteUpdateEvent event) {executeClass(GenericEmoteUpdateEvent.class, event);}
+    @Override public void onGenericPermissionOverride(@Nonnull GenericPermissionOverrideEvent event) {executeClass(GenericPermissionOverrideEvent.class, event);}
 
     public void onMessageConsoleReceived(MessageConsoleReceivedEvent event) {
     	executeClass(MessageConsoleReceivedEvent.class, event);
