@@ -27,9 +27,9 @@ import com.Keffisor21.JDAExpansion.Utils;
 import com.Keffisor21.JDAExpansion.ConfigManager.PluginConfigurationObject;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
-import com.Keffisor21.JDAExpansion.Exception.InvalidPluginYML;
-import com.Keffisor21.JDAExpansion.Exception.MainNotFound;
+import com.Keffisor21.JDAExpansion.EventController.EventsRegistration;
+import com.Keffisor21.JDAExpansion.Exceptions.InvalidPluginYMLException;
+import com.Keffisor21.JDAExpansion.Exceptions.MainNotFoundException;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.Reflection.ClassPathLoader;
 
@@ -147,7 +147,7 @@ public class PluginManager {
 			e.printStackTrace();
 		}
 		} catch(ClassNotFoundException e) {
-  			new MainNotFound(pluginInfo.name, e).printStackTrace();
+  			new MainNotFoundException(pluginInfo.name, e).printStackTrace();
 		}
 	return null;
 	}
@@ -249,7 +249,7 @@ public class PluginManager {
 	        		return result;
 	         
 	        } else {
-                new InvalidPluginYML(null).printStackTrace();
+                new InvalidPluginYMLException(null).printStackTrace();
                 return null;
 	        	//Console.logger.info(ConsoleColor.RED_BRIGHT+"The plugin.yml of "+f.getName()+" is invalid"+ConsoleColor.RESET);
 	        }

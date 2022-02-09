@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Event;
+package com.Keffisor21.JDAExpansion.EventController;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

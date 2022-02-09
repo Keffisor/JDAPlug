@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Event.API;
+package com.Keffisor21.JDAExpansion.API;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;

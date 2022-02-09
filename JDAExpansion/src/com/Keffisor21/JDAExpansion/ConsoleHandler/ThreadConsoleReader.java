@@ -2,9 +2,9 @@ package com.Keffisor21.JDAExpansion.ConsoleHandler;
 
 import java.util.stream.Collectors;
 
-import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
-import com.Keffisor21.JDAExpansion.Event.API.MessageConsoleReceivedEvent;
-import com.Keffisor21.JDAExpansion.Event.API.createCommand;
+import com.Keffisor21.JDAExpansion.API.MessageConsoleReceivedEvent;
+import com.Keffisor21.JDAExpansion.API.createCommand;
+import com.Keffisor21.JDAExpansion.EventController.EventsRegistration;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
 import jline.console.ConsoleReader;

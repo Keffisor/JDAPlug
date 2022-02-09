@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Event.API;
+package com.Keffisor21.JDAExpansion.API;
 
 import java.util.ArrayList;
 import java.util.Arrays;

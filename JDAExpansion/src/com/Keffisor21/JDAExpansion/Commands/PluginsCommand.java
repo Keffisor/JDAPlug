@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.Utils;
+import com.Keffisor21.JDAExpansion.API.createCommand;
 import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
 import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
 import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.Event.EventHandler;
-import com.Keffisor21.JDAExpansion.Event.API.createCommand;
+import com.Keffisor21.JDAExpansion.EventController.EventHandler;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
 
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

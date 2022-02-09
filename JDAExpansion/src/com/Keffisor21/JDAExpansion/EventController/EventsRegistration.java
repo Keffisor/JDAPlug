@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Event;
+package com.Keffisor21.JDAExpansion.EventController;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.Keffisor21.JDAExpansion.Event.API.MessageConsoleReceivedEvent;
+import com.Keffisor21.JDAExpansion.API.MessageConsoleReceivedEvent;
 
 import net.dv8tion.jda.annotations.DeprecatedSince;
 import net.dv8tion.jda.annotations.ForRemoval;

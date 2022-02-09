@@ -1,4 +1,4 @@
-package com.Keffisor21.JDAExpansion.Event.API;
+package com.Keffisor21.JDAExpansion.API;
 
 public class MessageConsoleReceivedEvent {
 	private String contentRaw;

@@ -133,15 +133,23 @@ public class FileConfiguration {
 	public boolean getBoolean(String x) {
        return (boolean)getElementMap(x, data.get(x), data);		
 	}
+	
 	public String getString(String x) {
 		return String.valueOf(getElementMap(x, data.get(x), data));
 	}
+	
 	public List<Object> getList(String x) {
 		return (List<Object>)getElementMap(x, data.get(x), data);
 	}
+	
+	public List<String> getStringList(String x) {
+		return (List<String>)getElementMap(x, data.get(x), data);
+	}
+	
 	public int getInt(String x) {
 		return (int)getElementMap(x, data.get(x), data);
 	}
+	
 	public double getDouble(String x) {
 		return (double)getElementMap(x, data.get(x), data);
 	}
@@ -183,6 +191,7 @@ public class FileConfiguration {
 			return false;
 		}
 	}
+	
 	private Object getElementMap(String req, Object x, Map<String, Object> data) {
 		if(req.contains(".")) {
 			String[] split = (req.replace(".", ":").split(":"));
@@ -193,6 +202,7 @@ public class FileConfiguration {
 		}
 		return x;
 	}
+	
 	private Object getLastElement(List<String> each, Object o) {
 		if(!(o instanceof Map)) return o;
 		if(each.size() == 0) return o;
@@ -201,6 +211,7 @@ public class FileConfiguration {
 		nL.remove(S);
 		return getLastElement(nL, ((Map)o).get(S));
 	}
+	
 	private void setElementMap(String req, Object x, Object toChange) {
 		if(req.contains(".")) {
 			String[] split = (req.replace(".", ":").split(":"));
@@ -215,6 +226,7 @@ public class FileConfiguration {
 		}
 		data.put(req, x);
 	}
+	
 	private Object setNewElementMap(LinkedList<Object> list, Map<String, Object> data, String content, Object toChange) {
 		String[] cnt = (content.replace(".", ":")).split(":");
 		Map<String, Object> d =  null;
@@ -232,6 +244,7 @@ public class FileConfiguration {
 		}
 		return d;
 	}
+	
 	private LinkedList<Object> getAllElements(List<String> each, LinkedList<Object> comp, Object o) {
 		comp.add(o);
 		if(each.size() == 0) return comp;

@@ -4,3 +4,11 @@ Commands:
         Message: "You don't have permission to see this"
     Version:
         Disabled: false
+        Message: "You don't have permission to see this"
+Intents: #GUILD_MEMBERS, GUILD_BANS, GUILD_EMOJIS, GUILD_WEBHOOKS, GUILD_INVITES, GUILD_VOICE_STATES, GUILD_PRESENCES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGES, DIRECT_MESSAGE_REACTIONS, DIRECT_MESSAGE_TYPING
+    Enabled:
+    - 'GUILD_MEMBERS'
+    Disabled: []
+ShardManager:
+    Enabled: false
+    Shards: 2

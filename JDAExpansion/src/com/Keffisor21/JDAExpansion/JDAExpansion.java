@@ -2,12 +2,13 @@ package com.Keffisor21.JDAExpansion;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
+import com.Keffisor21.JDAExpansion.API.createCommand;
 import com.Keffisor21.JDAExpansion.Commands.ClearConsoleCommand;
 import com.Keffisor21.JDAExpansion.Commands.PluginsCommand;
 import com.Keffisor21.JDAExpansion.Commands.ReloadCommand;
@@ -15,13 +16,13 @@ import com.Keffisor21.JDAExpansion.Commands.StopCommand;
 import com.Keffisor21.JDAExpansion.Commands.VersionCommand;
 import com.Keffisor21.JDAExpansion.ConfigManager.FileConfiguration;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.Console;
+import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ThreadConsoleReader;
 import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorErr;
 import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorOut;
-import com.Keffisor21.JDAExpansion.Event.EventHandler;
-import com.Keffisor21.JDAExpansion.Event.EventsRegistration;
-import com.Keffisor21.JDAExpansion.Event.PluginListener;
-import com.Keffisor21.JDAExpansion.Event.API.createCommand;
+import com.Keffisor21.JDAExpansion.EventController.EventsRegistration;
+import com.Keffisor21.JDAExpansion.EventController.PluginListener;
+import com.Keffisor21.JDAExpansion.Exceptions.InvalidIntentException;
 import com.Keffisor21.JDAExpansion.Logs.LogsManager;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 import com.Keffisor21.JDAExpansion.NMS.JDAType;
@@ -30,9 +31,14 @@ import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
 import jline.console.ConsoleReader;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class JDAExpansion {
+	
+	private static JDA Jda = null;
+ 	private static ShardManager shardManager = null;
+ 	private static JDANMS JdaNMS = null;
 	
 	public static List<Object> registratedClassPlugin = new ArrayList<Object>(); 
 	private static PluginManager pluginManager = new PluginManager();
@@ -53,7 +59,7 @@ public class JDAExpansion {
 		if(o instanceof JDA)
 			try { ((JDA)o).awaitReady(); } catch (InterruptedException e) { e.printStackTrace(); }
 		JDANMS jda = new JDANMS(getJDAType(o));
-		Main.JdaNMS = jda;
+		JdaNMS = jda;
 		//create thread of reading the console
  	    new ThreadConsoleReader(jda, Console.reader).start();
 		getJDA().addEventListener(new EventsRegistration(), new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand(), new VersionCommand());
@@ -64,6 +70,7 @@ public class JDAExpansion {
 	}
 	
 	private static void setConsoleConfig() {
+		Utils.disableAccessWarnings(); //disable the illegal access warn
 		System.setErr(new ConsoleInterceptorErr(System.err));
 		Console.previousPrintStream = System.out;
 		System.setOut(new ConsoleInterceptorOut(System.out));
@@ -79,11 +86,11 @@ public class JDAExpansion {
 		JDAType type = new JDAType();
 		if(o instanceof JDA) {
 			type.jda = (JDA)o;
-			Main.Jda = (JDA)o;
+			Jda = (JDA)o;
 		}
 		if(o instanceof ShardManager) {
 			type.shardManager = (ShardManager)o;
-			Main.shardManager = (ShardManager)o;
+			shardManager = (ShardManager)o;
 		}
 		return type;
 	}
@@ -97,7 +104,7 @@ public class JDAExpansion {
 	}
 	
 	public static JDANMS getJDANMS() {
-		return Main.JdaNMS;
+		return JdaNMS;
 	}
 
 	public static Logger getLogger() {
@@ -105,7 +112,7 @@ public class JDAExpansion {
 	}
 	
 	public static JDA getJDA() {
-		return Main.Jda;
+		return Jda;
 	}
 	
 	public static FileConfiguration getConfiguration() {
@@ -113,7 +120,7 @@ public class JDAExpansion {
 	}
 	
 	public static ShardManager getShardManager() {
-		return Main.shardManager;
+		return shardManager;
 	}
 	
 	public static void registerEvent(Object o) {
@@ -130,6 +137,34 @@ public class JDAExpansion {
 			if(o2 instanceof PluginListener)
 				EventsRegistration.loadEvent((PluginListener)o2);
 		}
+	}
+	
+	public static void addEventListener(Object... o) {
+		registerEvents(o);
+	}
+	
+	public static List<GatewayIntent> getEnabledGatewayIntents() {
+		return getConfiguration().getStringList("Intents.Enabled").stream().filter(s -> {
+			try {
+				GatewayIntent.valueOf(s);
+				return true;
+			} catch (Exception e) {
+				new InvalidIntentException(Utils.convertToColors(ConsoleColor.RED, "Invalid gateway intent \"" + s + "\". Options: GUILD_MEMBERS, GUILD_BANS, GUILD_EMOJIS, GUILD_WEBHOOKS, GUILD_INVITES, GUILD_VOICE_STATES, GUILD_PRESENCES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGES, DIRECT_MESSAGE_REACTIONS, DIRECT_MESSAGE_TYPING")).printStackTrace();
+				return false;
+			}
+		}).map(GatewayIntent::valueOf).collect(Collectors.toList());
+	}
+	
+	public static List<GatewayIntent> getDisabledGatewayIntents() {
+		return getConfiguration().getStringList("Intents.Disabled").stream().filter(s -> {
+			try {
+				GatewayIntent.valueOf(s);
+				return true;
+			} catch (Exception e) {
+				new InvalidIntentException(Utils.convertToColors(ConsoleColor.RED, "Invalid gateway intent \"" + s + "\". Options: GUILD_MEMBERS, GUILD_BANS, GUILD_EMOJIS, GUILD_WEBHOOKS, GUILD_INVITES, GUILD_VOICE_STATES, GUILD_PRESENCES, GUILD_MESSAGES, GUILD_MESSAGE_REACTIONS, GUILD_MESSAGE_TYPING, DIRECT_MESSAGES, DIRECT_MESSAGE_REACTIONS, DIRECT_MESSAGE_TYPING")).printStackTrace();
+				return false;
+			}
+		}).map(GatewayIntent::valueOf).collect(Collectors.toList());
 	}
 	
 	public static String getAbsolutePath() {
