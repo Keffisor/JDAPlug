@@ -11,12 +11,13 @@ import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class StopCommand extends createCommand {
 
 	public StopCommand() {	
-		super(new CommandData("stop", "Stop the bot. Requires permission."), "!", "stop", "shutdown");
+		super(Commands.slash("stop", "Stop the bot. Requires permission."), "!", "stop", "shutdown");
 	}
 	
 	@Override

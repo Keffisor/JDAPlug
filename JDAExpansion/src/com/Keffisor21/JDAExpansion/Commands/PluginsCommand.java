@@ -8,17 +8,15 @@ import com.Keffisor21.JDAExpansion.Utils;
 import com.Keffisor21.JDAExpansion.API.createCommand;
 import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
 import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
-import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.EventController.EventHandler;
 import com.Keffisor21.JDAExpansion.Plugins.Plugin;
 
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 public class PluginsCommand extends createCommand {
 
-	public PluginsCommand() {	
-		super(new CommandData("plugins", "See the list of plugins installed."), "!", "plugins", "pl");
+	public PluginsCommand() {
+		super(Commands.slash("plugins", "See the list of plugins installed."), "!", "plugins", "pl");
 	}
 	
 	@Override

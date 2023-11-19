@@ -12,12 +12,13 @@ import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class ReloadCommand extends createCommand {
 
 	public ReloadCommand() {	
-		super(new CommandData("reload", "Reload the plugins of the bot. Requires permission."), "!", "reload", "rl");
+		super(Commands.slash("reload", "Reload the plugins of the bot. Requires permission."), "!", "reload", "rl");
 	}
 	
 	@Override

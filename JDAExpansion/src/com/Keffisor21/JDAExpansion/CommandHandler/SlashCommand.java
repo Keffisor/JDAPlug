@@ -5,22 +5,22 @@ import java.util.List;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-public class SlashCommand implements CommandSender, CommandInteraction {
+public class SlashCommand extends SlashCommandInteractionEvent implements CommandSender {
 
-	private SlashCommandEvent e;
+	private SlashCommandInteractionEvent e;
 	private String command;
 	
-	public SlashCommand(SlashCommandEvent e, String command) {
+	public SlashCommand(SlashCommandInteractionEvent e, String command) {
+		super(e.getJDA(), e.getResponseNumber(), e.getInteraction());
+
 		this.e = e;
 		this.command = command;
 	}
@@ -57,7 +57,7 @@ public class SlashCommand implements CommandSender, CommandInteraction {
 		return e.isAcknowledged();
 	}
 
-	public ReplyAction deferReply() {
+	public ReplyCallbackAction deferReply() {
 		return e.deferReply();
 	}
 
@@ -75,10 +75,6 @@ public class SlashCommand implements CommandSender, CommandInteraction {
 
 	public String getSubcommandGroup() {
 		return e.getSubcommandGroup();
-	}
-
-	public MessageChannel getChannel() {
-		return e.getChannel();
 	}
 
 	public long getCommandIdLong() {
@@ -104,5 +100,5 @@ public class SlashCommand implements CommandSender, CommandInteraction {
 	public String getCommand() {
 		return command;
 	}
-	
+
 }

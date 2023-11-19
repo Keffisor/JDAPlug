@@ -9,6 +9,8 @@ import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -40,5 +42,6 @@ public class Main extends ListenerAdapter {
 			e.printStackTrace();
 			throw (Error)e;
 		}
+		
 	}
 }

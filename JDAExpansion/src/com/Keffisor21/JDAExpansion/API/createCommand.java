@@ -5,13 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.CommandHandler.Command;
 import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
 import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
 import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData; 
@@ -49,10 +48,11 @@ public abstract class createCommand extends ListenerAdapter {
     }
     
     @Override
-    public void onSlashCommand(SlashCommandEvent e) {
+    public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
     	if(e.getUser().isBot()) return;
+   
     	if(e.getName().equals(command.replaceFirst("\\"+prefix, "")) || aliases.contains(command.replaceFirst("\\"+prefix, ""))) {
-    	   String[] args = e.getCommandPath().split("/");
+    	   String[] args = e.getFullCommandName().split("/");
     	   isExecuted(args, new SlashCommand(e, getCommand(e.getName())));
     	}
    }

@@ -18,7 +18,7 @@ public abstract class createReact extends ListenerAdapter {
      @Override
 	 public void onMessageReactionAdd(MessageReactionAddEvent e) {
     	 if(e.getMember().getUser().isBot()) return;
-    	 if(e.getReactionEmote().getName().replace("RE:", ":").equals(emote)) {
+    	 if(e.getReaction().getEmoji().getName().replace("RE:", ":").equals(emote)) {
     		 if(message != null && e.getMessageId().equals(message.getId())) {
     			 addReaction(e);
     			 return;
@@ -30,7 +30,7 @@ public abstract class createReact extends ListenerAdapter {
      @Override
      public void onMessageReactionRemove(MessageReactionRemoveEvent e) {
     	 if(e.getMember().getUser().isBot()) return;
-    	 if(e.getReactionEmote().getName().replace("RE:", ":").equals(emote)) {
+    	 if(e.getReaction().getEmoji().getName().replace("RE:", ":").equals(emote)) {
     		 if(message != null && e.getMessageId().equals(message.getId())) {
     			 removeReaction(e);
     			 return;
