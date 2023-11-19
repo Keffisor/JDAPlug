@@ -18,7 +18,7 @@ public class VersionCommand extends createCommand {
 			sender.replyMessage(JDAExpansion.getConfiguration().getString("Commands.Version.Message"));
 			return;
 		}
-		sender.replyMessage("Running JDAExpansion BETA v2.0");
+		sender.replyMessage("Running JDAExpansion BETA v2.2");
 	}
 
 }

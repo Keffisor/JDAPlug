@@ -10,11 +10,15 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
+
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Utils {
 
@@ -102,6 +106,10 @@ public class Utils {
 	  }
 	  public static void printStackTrace(Throwable e) {
 		e.printStackTrace();
+	  }
+	  
+	  public static EnumSet<CacheFlag> convertCacheFlagList(List<CacheFlag> list) {
+		    return list.stream().collect(Collectors.toCollection(() -> EnumSet.noneOf(CacheFlag.class)));
 	  }
 	  
 	  public static String convertToColors(ConsoleColor color, String msg) {

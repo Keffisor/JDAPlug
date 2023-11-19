@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -88,6 +89,10 @@ public class Command implements CommandSender {
 
 	public void replyMessage(String message) {
 		e.getMessage().reply(message).queue();
+	}
+
+	public void replyMessageEmbeds(MessageEmbed embed) {
+		e.getMessage().replyEmbeds(embed).queue();
 	}
 
 	public String getCommand() {

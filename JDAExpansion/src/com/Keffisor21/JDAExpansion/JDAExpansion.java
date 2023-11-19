@@ -22,6 +22,7 @@ import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorErr;
 import com.Keffisor21.JDAExpansion.ConsoleInterceptor.ConsoleInterceptorOut;
 import com.Keffisor21.JDAExpansion.EventController.EventsRegistration;
 import com.Keffisor21.JDAExpansion.EventController.PluginListener;
+import com.Keffisor21.JDAExpansion.Exceptions.InvalidCacheFlagException;
 import com.Keffisor21.JDAExpansion.Exceptions.InvalidIntentException;
 import com.Keffisor21.JDAExpansion.Logs.LogsManager;
 import com.Keffisor21.JDAExpansion.NMS.JDANMS;
@@ -33,6 +34,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class JDAExpansion {
 	
@@ -165,6 +167,30 @@ public class JDAExpansion {
 				return false;
 			}
 		}).map(GatewayIntent::valueOf).collect(Collectors.toList());
+	}
+	
+	public static List<CacheFlag> getEnabledCacheFlags() {
+		return getConfiguration().getStringList("CacheFlags.Enabled").stream().filter(s -> {
+			try {
+				CacheFlag.valueOf(s);
+				return true;
+			} catch (Exception e) {
+				new InvalidCacheFlagException(Utils.convertToColors(ConsoleColor.RED, "Invalid cache flag \"" + s + "\". Options: ACTIVITY, VOICE_STATE, EMOTE, CLIENT_STATUS, MEMBER_OVERRIDES, ROLE_TAGS, ONLINE_STATUS")).printStackTrace();
+				return false;
+			}
+		}).map(CacheFlag::valueOf).collect(Collectors.toList());
+	}
+	
+	public static List<CacheFlag> getDisabledCacheFlags() {
+		return getConfiguration().getStringList("CacheFlags.Disabled").stream().filter(s -> {
+			try {
+				CacheFlag.valueOf(s);
+				return true;
+			} catch (Exception e) {
+				new InvalidCacheFlagException(Utils.convertToColors(ConsoleColor.RED, "Invalid cache flag \"" + s + "\". Options: ACTIVITY, VOICE_STATE, EMOTE, CLIENT_STATUS, MEMBER_OVERRIDES, ROLE_TAGS, ONLINE_STATUS")).printStackTrace();
+				return false;
+			}
+		}).map(CacheFlag::valueOf).collect(Collectors.toList());
 	}
 	
 	public static String getAbsolutePath() {

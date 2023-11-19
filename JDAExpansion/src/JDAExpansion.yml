@@ -9,6 +9,10 @@ Intents: #GUILD_MEMBERS, GUILD_BANS, GUILD_EMOJIS, GUILD_WEBHOOKS, GUILD_INVITES
     Enabled:
     - 'GUILD_MEMBERS'
     Disabled: []
+CacheFlags: #ACTIVITY, VOICE_STATE, EMOTE, CLIENT_STATUS, MEMBER_OVERRIDES, ROLE_TAGS, ONLINE_STATUS
+    Enabled:
+    - 'VOICE_STATE'
+    Disabled: []
 ShardManager:
     Enabled: false
     Shards: 2

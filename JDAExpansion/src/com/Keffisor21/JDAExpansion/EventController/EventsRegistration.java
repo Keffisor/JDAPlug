@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.Keffisor21.JDAExpansion.JDAExpansion;
 import com.Keffisor21.JDAExpansion.API.MessageConsoleReceivedEvent;
 
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -63,9 +64,11 @@ public class EventsRegistration extends ListenerAdapter {
 		orderPriority(getClass(cl)).forEach(value -> {
 			try {
 				try {
-				value.getMethod().invoke(value.getObject(), e);
-				} catch(IllegalArgumentException ex) {}
-			} catch (Exception ex) {
+					value.getMethod().invoke(value.getObject(), e);
+				} catch(Throwable ex) {
+					ex.printStackTrace();
+				}
+			} catch (IllegalArgumentException ex) {
 			}
 		});
 	}

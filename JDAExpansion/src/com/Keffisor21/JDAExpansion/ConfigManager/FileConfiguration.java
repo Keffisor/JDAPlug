@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -83,6 +85,7 @@ public class FileConfiguration {
 		return this.file.getPath();
 	}
 	
+	@Nullable
 	public Object get(String x) {
 		return getElementMap(x, data.get(x), data);
 	}
@@ -129,27 +132,33 @@ public class FileConfiguration {
 	    	e2.printStackTrace();
 	    }
 	}
-
+	
+	@Nullable
 	public boolean getBoolean(String x) {
        return (boolean)getElementMap(x, data.get(x), data);		
 	}
 	
+	@Nullable
 	public String getString(String x) {
 		return String.valueOf(getElementMap(x, data.get(x), data));
 	}
 	
+	@Nullable
 	public List<Object> getList(String x) {
 		return (List<Object>)getElementMap(x, data.get(x), data);
 	}
 	
+	@Nullable
 	public List<String> getStringList(String x) {
 		return (List<String>)getElementMap(x, data.get(x), data);
 	}
 	
+	@Nullable
 	public int getInt(String x) {
 		return (int)getElementMap(x, data.get(x), data);
 	}
 	
+	@Nullable
 	public double getDouble(String x) {
 		return (double)getElementMap(x, data.get(x), data);
 	}

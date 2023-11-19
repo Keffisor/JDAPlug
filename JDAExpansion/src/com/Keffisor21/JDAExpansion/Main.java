@@ -1,17 +1,19 @@
 package com.Keffisor21.JDAExpansion;
 
+import java.util.EnumSet;
+
 import javax.security.auth.login.LoginException;
 
 import com.Keffisor21.JDAExpansion.ConfigManager.TokenConfiguration;
 import com.Keffisor21.JDAExpansion.ConsoleHandler.ConsoleColor;
-import com.Keffisor21.JDAExpansion.NMS.JDANMS;
 
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Main extends ListenerAdapter {
 	 	
@@ -26,15 +28,17 @@ public class Main extends ListenerAdapter {
 			return;
 		}
 		
-       JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(JDAExpansion.getEnabledGatewayIntents()).disableIntents(JDAExpansion.getDisabledGatewayIntents());
-       
-       try {
-    	   if(JDAExpansion.getConfiguration().getBoolean("ShardManager.Enabled"))
-    		   JDAExpansion.start(DefaultShardManagerBuilder.createDefault(token).setShardsTotal(JDAExpansion.getConfiguration().getInt("ShardManager.Shards")).build());
-    	   else JDAExpansion.start(jdaBuilder.build());
-       } catch(Throwable e) {
-    	   e.printStackTrace();
-    	   throw (Error)e;
-       }
+		//		JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setEnabledCacheFlags(Utils.convertCacheFlagList(JDAExpansion.getEnabledCacheFlags())).setDisabledCacheFlags(Utils.convertCacheFlagList(JDAExpansion.getDisabledCacheFlags())).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(JDAExpansion.getEnabledGatewayIntents()).disableIntents(JDAExpansion.getDisabledGatewayIntents());
+
+		JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setChunkingFilter(ChunkingFilter.ALL).setMemberCachePolicy(MemberCachePolicy.ALL).setDisabledIntents(JDAExpansion.getDisabledGatewayIntents()).enableIntents(JDAExpansion.getEnabledGatewayIntents());
+
+		try {
+			if(JDAExpansion.getConfiguration().getBoolean("ShardManager.Enabled"))
+				JDAExpansion.start(DefaultShardManagerBuilder.createDefault(token).setShardsTotal(JDAExpansion.getConfiguration().getInt("ShardManager.Shards")).build());
+			else JDAExpansion.start(jdaBuilder.build());
+		} catch(Throwable e) {
+			e.printStackTrace();
+			throw (Error)e;
+		}
 	}
 }
