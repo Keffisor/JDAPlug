@@ -9,6 +9,8 @@ import com.Keffisor21.JDAExpansion.CommandHandler.Command;
 import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
 import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
 import com.Keffisor21.JDAExpansion.CommandHandler.SlashCommand;
+import com.Keffisor21.JDAExpansion.EventController.EventHandler;
+import com.Keffisor21.JDAExpansion.EventController.PluginListener;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -18,6 +20,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 public abstract class createCommand extends ListenerAdapter {
 	public static List<CommandData> commandsData = new ArrayList<>();
 	
+	private CommandData commandData;
     private String command;
     private String contentRaw = "";
     private List<String> aliases = new ArrayList<String>();
@@ -25,6 +28,7 @@ public abstract class createCommand extends ListenerAdapter {
     private String prefix;
     
     public createCommand(CommandData commandData, String prefix, String cmd, String... args) {
+    	this.commandData = commandData;
     	this.prefix = prefix;
     	this.command = prefix+cmd;
     	if(args.length != 0) {
@@ -36,7 +40,7 @@ public abstract class createCommand extends ListenerAdapter {
     }
    
     //possible events
-    @Override
+    @EventHandler
     public void onMessageReceived(MessageReceivedEvent e) {
     	if(e.getAuthor().isBot()) return;
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
@@ -47,11 +51,11 @@ public abstract class createCommand extends ListenerAdapter {
       }
     }
     
-    @Override
+    @EventHandler
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
-    	if(e.getUser().isBot()) return;
-   
-    	if(e.getName().equals(command.replaceFirst("\\"+prefix, "")) || aliases.contains(command.replaceFirst("\\"+prefix, ""))) {
+    	if(e.getUser().isBot() || this.commandData == null) return;
+    	
+    	if(e.getName().equals(this.commandData.getName())) {
     	   String[] args = e.getFullCommandName().split("/");
     	   isExecuted(args, new SlashCommand(e, getCommand(e.getName())));
     	}
