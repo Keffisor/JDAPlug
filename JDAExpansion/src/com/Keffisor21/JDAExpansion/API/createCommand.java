@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Keffisor21.JDAExpansion.CommandHandler.Command;
 import com.Keffisor21.JDAExpansion.CommandHandler.CommandSender;
 import com.Keffisor21.JDAExpansion.CommandHandler.ConsoleCommand;
@@ -27,7 +29,7 @@ public abstract class createCommand extends ListenerAdapter {
     private Command event = null;
     private String prefix;
     
-    public createCommand(CommandData commandData, String prefix, String cmd, String... args) {
+    public createCommand(CommandData commandData, @Nullable String prefix, @Nullable String cmd, String... args) {
     	this.commandData = commandData;
     	this.prefix = prefix;
     	this.command = prefix+cmd;

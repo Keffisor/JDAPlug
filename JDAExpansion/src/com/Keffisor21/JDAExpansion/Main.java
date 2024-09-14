@@ -21,7 +21,7 @@ public class Main extends ListenerAdapter {
 	 	
 	public static void main(String[] args) throws LoginException {
 		Utils.isOpenByConsole();
-		Utils.executeCommand("cls", "clear"); //for fix the ansi codes
+		Utils.executeCommand("cls", "clear"); //for fix the console colors (w10 only)
 		
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {
@@ -29,10 +29,19 @@ public class Main extends ListenerAdapter {
 			System.out.println(Utils.convertToColors(ConsoleColor.RED_BRIGHT, "\n[ERROR] The token.txt is empty, please write the token of the bot"));;
 			return;
 		}
-		
-		//		JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setEnabledCacheFlags(Utils.convertCacheFlagList(JDAExpansion.getEnabledCacheFlags())).setDisabledCacheFlags(Utils.convertCacheFlagList(JDAExpansion.getDisabledCacheFlags())).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(JDAExpansion.getEnabledGatewayIntents()).disableIntents(JDAExpansion.getDisabledGatewayIntents());
 
-		JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setChunkingFilter(ChunkingFilter.ALL).setMemberCachePolicy(MemberCachePolicy.ALL).setDisabledIntents(JDAExpansion.getDisabledGatewayIntents()).enableIntents(JDAExpansion.getEnabledGatewayIntents());
+		JDABuilder jdaBuilder = JDABuilder.createDefault(token)
+			.enableCache(Utils.convertCacheFlagList(JDAExpansion.getEnabledCacheFlags()))
+			.disableCache(Utils.convertCacheFlagList(JDAExpansion.getDisabledCacheFlags()))
+
+			.enableIntents(JDAExpansion.getEnabledGatewayIntents())
+			.disableIntents(JDAExpansion.getDisabledGatewayIntents())
+
+			.setMemberCachePolicy(JDAExpansion.getMemberCachePolicy())
+			.setChunkingFilter(JDAExpansion.getChunkingFilter())
+		;
+
+		//JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setChunkingFilter(ChunkingFilter.ALL).setMemberCachePolicy(MemberCachePolicy.ALL).setDisabledIntents(JDAExpansion.getDisabledGatewayIntents()).enableIntents(JDAExpansion.getEnabledGatewayIntents());
 
 		try {
 			if(JDAExpansion.getConfiguration().getBoolean("ShardManager.Enabled"))

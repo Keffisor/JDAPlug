@@ -13,6 +13,8 @@ CacheFlags: #ACTIVITY, VOICE_STATE, EMOTE, CLIENT_STATUS, MEMBER_OVERRIDES, ROLE
     Enabled:
     - 'VOICE_STATE'
     Disabled: []
+MemberCachePolicy: 'ALL'
+ChunkingFilter: 'ALL'
 ShardManager:
     Enabled: false
     Shards: 2

@@ -2,6 +2,7 @@ package com.Keffisor21.JDAExpansion;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class JDAExpansion {
@@ -191,6 +194,36 @@ public class JDAExpansion {
 				return false;
 			}
 		}).map(CacheFlag::valueOf).collect(Collectors.toList());
+	}
+	
+	public static MemberCachePolicy getMemberCachePolicy() {
+		String s = getConfiguration().getString("MemberCachePolicy");
+		MemberCachePolicy memberCachePolicy = MemberCachePolicy.ALL;
+		
+		try {
+			Class<?> clazz = MemberCachePolicy.class;
+			Field field = clazz.getDeclaredField(s);
+			memberCachePolicy = (MemberCachePolicy) field.get(clazz);
+		} catch (Exception e) {
+			new RuntimeException(Utils.convertToColors(ConsoleColor.RED, "Invalid MemberCachePolicy \"" + s + "\". Options: NONE, ALL, OWNER, ONLINE, VOICE, BOOSTER, PENDING, DEFAULT"));
+		}
+		
+		return memberCachePolicy;
+	}
+	
+	public static ChunkingFilter getChunkingFilter() {
+		String s = getConfiguration().getString("ChunkingFilter");
+		ChunkingFilter chunkingFilter = ChunkingFilter.ALL;
+		
+		try {
+			Class<?> clazz = ChunkingFilter.class;
+			Field field = clazz.getDeclaredField(s);
+			chunkingFilter = (ChunkingFilter) field.get(clazz);
+		} catch (Exception e) {
+			new RuntimeException(Utils.convertToColors(ConsoleColor.RED, "Invalid ChunkingFilter \"" + s + "\". Options: NONE, ALL"));
+		}
+		
+		return chunkingFilter;
 	}
 	
 	public static String getAbsolutePath() {
