@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -37,6 +39,7 @@ public class FileConfiguration {
 	
 	public FileConfiguration(File jarFile, String route, String nameFile, Object o) {
 		this.jarFile = jarFile;
+
 		File directory = new File(route);
 		if(!directory.exists()) {
 			directory.mkdir();
@@ -44,7 +47,9 @@ public class FileConfiguration {
 			directory.setWritable(true, false);
 
 		}
-		this.file = new File(route+"/"+nameFile);
+
+		this.file = new File(route + "/" + nameFile);
+		
 		try {
 
 			DumperOptions options = new DumperOptions();
@@ -117,11 +122,10 @@ public class FileConfiguration {
 	 }
 	}
 	public void set(String x, Object o) {
-		if(x.contains(".") && data.get(x) != null) {
-	    setElementMap(x, data.get(x), o);
-		} else {
-			data.put(x, o);
-		}
+		if(x.contains(".") && data.get(x.split("\\.")[0]) != null) {
+		    setElementMap(x, data.get(x), o);
+		} else data.put(x, o);
+
 		try {
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
@@ -223,35 +227,39 @@ public class FileConfiguration {
 	
 	private void setElementMap(String req, Object x, Object toChange) {
 		if(req.contains(".")) {
-			String[] split = (req.replace(".", ":").split(":"));
+			String[] split = (req.split("\\."));
 			String s = split[0];
-			LinkedList<Object> linkedList = new LinkedList<>(Arrays.asList(s));
-			List<String> list = new ArrayList<>(Arrays.asList(split));
-			list.remove(s);
-			linkedList = getAllElements(list, linkedList, data.get(split[0]));
-			Object object = ((Map)setNewElementMap(linkedList, data, req, toChange)).get(s);
+
+			Map<String, Object> object = setNewElementMap(Stream.of(split).collect(Collectors.toList()), toChange);
+
 		    data.put(s, object);
 		    return;
 		}
 		data.put(req, x);
 	}
 	
-	private Object setNewElementMap(LinkedList<Object> list, Map<String, Object> data, String content, Object toChange) {
-		String[] cnt = (content.replace(".", ":")).split(":");
-		Map<String, Object> d =  null;
-		for(int i = (list.size()-1); i!=0; i--) {
-			Object o = list.get(i);
-			if(d == null) {
-				Map<String, Object> amMap = new HashMap<>();
-				amMap.put(cnt[i-1], toChange);
-				d = amMap;
+	private Map<String, Object> setNewElementMap(List<String> paths, Object toChange) {
+		String start = paths.get(0);
+		String end = paths.get(paths.size() - 1);
+		
+		Map<String, Object> initial = (Map<String, Object>) data.get(start);
+		
+		paths.remove(0);
+		paths.remove(paths.size() - 1);
+		
+		Object tmp = null;
+		for(String path : paths) {
+			if(tmp == null) {
+				tmp = initial.get(path);
 				continue;
 			}
-			Map<String, Object> amMap = new HashMap<>();
-			amMap.put(cnt[i-1], d);
-		    d = amMap;
+			
+			tmp = ((Map<String, Object>) tmp).get(path);
 		}
-		return d;
+		
+		((Map<String, Object>) tmp).put(end, toChange);
+				
+		return initial;
 	}
 	
 	private LinkedList<Object> getAllElements(List<String> each, LinkedList<Object> comp, Object o) {
@@ -269,7 +277,7 @@ public class FileConfiguration {
 		ZipFile zipFile = new ZipFile(jarFile);
 		ZipEntry zipEntry = zipFile.getEntry(file.getName());
 		if(zipEntry == null) {
-		   Console.info(ConsoleColor.RED_BRIGHT, "The "+file.getName()+" was not found in "+jarFile.getName());
+		   Console.info(ConsoleColor.RED_BRIGHT, "The " + file.getName() + " was not found in " + jarFile.getName());
 		   return null;	
 		}
 		if(write) {
