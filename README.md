@@ -63,12 +63,12 @@ public class EventTest implements PluginListener {
 	
 	@EventHandler(priority = EventPriority.MONITOR) //set the priority of the event, if it's not set, it will be NORMAL by default.
   	public void test(MessageReceivedEvent e) {
-        JDAPlug.getLogger().info(e.getMessage().getContentRaw());
+            JDAPlug.getLogger().info(e.getMessage().getContentRaw());
   	}
 
 	@EventHandler
 	public void test2(MessageReceivedEvent e) {
-        JDAPlug.getLogger().info(e.getAuthor().getAsTag());
+            JDAPlug.getLogger().info(e.getAuthor().getAsTag());
 	}
 
 }
