@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.meta.Exclusive;
+
 import org.slf4j.Logger;
 
 import com.Keffisor21.JDAExpansion.API.createCommand;
@@ -31,6 +33,7 @@ import com.Keffisor21.JDAExpansion.NMS.JDAType;
 import com.Keffisor21.JDAExpansion.Plugins.PluginManager;
 
 import jline.console.ConsoleReader;
+import kotlin.UnsafeVariance;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -120,6 +123,7 @@ public class JDAExpansion {
 		return Jda;
 	}
 	
+	@Exclusive
 	public static FileConfiguration getConfiguration() {
 		return configuration;
 	}

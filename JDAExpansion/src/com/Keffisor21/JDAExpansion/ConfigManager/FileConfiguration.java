@@ -4,19 +4,18 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -53,9 +52,11 @@ public class FileConfiguration {
 		try {
 
 			DumperOptions options = new DumperOptions();
+
 			options.setPrettyFlow(true);
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 			options.setAllowUnicode(true);
+
 			yaml = new Yaml(options);
 
 	//		InputStream is = o.getClass().getClassLoader().(nameFile);
@@ -69,9 +70,13 @@ public class FileConfiguration {
 				}
 			}
 			
-			data = yaml.load(new FileInputStream(file));
+			InputStream fileInputStream = new FileInputStream(file);
+			data = yaml.load(fileInputStream);
+			fileInputStream.close();
 			
 			if(data == null) data = new HashMap<String, Object>();
+			
+			formatConfig();
 			
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
@@ -81,7 +86,7 @@ public class FileConfiguration {
 			bw.close();
 
 		} catch(IOException e2) { 
-			Console.info(ConsoleColor.RED_BRIGHT, "Error on creating the file "+file.getAbsolutePath());
+			Console.info(ConsoleColor.RED_BRIGHT, "Error on creating the file " + file.getAbsolutePath());
 			e2.printStackTrace();
 		}
 	}
@@ -100,6 +105,7 @@ public class FileConfiguration {
 	}
 	
 	public void saveConfig() {
+		formatConfig();
 		try {
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
@@ -112,15 +118,49 @@ public class FileConfiguration {
 	}
 	
 	public void reloadConfig() {
-	try {
-		DumperOptions options = new DumperOptions();
-		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-		yaml = new Yaml(options);
-		data = yaml.load(new FileInputStream(file));
-	 } catch (FileNotFoundException e) {
-		e.printStackTrace();
-	 }
+		try {
+			DumperOptions options = new DumperOptions();
+			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+			yaml = new Yaml(options);
+			data = yaml.load(new FileInputStream(file));
+		 } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		 }
 	}
+	
+	/**
+	 * Set the proper format to the config. Ej: Replace a dot with map.
+	 */
+	private void formatConfig() {
+		new LinkedHashSet<String>(data.keySet()).stream().filter(s -> s.contains(".")).forEach(key -> {
+			List<String> paths = Stream.of(key.split("\\.")).collect(Collectors.toList());
+
+			String start = paths.get(0);
+			String end = paths.get(paths.size() - 1);
+			
+			paths.remove(start);
+			paths.remove(end);
+			
+			LinkedHashMap<String, Object> initial = (data.get(start) == null ? new LinkedHashMap<>(): (LinkedHashMap<String, Object>) data.get(start));
+			
+			Map<String, Object> tmp = null;
+			for(String path : paths) {
+				if(tmp == null) {
+					if(initial.get(path) == null) initial.put(path, new LinkedHashMap<>());
+					tmp = (LinkedHashMap<String, Object>) initial.get(path);
+					continue;
+				}
+				if(tmp.get(path) == null) tmp.put(path, new LinkedHashMap<>());
+				tmp = (LinkedHashMap<String, Object>) tmp.get(path);
+			}
+			
+			(tmp == null ? initial: tmp).put(end, data.get(key));
+			
+			data.remove(key);
+			data.put(start, initial);			
+		});
+	}
+	
 	public void set(String x, Object o) {
 		if(x.contains(".") && data.get(x.split("\\.")[0]) != null) {
 		    setElementMap(x, data.get(x), o);
@@ -242,7 +282,7 @@ public class FileConfiguration {
 		String start = paths.get(0);
 		String end = paths.get(paths.size() - 1);
 		
-		Map<String, Object> initial = (Map<String, Object>) data.get(start);
+		LinkedHashMap<String, Object> initial = (LinkedHashMap<String, Object>) data.get(start);
 		
 		paths.remove(0);
 		paths.remove(paths.size() - 1);
@@ -250,15 +290,16 @@ public class FileConfiguration {
 		Object tmp = null;
 		for(String path : paths) {
 			if(tmp == null) {
+				if(initial.get(path) == null) initial.put(path, new LinkedHashMap<>());
 				tmp = initial.get(path);
 				continue;
 			}
-			
-			tmp = ((Map<String, Object>) tmp).get(path);
+			if(((LinkedHashMap) tmp).get(path) == null) ((LinkedHashMap) tmp).put(path, new LinkedHashMap<>());
+			tmp = ((LinkedHashMap) tmp).get(path);
 		}
 		
-		((Map<String, Object>) tmp).put(end, toChange);
-				
+		((LinkedHashMap<String, Object>) (tmp == null ? initial: tmp)).put(end, toChange);
+
 		return initial;
 	}
 	
