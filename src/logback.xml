@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%ex{4}</pattern>
+        </encoder>
+    </appender>
+    <appender name="MIAPPENDER" class="com.jdaplug.consolehandler.Console">
+        <encoder>
+            <pattern>%ex{4}</pattern>
+        </encoder>
+    </appender>
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="MIAPPENDER" />
+        <appender-ref ref="WINDOWS_COMPAT" />
+     </root>
+</configuration>
