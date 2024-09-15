@@ -68,7 +68,7 @@ public class EventTest implements PluginListener {
 
 	@EventHandler
 	public void test2(MessageReceivedEvent e) {
-		JDAPlug.getLogger().info(e.getAuthor().getAsTag());
+        JDAPlug.getLogger().info(e.getAuthor().getAsTag());
 	}
 
 }
@@ -126,6 +126,7 @@ public class Main extends JavaPlugin {
 	protected void onDisable() {
 		
 	}
+}
 ```
 The config file is created into a directory with the name of the plugin in the directory of plugins. The config file **must** be created inside the jar without any package. The data that contains that config will be created into the directory of the plugin.
 ```
