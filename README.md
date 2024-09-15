@@ -13,6 +13,7 @@
 - Enhanced event management, improving upon the original JDA system.
 - Integrated logging system.
 - Reload plugin source code while the bot is running.
+- Compatible with Java 8 through Java 21.
 
 ### Get started
 You can start the jar file in the regular way for build your project with plugins.
