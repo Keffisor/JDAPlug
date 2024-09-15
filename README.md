@@ -15,13 +15,13 @@
 - Reload plugin source code while the bot is running.
 
 ### Get started
-You can start the jar file in the regular way for build your project with plugins
+You can start the jar file in the regular way for build your project with plugins.
 ```
 @echo OFF
 java -Xms512M -Xmx512M -jar JDAPlug.jar
 PAUSE
 ```
-In case you want to integrate it to already created bot project, you can wrap the jda instance into JDAPlug
+In case you want to integrate it to already created bot project, you can wrap the jda instance into JDAPlug.
 ```
 public static void main(String[] args) throws LoginException {
        JDA jda = new JDABuilder(AccountType.BOT).setToken(token).build(); //any call of jda

@@ -6,7 +6,7 @@
             <pattern>%ex{4}</pattern>
         </encoder>
     </appender>
-    <appender name="MIAPPENDER" class="com.jdaplug.consolehandler.Console">
+    <appender name="JDAPLUG" class="com.jdaplug.consolehandler.Console">
         <encoder>
             <pattern>%ex{4}</pattern>
         </encoder>
@@ -14,7 +14,6 @@
     <root>
         <level value="INFO" />
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="MIAPPENDER" />
-        <appender-ref ref="WINDOWS_COMPAT" />
+        <appender-ref ref="JDAPLUG" />
      </root>
 </configuration>
