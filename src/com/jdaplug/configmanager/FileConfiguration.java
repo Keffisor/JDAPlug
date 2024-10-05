@@ -170,12 +170,13 @@ public class FileConfiguration {
 	private StringWriter commentsConfig(StringWriter writer) {
 		List<String> lines = Stream.of(writer.toString().split("\n")).collect(Collectors.toList());
 
+		AtomicInteger count = new AtomicInteger();
+		AtomicInteger commentsApplied = new AtomicInteger();
 		try {
-			AtomicInteger count = new AtomicInteger();
 			Files.readAllLines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).forEach(line -> {
 				int pos = count.getAndIncrement();
 				if(!line.trim().startsWith("#")) return;
-				lines.add(pos, line);
+				lines.add(pos + commentsApplied.getAndIncrement(), line);
 			});
 		} catch(Exception e) {
 			e.printStackTrace();
