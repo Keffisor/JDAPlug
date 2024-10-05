@@ -32,10 +32,10 @@ public class PluginsCommand extends createCommand {
 			return;
 		}
 		if(JDAPlug.getConfiguration().getBoolean("Commands.Plugins.Disabled")) {
-			sender.replyMessage(JDAPlug.getConfiguration().getString("Commands.Plugins.Message"));
+			sender.replySender(JDAPlug.getConfiguration().getString("Commands.Plugins.Message"));
 			return;
 		}
-		sender.replyMessage("Plugins ("+plugins.size()+"): "+plugins.toString().replace("[", "").replace("]", ""));
+		sender.replySender("Plugins (" + plugins.size() + "): " + plugins.toString().replace("[", "").replace("]", ""));
 	}
 	
 }

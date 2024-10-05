@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class ConsoleCommand implements CommandSender {
-	private String command;
+	private final String command;
 	
 	public ConsoleCommand(String command) {
 		this.command = command;
@@ -17,16 +17,16 @@ public class ConsoleCommand implements CommandSender {
 		return JDAPlug.getJDA();
 	}
 
-	public void sendMessage(String message) {
+	public void sendSenderMessage(String message) {
 		JDAPlug.getLogger().info(message);
 	}
 
-	public void replyMessage(String message) {
+	public void replySender(String message) {
 		JDAPlug.getLogger().info(message);
 	}
 	
 	@SuppressWarnings("unused")
-	public void replyMessageEmbeds(MessageEmbed embed) {}
+	public void replySenderEmbeds(MessageEmbed embed) {}
 	
 	@SuppressWarnings("unused")
 	public Member getMember() {

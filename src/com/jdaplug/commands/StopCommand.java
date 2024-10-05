@@ -29,7 +29,7 @@ public class StopCommand extends createCommand {
 				((SlashCommand)sender).reply(message).queue();
 				return;
 			}
-			sender.sendMessage(message);
+			sender.sendSenderMessage(message);
 		}
 	}
 }

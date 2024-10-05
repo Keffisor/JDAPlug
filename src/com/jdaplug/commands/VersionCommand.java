@@ -13,10 +13,10 @@ public class VersionCommand extends createCommand {
 	@Override
 	protected void isExecuted(String[] args, CommandSender sender) {
 		if(JDAPlug.getConfiguration().getBoolean("Commands.Version.Disabled")) {
-			sender.replyMessage(JDAPlug.getConfiguration().getString("Commands.Version.Message"));
+			sender.replySender(JDAPlug.getConfiguration().getString("Commands.Version.Message"));
 			return;
 		}
-		sender.replyMessage("Running JDAPlug v1.0");
+		sender.replySender("Running JDAPlug v1.0.2");
 	}
 
 }

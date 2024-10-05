@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.jdaplug.commandhandler.Command;
+import com.jdaplug.commandhandler.TextCommand;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
 import com.jdaplug.commandhandler.SlashCommand;
@@ -25,7 +25,7 @@ public abstract class createCommand extends ListenerAdapter {
     private String command;
     private String contentRaw = "";
     private List<String> aliases = new ArrayList<String>();
-    private Command event = null;
+    private TextCommand event = null;
     private String prefix;
     
     public createCommand(CommandData commandData, @Nullable String prefix, @Nullable String cmd, String... args) {
@@ -47,7 +47,7 @@ public abstract class createCommand extends ListenerAdapter {
       if(isCommand(e.getMessage().getContentRaw(), command) || getAliases(e.getMessage().getContentRaw(), false)) {
     	  
     	  contentRaw = e.getMessage().getContentRaw();
-    	  event = new Command(e, getCommand(contentRaw), getPrefix());
+    	  event = new TextCommand(e, getCommand(contentRaw), getPrefix());
      	  isExecuted(getArgs(), event);
       }
     }

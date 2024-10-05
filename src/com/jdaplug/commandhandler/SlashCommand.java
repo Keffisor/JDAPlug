@@ -23,81 +23,14 @@ public class SlashCommand extends SlashCommandInteractionEvent implements Comman
 		this.e = e;
 		this.command = command;
 	}
-	
-	public JDA getJDA() {
-		return e.getJDA();
-	}
 
-	public int getTypeRaw() {
-		return e.getTypeRaw();
-	}
+	public void sendSenderMessage(String message) { e.getChannel().sendMessage(message).queue(); }
 
-	public String getToken() {
-		return e.getToken();
-	}
+	public void replySender(String message) { e.reply(message).queue(); }
 
-	public Guild getGuild() {
-		return e.getGuild();
-	}
+	public void replySenderEmbeds(MessageEmbed embed) { e.replyEmbeds(embed).queue(); }
 
-	public User getUser() {
-		return e.getUser();
-	}
-
-	public Member getMember() {
-		return e.getMember();
-	}
-
-	public InteractionHook getHook() {
-		return e.getHook();
-	}
-
-	public boolean isAcknowledged() {
-		return e.isAcknowledged();
-	}
-
-	public ReplyCallbackAction deferReply() {
-		return e.deferReply();
-	}
-
-	public long getIdLong() {
-		return e.getIdLong();
-	}
-
-	public String getName() {
-		return e.getName();
-	}
-
-	public String getSubcommandName() {
-		return e.getSubcommandName();
-	}
-
-	public String getSubcommandGroup() {
-		return e.getSubcommandGroup();
-	}
-
-	public long getCommandIdLong() {
-		return e.getCommandIdLong();
-	}
-
-	public List<OptionMapping> getOptions() {
-		return e.getOptions();
-	}
-
-	public void sendMessage(String message) {
-		e.getChannel().sendMessage(message).queue();
-	}
-	
-	public void replyMessage(String message) {
-		e.reply(message).queue();
-	}
-	
-	public void replyMessageEmbeds(MessageEmbed embed) {
-		e.replyEmbeds(embed).queue();
-	}
-	
 	public String getCommand() {
 		return command;
 	}
-
 }
