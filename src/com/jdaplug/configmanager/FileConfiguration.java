@@ -171,12 +171,11 @@ public class FileConfiguration {
 		List<String> lines = Stream.of(writer.toString().split("\n")).collect(Collectors.toList());
 
 		AtomicInteger count = new AtomicInteger();
-		AtomicInteger commentsApplied = new AtomicInteger();
 		try {
 			Files.readAllLines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).forEach(line -> {
 				int pos = count.getAndIncrement();
 				if(!line.trim().startsWith("#")) return;
-				lines.add(pos + commentsApplied.getAndIncrement(), line);
+				lines.add(pos, line);
 			});
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -204,7 +203,6 @@ public class FileConfiguration {
 	    }
 	}
 	
-	@Nullable
 	public boolean getBoolean(String x) {
        return (boolean)getElementMap(x, data.get(x), data);		
 	}
@@ -224,12 +222,10 @@ public class FileConfiguration {
 		return (List<String>)getElementMap(x, data.get(x), data);
 	}
 	
-	@Nullable
 	public int getInt(String x) {
 		return (int)getElementMap(x, data.get(x), data);
 	}
 	
-	@Nullable
 	public double getDouble(String x) {
 		return (double)getElementMap(x, data.get(x), data);
 	}

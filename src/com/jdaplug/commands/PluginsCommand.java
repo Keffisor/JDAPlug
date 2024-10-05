@@ -22,20 +22,22 @@ public class PluginsCommand extends createCommand {
 	@Override
 	protected void isExecuted(String[] args, CommandSender sender) {
 		List<String> plugins = JDAPlug.getPluginManager().getInstalledPlugins().stream().map(Plugin::getName).collect(Collectors.toList());
+
+		String pluginsMessage = "Plugins (" + plugins.size() + "): " + plugins.toString().replace("[", "").replace("]", "");
+
 		if(sender instanceof ConsoleCommand) {
 			if(Utils.hasSupportColors())
 				JDAPlug.getLogger().info("Plugins ("+ConsoleColor.GREEN_BRIGHT+plugins.size()+ConsoleColor.RESET+"): "
 					+ConsoleColor.GREEN_BRIGHT+plugins.toString().replace("[", "").replace("]", "")+ConsoleColor.RESET);
 			else
-				JDAPlug.getLogger().info("Plugins ("+plugins.size()+"): "
-						+plugins.toString().replace("[", "").replace("]", ""));
+				JDAPlug.getLogger().info(pluginsMessage);
 			return;
 		}
 		if(JDAPlug.getConfiguration().getBoolean("Commands.Plugins.Disabled")) {
 			sender.replySender(JDAPlug.getConfiguration().getString("Commands.Plugins.Message"));
 			return;
 		}
-		sender.replySender("Plugins (" + plugins.size() + "): " + plugins.toString().replace("[", "").replace("]", ""));
+		sender.replySender(pluginsMessage);
 	}
 	
 }
