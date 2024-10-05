@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -25,10 +29,13 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import com.jdaplug.consolehandler.Console;
 import com.jdaplug.consolehandler.ConsoleColor;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.representer.Representer;
 
 public class FileConfiguration {
 	private Yaml yaml;
@@ -50,23 +57,20 @@ public class FileConfiguration {
 		this.file = new File(route + "/" + nameFile);
 		
 		try {
-
 			DumperOptions options = new DumperOptions();
 
 			options.setPrettyFlow(true);
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 			options.setAllowUnicode(true);
+			options.setProcessComments(true);
 
 			yaml = new Yaml(options);
-
-	//		InputStream is = o.getClass().getClassLoader().(nameFile);
-	//		Files.write(file, IOUtils.toString(is, StandardCharsets.UTF_8));
 
 			if(!isValid(file, o, nameFile)) {
 				try {
 					extractConfig(true);
 				} catch (Exception e) {
-					// TODO: handle exception
+					e.printStackTrace();
 				}
 			}
 			
@@ -76,14 +80,7 @@ public class FileConfiguration {
 			
 			if(data == null) data = new HashMap<String, Object>();
 			
-			formatConfig();
-			
-			StringWriter writer = new StringWriter();
-			yaml.dump(data, writer);
-
-			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"));
-			bw.write(writer.toString());
-			bw.close();
+			saveConfig();
 
 		} catch(IOException e2) { 
 			Console.info(ConsoleColor.RED_BRIGHT, "Error on creating the file " + file.getAbsolutePath());
@@ -109,8 +106,12 @@ public class FileConfiguration {
 		try {
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
-			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"));
+
+			writer = commentsConfig(writer);
+
+			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
 			bw.write(writer.toString());
+
 			bw.close();
 	    } catch(IOException e2) {
 	    	e2.printStackTrace();
@@ -160,7 +161,32 @@ public class FileConfiguration {
 			data.put(start, initial);			
 		});
 	}
-	
+
+	/**
+	 * Recover the comments in the yml file and apply them to the StringWriter so when the config it's overwritten the comments are not removed.
+	 * @param writer The StringWriter to apply the comments
+	 * @return The StringWriter with the comments applied
+	 */
+	private StringWriter commentsConfig(StringWriter writer) {
+		List<String> lines = Stream.of(writer.toString().split("\n")).collect(Collectors.toList());
+
+		try {
+			AtomicInteger count = new AtomicInteger();
+			Files.readAllLines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).forEach(line -> {
+				int pos = count.getAndIncrement();
+				if(!line.trim().startsWith("#")) return;
+				lines.add(pos, line);
+			});
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		writer = new StringWriter();
+		writer.append(String.join("\n", lines));
+
+		return writer;
+	}
+
 	public void set(String x, Object o) {
 		if(x.contains(".") && data.get(x.split("\\.")[0]) != null) {
 		    setElementMap(x, data.get(x), o);
@@ -169,7 +195,7 @@ public class FileConfiguration {
 		try {
 			StringWriter writer = new StringWriter();
 			yaml.dump(data, writer);
-			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), Charset.forName("UTF-8"));
+			BufferedWriter bw = java.nio.file.Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
 			bw.write(writer.toString());
 			bw.close();
 	    } catch(IOException e2) {
