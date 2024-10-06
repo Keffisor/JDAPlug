@@ -1,16 +1,13 @@
 package com.jdaplug.commands;
 
 import com.jdaplug.JDAPlug;
-import com.jdaplug.api.createCommand;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
-import com.jdaplug.commandhandler.SlashCommand;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class ReloadCommand extends createCommand {
+public class ReloadCommand extends CommandExecutor {
 
 	public ReloadCommand() {	
 		super(Commands.slash("reload", "Reload the plugins of the bot. Requires permission.").setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR)), "!", "reload", "rl");

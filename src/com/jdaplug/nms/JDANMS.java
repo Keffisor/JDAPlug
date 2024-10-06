@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDANMS {
-	private JDAType type;
-	private List<Object> registredListeners = new ArrayList<>();
+	private final JDAType type;
+	private final List<Object> registeredListeners = new ArrayList<>();
 	
 	public JDANMS(JDAType type) {
 		this.type = type;
@@ -16,7 +16,7 @@ public class JDANMS {
 			  type.jda.addEventListener(o);
 		  }
 		  if(type.shardManager != null) {
-			  registredListeners.add(o);
+			  registeredListeners.add(o);
 			  type.shardManager.addEventListener(o);
 		  }
 	}
@@ -28,7 +28,7 @@ public class JDANMS {
 		  }
 		  if(type.shardManager != null) {
 			  for (Object object : o) {
-				  registredListeners.add(o);
+				  registeredListeners.add(o);
 			  	type.shardManager.addEventListener(o);
 			  }
 		  }
@@ -39,7 +39,7 @@ public class JDANMS {
 			  type.jda.removeEventListener(o);
 		  }
 		  if(type.shardManager != null) {
-			  registredListeners.remove(o);
+			  registeredListeners.remove(o);
 			  type.shardManager.removeEventListener(o);
 		  }
 	}
@@ -49,7 +49,7 @@ public class JDANMS {
 			  return type.jda.getEventManager().getRegisteredListeners();
 		  }
 		  if(type.shardManager != null) {
-			  return registredListeners;
+			  return registeredListeners;
 		  }
 		  return null;
 	}

@@ -1,10 +1,9 @@
 package com.jdaplug.commands;
 
 import com.jdaplug.JDAPlug;
-import com.jdaplug.api.createCommand;
 import com.jdaplug.commandhandler.CommandSender;
 
-public class VersionCommand extends createCommand {
+public class VersionCommand extends CommandExecutor {
 
 	public VersionCommand() {
 		super(null, "!", "version", "ver");

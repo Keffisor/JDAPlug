@@ -1,15 +1,12 @@
 package com.jdaplug.commands;
 
-import com.jdaplug.api.createCommand;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
-import com.jdaplug.commandhandler.SlashCommand;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class StopCommand extends createCommand {
+public class StopCommand extends CommandExecutor {
 
 	public StopCommand() {	
 		super(Commands.slash("stop", "Stop the bot. Requires permission.").setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR)), "!", "stop", "shutdown");

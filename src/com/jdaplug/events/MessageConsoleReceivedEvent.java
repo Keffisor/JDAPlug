@@ -1,4 +1,4 @@
-package com.jdaplug.api;
+package com.jdaplug.events;
 
 public class MessageConsoleReceivedEvent {
 	private String contentRaw;

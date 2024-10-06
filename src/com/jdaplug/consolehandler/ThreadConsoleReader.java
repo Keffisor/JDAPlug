@@ -2,8 +2,8 @@ package com.jdaplug.consolehandler;
 
 import java.util.stream.Collectors;
 
-import com.jdaplug.api.MessageConsoleReceivedEvent;
-import com.jdaplug.api.createCommand;
+import com.jdaplug.events.MessageConsoleReceivedEvent;
+import com.jdaplug.commands.CommandExecutor;
 import com.jdaplug.eventcontroller.EventsRegistration;
 import com.jdaplug.nms.JDANMS;
 
@@ -45,8 +45,8 @@ public class ThreadConsoleReader extends Thread {
 
     	if(jda.getEventManager().stream().filter(obj -> {
     		
-    		if(obj instanceof createCommand) {
-   				return ((createCommand) obj).onConsoleMessageReceived(command);
+    		if(obj instanceof CommandExecutor) {
+   				return ((CommandExecutor) obj).onConsoleMessageReceived(command);
    			}
     		
    			return false;

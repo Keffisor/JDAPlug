@@ -1,19 +1,17 @@
 package com.jdaplug.commands;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.jdaplug.JDAPlug;
 import com.jdaplug.Utils;
-import com.jdaplug.api.createCommand;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
 import com.jdaplug.consolehandler.ConsoleColor;
 import com.jdaplug.plugins.Plugin;
-
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-public class PluginsCommand extends createCommand {
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class PluginsCommand extends CommandExecutor {
 
 	public PluginsCommand() {
 		super(Commands.slash("plugins", "See the list of plugins installed."), "!", "plugins", "pl");

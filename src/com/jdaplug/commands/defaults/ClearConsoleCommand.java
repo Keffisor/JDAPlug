@@ -1,11 +1,10 @@
 package com.jdaplug.commands;
 
 import com.jdaplug.Utils;
-import com.jdaplug.api.createCommand;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
 
-public class ClearConsoleCommand extends createCommand {
+public class ClearConsoleCommand extends CommandExecutor {
 
 	public ClearConsoleCommand() {
 		super(null, "!", "cls", "clear");

@@ -1,4 +1,4 @@
-package com.jdaplug.api;
+package com.jdaplug.events;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;

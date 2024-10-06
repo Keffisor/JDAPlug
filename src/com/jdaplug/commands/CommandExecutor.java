@@ -1,4 +1,4 @@
-package com.jdaplug.api;
+package com.jdaplug.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData; 
 
-public abstract class createCommand extends ListenerAdapter {
+public abstract class CommandExecutor extends ListenerAdapter {
 	public static List<CommandData> commandsData = new ArrayList<>();
 	
 	private CommandData commandData;
@@ -28,7 +28,7 @@ public abstract class createCommand extends ListenerAdapter {
     private TextCommand event = null;
     private String prefix;
     
-    public createCommand(CommandData commandData, @Nullable String prefix, @Nullable String cmd, String... args) {
+    public CommandExecutor(CommandData commandData, @Nullable String prefix, @Nullable String cmd, String... args) {
     	this.commandData = commandData;
     	this.prefix = prefix;
     	this.command = prefix+cmd;

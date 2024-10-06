@@ -11,7 +11,7 @@ import javax.annotation.meta.Exclusive;
 
 import org.slf4j.Logger;
 
-import com.jdaplug.api.createCommand;
+import com.jdaplug.commands.CommandExecutor;
 import com.jdaplug.commands.ClearConsoleCommand;
 import com.jdaplug.commands.PluginsCommand;
 import com.jdaplug.commands.ReloadCommand;
@@ -73,7 +73,7 @@ public class JDAPlug {
 		new Console().start();
 	    pluginManager.loadPlugins(jda);
 	    //load commanddata for slashcommands
-	    getJDA().updateCommands().addCommands(createCommand.commandsData).queue();
+	    getJDA().updateCommands().addCommands(CommandExecutor.commandsData).queue();
 	}
 	
 	private static void setConsoleConfig() {
