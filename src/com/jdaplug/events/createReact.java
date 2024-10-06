@@ -5,11 +5,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-/**
- * Very legacy code
- */
-
-public abstract class createReact extends ListenerAdapter {
+@Deprecated public abstract class createReact extends ListenerAdapter {
 	
     private final Message message;
     private final String emote;

@@ -86,29 +86,29 @@ After compiling the plugin, you have to move the jar into the plugins folder cre
 
 ### Creating commands for Discord and the Console
 ```
-createCommand command = new createCommand(new CommandData("principalcommand", "Some description for slash command"), "!", "principalcommand", "aliase1", "anotheraliase") {
+CommandExecutor command = new CommandExecutor(new CommandData("principalcommand", "Some description for slash command"), "!", "principalcommand", "aliase1", "anotheraliase") {
 	@Override
 	protected void isExecuted(String[] args, CommandSender sender) {
 		if(sender instanceof ConsoleCommand) {
 			ConsoleCommand e = (ConsoleCommand)sender;
 			JDAPlug.getLogger().info("Hey! This is just a test command for the console :D");
 		}
-		if(sender instanceof Command) {
-			Command e = (Command)sender;
+		if(sender instanceof TextCommand) {
+			TextCommand e = (TextCommand)sender;
 			e.getChannel().sendMessage("Hey! This is just a test command without slash commands :D").queue();
 		}
 		if(sender instanceof SlashCommand) {
 			SlashCommand e = (SlashCommand)sender;
 			e.reply("Hey! This is just a test command by slash commands :D").queue();
 		}
-		sender.sendMessage("This message will sent without caring about the type");
+		sender.sendSenderMessage("This message will sent without caring about the type");
 	}
   }; 
 }
 
 JDAPlug.registerEvent(command);
 ```
-You have to use the class of createCommand which you can set a slash command, prefix, a principal command or command aliases.
+You have to use the class of CommandExecutor which you can set a slash command, prefix, a principal command or command aliases.
 **The commands on the console doesn't have prefix, if you command is "!test" you have to execute as "test" on the console**
 
 ### Creating configs for plugins
@@ -134,6 +134,7 @@ The config file is created into a directory with the name of the plugin in the d
 e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
 config.set("something", 1); //set data to the config
 ```
+Works exactly the same as Bukkit. In addition, the yml files can have comments, will be not removed if the comment has a unique line only for them.
 <h2><strong>Screenshots</strong></h2>
 <img src="https://i.imgur.com/ftzRALM.png">
 <img src="https://i.imgur.com/SCTW9Cu.png">
