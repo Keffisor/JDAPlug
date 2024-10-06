@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 /**
- * Legacy code
+ * Very legacy code
  */
 
 public abstract class createReact extends ListenerAdapter {

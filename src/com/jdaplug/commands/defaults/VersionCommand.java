@@ -1,7 +1,8 @@
-package com.jdaplug.commands;
+package com.jdaplug.commands.defaults;
 
 import com.jdaplug.JDAPlug;
 import com.jdaplug.commandhandler.CommandSender;
+import com.jdaplug.commands.CommandExecutor;
 
 public class VersionCommand extends CommandExecutor {
 

@@ -13,7 +13,7 @@ public class Main extends ListenerAdapter {
 	 	
 	public static void main(String[] args) {
 		Utils.isOpenByConsole();
-		Utils.executeCommand("cls", "clear"); //for fix the console colors (w10 only)
+		Utils.executeCommand("cls", "clear"); //for fix the console colors (w10/w11 only)
 		
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {

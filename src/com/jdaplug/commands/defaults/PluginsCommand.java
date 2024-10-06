@@ -1,9 +1,10 @@
-package com.jdaplug.commands;
+package com.jdaplug.commands.defaults;
 
 import com.jdaplug.JDAPlug;
 import com.jdaplug.Utils;
 import com.jdaplug.commandhandler.CommandSender;
 import com.jdaplug.commandhandler.ConsoleCommand;
+import com.jdaplug.commands.CommandExecutor;
 import com.jdaplug.consolehandler.ConsoleColor;
 import com.jdaplug.plugins.Plugin;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;

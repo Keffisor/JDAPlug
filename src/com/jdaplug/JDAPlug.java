@@ -9,14 +9,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.meta.Exclusive;
 
+import com.jdaplug.commands.defaults.*;
 import org.slf4j.Logger;
 
 import com.jdaplug.commands.CommandExecutor;
-import com.jdaplug.commands.ClearConsoleCommand;
-import com.jdaplug.commands.PluginsCommand;
-import com.jdaplug.commands.ReloadCommand;
-import com.jdaplug.commands.StopCommand;
-import com.jdaplug.commands.VersionCommand;
 import com.jdaplug.configmanager.FileConfiguration;
 import com.jdaplug.consolehandler.Console;
 import com.jdaplug.consolehandler.ConsoleColor;
@@ -77,7 +73,6 @@ public class JDAPlug {
 	}
 	
 	private static void setConsoleConfig() {
-		Utils.disableAccessWarnings(); //disable the illegal access warn
 		System.setErr(new ConsoleInterceptorErr(System.err));
 		Console.previousPrintStream = System.out;
 		System.setOut(new ConsoleInterceptorOut(System.out));
