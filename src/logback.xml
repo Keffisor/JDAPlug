@@ -3,12 +3,12 @@
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%ex{4}</pattern>
+            <pattern>%ex</pattern>
         </encoder>
     </appender>
     <appender name="JDAPLUG" class="com.jdaplug.consolehandler.Console">
         <encoder>
-            <pattern>%ex{4}</pattern>
+            <pattern>%ex</pattern>
         </encoder>
     </appender>
     <root>

@@ -16,66 +16,50 @@ import jline.console.ConsoleReader;
 
 
 public class Console extends ch.qos.logback.core.UnsynchronizedAppenderBase<ILoggingEvent> {
-	public static List<String> lines = new ArrayList<String>();
+    public static List<String> lines = new ArrayList<String>();
     public static Logger logger = LoggerFactory.getLogger(Console.class);
     public static ConsoleReader reader = null;
     public static PrintStream previousPrintStream = null;
-    
-	@Override
-	protected void append(ILoggingEvent e) {
- 		if(e == null) return;
- 		filter(e.getMessage());
-	}
-	
-	private void filter(String msg) {
-		try {	
-		
-		reader.print(reader.RESET_LINE+"");
-		reader.flush();
-		reader.drawLine();
-		reader.getCursorBuffer().clear();
-		reader.flush();
-		 
-		//removeLine(msg);
-	 
-		int length = msg.split("\n").length-1;
-		
-		if(msg.equals("> ")) return;
-		if(msg.startsWith("> ") || msg.equals(">")) { 
-			JDAPlug.getLogsManager().writeLog(msg);
-		} else {
-			String format = String.format("[%s INFO]: %s", Utils.getTime(), msg);
-			Console.previousPrintStream.println(format);
-			JDAPlug.getLogsManager().writeLog(format);
-		}	
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Console.previousPrintStream.print("> ");
-	}
-	
-	public static void info(ConsoleColor color, String msg) {
-		if(!Utils.hasSupportColors()) {
-			JDAPlug.getLogger().info(msg);
-			return;
-		}
-		JDAPlug.getLogger().info(color+msg+ConsoleColor.RESET);
-	}
-	
-	
-	/*public static void removeLine(String text) {
-		String[] split = text.split("\n");
-		if(split.length == 1) {
-  			System.out.print("\033[F");
-			for(int i = 0; i < text.length(); i++) {
-				System.out.print(Utils.getCharDelete());
-			}
-			return;
-		} 	
-        System.out.print("\033[F");
-		for(String s : split) {
-	        System.out.print("\033[F");
-		}
-		System.out.print(Utils.getCharDelete());
-  }*/
+
+    @Override
+    protected void append(ILoggingEvent e) {
+        if (e == null) return;
+        filter(e.getMessage());
+    }
+
+    private void filter(String msg) {
+        try {
+            reader.print(String.valueOf(reader.RESET_LINE));
+            reader.flush();
+            reader.drawLine();
+            reader.getCursorBuffer().clear();
+            reader.flush();
+
+            int length = msg.split("\n").length - 1;
+
+            if (msg.equals("> ")) return;
+            if (msg.startsWith("> ") || msg.equals(">")) {
+                JDAPlug.getLogsManager().writeLog(msg);
+            } else {
+                String format = String.format("[%s INFO]: %s", Utils.getTime(), msg);
+                Console.previousPrintStream.println(format);
+                JDAPlug.getLogsManager().writeLog(format);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Console.previousPrintStream.print("> ");
+    }
+
+    public static void info(ConsoleColor color, String msg) {
+        if (!Utils.hasSupportColors()) {
+            JDAPlug.getLogger().info(msg);
+            return;
+        }
+
+        JDAPlug.getLogger().info(color + msg + ConsoleColor.RESET);
+    }
+
 }

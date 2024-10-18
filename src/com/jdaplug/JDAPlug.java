@@ -64,7 +64,7 @@ public class JDAPlug {
 		JDANMS jda = new JDANMS(getJDAType(o));
 		JdaNMS = jda;
 		//create thread of reading the console
- 	    new ThreadConsoleReader(jda, Console.reader).start();
+ 	    new ThreadConsoleReader(jda).start();
 		getJDA().addEventListener(new EventsRegistration(), new ClearConsoleCommand(), new PluginsCommand(), new ReloadCommand(), new StopCommand(), new VersionCommand());
 		new Console().start();
 	    pluginManager.loadPlugins(jda);
