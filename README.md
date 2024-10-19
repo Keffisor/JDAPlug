@@ -15,14 +15,14 @@
 - Reload plugin source code while the bot is running.
 - Compatible with Java 8 through Java 21.
 
-### Get started
-You can start the jar file in the regular way for build your project with plugins.
+### Getting Started
+You can start the jar file in the regular way for build your project with plugins:
 ```
 @echo OFF
 java -Xms512M -Xmx512M -jar JDAPlug.jar
 PAUSE
 ```
-In case you want to integrate it to already created bot project, you can wrap the jda instance into JDAPlug.
+For integration with an existing bot project, wrap the JDA instance in JDAPlug:
 ```
 public static void main(String[] args) throws LoginException {
        JDA jda = new JDABuilder(AccountType.BOT).setToken(token).build(); //any call of jda
@@ -31,7 +31,7 @@ public static void main(String[] args) throws LoginException {
 ```
 
 ### Creating plugins 
-You will need to set up a plugin.yml on the jar without being on a package
+First, add a ``plugin.yml`` in the root of your plugin jar (with no packages):
 ```
 name: Name of your plugin
 main: your.main.class.of.your.plugin
@@ -39,7 +39,7 @@ main: your.main.class.of.your.plugin
 author: Keffisor21
 version: v2.3
 ```
-Now you will have to create a class extending the PluginListener class
+Then, create a class extending ``JavaPlugin``:
 ```
 public class Main extends JavaPlugin {
 
@@ -54,7 +54,7 @@ public class Main extends JavaPlugin {
 	}
 }
 ```
-You can use the api of events by the JDAPlug without using the ListenerAdapter
+You can define events using JDAPlug’s API implementing ``PluginListener``
 ```
 public class EventTest implements PluginListener {
 	/*
@@ -74,7 +74,7 @@ public class EventTest implements PluginListener {
 
 }
 ```
-In case that you need to register a class with events you must call this function
+To register events:
 ```
     @Override
 	protected void onEnable() {
@@ -82,7 +82,7 @@ In case that you need to register a class with events you must call this functio
 		JDAPlug.registerEvents(new Event1(), new Event2(), new Event3());
 	}
 ```
-After compiling the plugin, you have to move the jar into the plugins folder created by the Bot. You can reload the plugins with the command !reload o !rl and you can see the plugins installed with !plugins or !pl.
+After compiling, move the jar into the ``plugins`` folder created by the bot. Reload plugins using !reload or !rl, and list installed plugins with !plugins or !pl.
 
 ### Creating commands for Discord and the Console
 ```
@@ -111,7 +111,7 @@ JDAPlug.registerEvent(command);
 You have to use the class of CommandExecutor which you can set a slash command, prefix, a principal command or command aliases.
 **The commands on the console doesn't have prefix, if you command is "!test" you have to execute as "test" on the console**
 
-### Creating configs for plugins
+### Creating configs for Plugins
 ```
 public class Main extends JavaPlugin {
 	public static FileConfiguration config;
@@ -129,7 +129,7 @@ public class Main extends JavaPlugin {
 	}
 }
 ```
-The config file is created into a directory with the name of the plugin in the directory of plugins. The config file **must** be created inside the jar without any package. The data that contains that config will be created into the directory of the plugin.
+The config file is stored in the plugin's directory. You can access or modify data as needed:
 ```
 e.getChannel().sendMessage(Main.getInstance().config.getString("Message.NoPermission")).queue(); 
 config.set("something", 1); //set data to the config
@@ -139,8 +139,77 @@ Works exactly the same as Bukkit. In addition, the yml files can have comments, 
 <img src="https://i.imgur.com/ftzRALM.png">
 <img src="https://i.imgur.com/SCTW9Cu.png">
 <img src="https://i.imgur.com/ZyRzR6f.png">
-<h2><strong>Example</strong></h2>
-<p>You can download an example of a plugin <a href="https://keffisor21.com/downloads/CommandCreator.jar">here</a></p>
+<h2><strong>Plugins examples</strong></h2>
+
+- <strong>BotRPC</strong> - Set custom RPC for your bot with a customizable config for rotating activities. <a href="https://keffisor21.com/jdaplug/BotRPC/BotRPC.jar" rel="nofollow">Download here</a>  
+``` Config.yml file
+#COMPETING, PLAYING, LISTENING, WATCHING, STREAMING
+RPCs:
+- LISTENING:Test
+- LISTENING:Message 2
+```
+
+- <strong>Vault</strong> - An economy library with a simple API, inspired by Bukkit’s original Vault plugin. <a href="https://keffisor21.com/jdaplug/Vault/Vault.jar" rel="nofollow">Download here</a>
+```
+# Code usage:
+VaultAPI.addCoins(Member, Coins);
+VaultAPI.removeCoins(Member, Coins);
+VaultAPI.setCoins(Member, Coins);
+VaultAPI.getCoins(Member, Coins);
+
+For using it, just add the jar to the library path of your project and install the plugin in your plugins folder.
+That's all you have to do!
+
+# Config file
+SlashCommands:
+  Coins:
+    Command: coins
+    Description: Check your coins on the server
+    Argument:
+      Member:
+        Name: member
+        Description: Check the coins of a member
+  CoinsAdd:
+    Command: coinsadd
+    Description: Add coins to a member
+    Permission: ADMINISTRATOR
+    Argument:
+      Member:
+        Name: member
+        Description: Member to add the coins
+      Coins:
+        Name: coins
+        Description: The coins to add
+  CoinsRemove:
+    Command: coinsremove
+    Description: Remove coins to a member
+    Permission: ADMINISTRATOR
+    Argument:
+      Member:
+        Name: member
+        Description: Member to remove the coins
+      Coins:
+        Name: coins
+        Description: The coins to remove
+Messages:
+  Coins:
+    Self:
+      Title: ℹ️  Your coins  🪙
+      Description: You have **%coins coins**
+      Color: '#0076D7'
+      FooterText: Vault
+      FooterImage: ''
+    Member:
+      Title: ℹ️  %name's coins  🪙
+      Description: The member %name has **%coins coins**
+      Color: '#0076D7'
+      FooterText: Vault
+      FooterImage: ''
+  CoinsAdd: Added %quantity coins to %member
+  CoinsRemove: Added %quantity coins to %member
+  
+```
+
 <br>
 <br>
 <br>
