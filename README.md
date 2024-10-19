@@ -139,7 +139,7 @@ Works exactly the same as Bukkit. In addition, the yml files can have comments, 
 <img src="https://i.imgur.com/ftzRALM.png">
 <img src="https://i.imgur.com/SCTW9Cu.png">
 <img src="https://i.imgur.com/ZyRzR6f.png">
-<h2><strong>Plugins examples</strong></h2>
+<h2><strong>Plugin examples</strong></h2>
 
 - <strong>BotRPC</strong> - Set custom RPC for your bot with a customizable config for rotating activities. <a href="https://keffisor21.com/jdaplug/BotRPC/BotRPC.jar" rel="nofollow">Download here</a>  
 ``` Config.yml file
@@ -163,7 +163,8 @@ That's all you have to do!
  */
 ```
 ```yaml
-# Config file
+# Config file. The plugin also adds slash commands for the to members check their coins or the 
+  # staff with admin permissions to manage the coins of other member.
 SlashCommands:
   Coins:
     Command: coins
