@@ -163,8 +163,8 @@ That's all you have to do!
  */
 ```
 ```yaml
-# Config file. The plugin also adds slash commands for the to members check their coins or the 
-  # staff with admin permissions to manage the coins of other member.
+# Config file. The plugin also adds slash commands for the members to check their coins or the 
+  # staff with admin permissions to manage the coins of other member. Uses SQLite as a db.
 SlashCommands:
   Coins:
     Command: coins
