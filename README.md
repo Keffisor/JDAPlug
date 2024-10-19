@@ -38,6 +38,7 @@ main: your.main.class.of.your.plugin
 # optional ⬇
 author: Keffisor21
 version: v2.3
+depend: [Vault, AnyOtherPlugin]
 ```
 Then, create a class extending ``JavaPlugin``:
 ```
