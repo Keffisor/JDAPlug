@@ -157,8 +157,10 @@ VaultAPI.removeCoins(Member, Coins);
 VaultAPI.setCoins(Member, Coins);
 VaultAPI.getCoins(Member, Coins);
 
-// For using it, just add the jar to the library path of your project and install the plugin in your plugins folder.
-// That's all you have to do!
+/*
+For using it, just add the jar to the library path of your project and install the plugin in your plugins folder.
+That's all you have to do!   
+ */
 ```
 ```yaml
 # Config file
