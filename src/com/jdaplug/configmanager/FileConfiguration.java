@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,13 +28,10 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import com.jdaplug.consolehandler.Console;
 import com.jdaplug.consolehandler.ConsoleColor;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
 public class FileConfiguration {
 	private Yaml yaml;
@@ -100,8 +96,11 @@ public class FileConfiguration {
 	public Map<String, Object> getElements() {
 		return data;
 	}
-	
-	public void saveConfig() {
+
+	/**
+	 * Saves the current configuration to the file.
+	 */
+	 public void saveConfig() {
 		formatConfig();
 		try {
 			StringWriter writer = new StringWriter();
@@ -117,8 +116,11 @@ public class FileConfiguration {
 	    	e2.printStackTrace();
 	    }
 	}
-	
-	public void reloadConfig() {
+
+	/**
+	 * Reloads the configuration from the file.
+	 */
+	 public void reloadConfig() {
 		try {
 			DumperOptions options = new DumperOptions();
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
@@ -130,7 +132,7 @@ public class FileConfiguration {
 	}
 	
 	/**
-	 * Set the proper format to the config. Ej: Replace a dot with map.
+	 * Set the proper format to the config. Ex: Replace a dot with map.
 	 */
 	private void formatConfig() {
 		new LinkedHashSet<String>(data.keySet()).stream().filter(s -> s.contains(".")).forEach(key -> {
@@ -170,12 +172,19 @@ public class FileConfiguration {
 	private StringWriter commentsConfig(StringWriter writer) {
 		List<String> lines = Stream.of(writer.toString().split("\n")).collect(Collectors.toList());
 
-		AtomicInteger count = new AtomicInteger();
+        AtomicInteger count = new AtomicInteger();
+		StringWriter linesRead = new StringWriter();
+
 		try {
 			Files.readAllLines(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).forEach(line -> {
+				if(line.isEmpty()) return;
+
+				linesRead.append(line).append("\n");
+
 				int pos = count.getAndIncrement();
 				if(!line.trim().startsWith("#")) return;
-				lines.add(pos, line);
+
+				lines.add(pos + getFormattedNewLinesCount(linesRead.toString()), line);
 			});
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -187,6 +196,14 @@ public class FileConfiguration {
 		return writer;
 	}
 
+	/**
+	 * Sets the value for the specified key in the configuration data.
+	 * If the key contains dots, it is treated as a path and the value is set in the nested map structure.
+	 * Otherwise, the value is set directly in the root map.
+	 *
+	 * @param x the key for which the value is to be set. If the key contains dots, it is treated as a path.
+	 * @param o the value to be set for the specified key.
+	 */
 	public void set(String x, Object o) {
 		if(x.contains(".") && data.get(x.split("\\.")[0]) != null) {
 		    setElementMap(x, data.get(x), o);
@@ -202,35 +219,71 @@ public class FileConfiguration {
 	    	e2.printStackTrace();
 	    }
 	}
-	
+
+	/**
+	 * Gets the boolean value for the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the boolean value associated with the key
+	 */
 	public boolean getBoolean(String x) {
        return (boolean)getElementMap(x, data.get(x), data);		
 	}
-	
+
+	/**
+	 * Retrieves the string value associated with the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the string value associated with the key, or null if not found
+	 */
 	@Nullable
 	public String getString(String x) {
 		return String.valueOf(getElementMap(x, data.get(x), data));
 	}
-	
+
+	/**
+	 * Retrieves the list of objects associated with the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the list of objects associated with the key, or null if not found
+	 */
 	@Nullable
 	public List<Object> getList(String x) {
-		return (List<Object>)getElementMap(x, data.get(x), data);
-	}
-	
-	@Nullable
-	public List<String> getStringList(String x) {
-		return (List<String>)getElementMap(x, data.get(x), data);
-	}
-	
-	public int getInt(String x) {
-		return (int)getElementMap(x, data.get(x), data);
-	}
-	
-	public double getDouble(String x) {
-		return (double)getElementMap(x, data.get(x), data);
+		return (List<Object>) getElementMap(x, data.get(x), data);
 	}
 
-	public boolean isValid(File configFile, Object obj, String nameFile) {
+	/**
+	 * Retrieves the list of strings associated with the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the list of strings associated with the key, or null if not found
+	 */
+	@Nullable
+	public List<String> getStringList(String x) {
+		return (List<String>) getElementMap(x, data.get(x), data);
+	}
+
+	/**
+	 * Retrieves the integer value associated with the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the integer value associated with the key
+	 */
+	public int getInt(String x) {
+		return (int) getElementMap(x, data.get(x), data);
+	}
+
+	/**
+	 * Retrieves the double value associated with the specified key.
+	 *
+	 * @param x the key to look up
+	 * @return the double value associated with the key
+	 */
+	public double getDouble(String x) {
+		return (double) getElementMap(x, data.get(x), data);
+	}
+
+	private boolean isValid(File configFile, Object obj, String nameFile) {
 		try {
 		if(!configFile.exists()) {
 			configFile.createNewFile();
@@ -300,7 +353,52 @@ public class FileConfiguration {
 		}
 		data.put(req, x);
 	}
-	
+
+	private int getFormattedNewLinesCount(String data) {
+		DumperOptions options = new DumperOptions();
+
+		options.setPrettyFlow(true);
+		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		options.setAllowUnicode(true);
+
+		Map<String, Object> map = new Yaml(options).load(data);
+
+		if(map == null) return 0;
+
+		new LinkedHashSet<String>(map.keySet()).stream().filter(s -> s.contains(".")).forEach(key -> {
+			List<String> paths = Stream.of(key.split("\\.")).collect(Collectors.toList());
+
+			String start = paths.get(0);
+			String end = paths.get(paths.size() - 1);
+
+			paths.remove(start);
+			paths.remove(end);
+
+			LinkedHashMap<String, Object> initial = (map.get(start) == null ? new LinkedHashMap<>(): (LinkedHashMap<String, Object>) map.get(start));
+
+			Map<String, Object> tmp = null;
+			for(String path : paths) {
+				if(tmp == null) {
+					if(initial.get(path) == null) initial.put(path, new LinkedHashMap<>());
+					tmp = (LinkedHashMap<String, Object>) initial.get(path);
+					continue;
+				}
+				if(tmp.get(path) == null) tmp.put(path, new LinkedHashMap<>());
+				tmp = (LinkedHashMap<String, Object>) tmp.get(path);
+			}
+
+			(tmp == null ? initial: tmp).put(end, map.get(key));
+
+			map.remove(key);
+			map.put(start, initial);
+		});
+
+		StringWriter formatted = new StringWriter();
+		yaml.dump(map, formatted);
+
+		return formatted.toString().split("\n").length - data.split("\n").length + 1;
+	}
+
 	private Map<String, Object> setNewElementMap(List<String> paths, Object toChange) {
 		String start = paths.get(0);
 		String end = paths.get(paths.size() - 1);

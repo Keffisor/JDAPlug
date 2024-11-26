@@ -16,7 +16,7 @@ public class VersionCommand extends CommandExecutor {
 			sender.replySender(JDAPlug.getConfiguration().getString("Commands.Version.Message"));
 			return;
 		}
-		sender.replySender("Running JDAPlug v1.0.2");
+		sender.replySender("Running JDAPlug v1.1.2");
 	}
 
 }

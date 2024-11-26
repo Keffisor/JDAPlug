@@ -1,7 +1,5 @@
 package com.jdaplug;
 
-import javax.security.auth.login.LoginException;
-
 import com.jdaplug.configmanager.TokenConfiguration;
 import com.jdaplug.consolehandler.ConsoleColor;
 
@@ -18,7 +16,7 @@ public class Main extends ListenerAdapter {
 		String token = TokenConfiguration.getTokenFileContent();
 		if(token.isEmpty()) {
 			Utils.executeCommand("cls", "clear");
-			System.out.println(Utils.convertToColors(ConsoleColor.RED_BRIGHT, "\n[ERROR] The token.txt is empty, please write the token of the bot"));;
+			System.out.println(Utils.convertToColors(ConsoleColor.RED_BRIGHT, "\n[ERROR] The token.txt is empty, please write the token of the bot"));
 			return;
 		}
 
@@ -32,8 +30,6 @@ public class Main extends ListenerAdapter {
 			.setMemberCachePolicy(JDAPlug.getMemberCachePolicy())
 			.setChunkingFilter(JDAPlug.getChunkingFilter())
 		;
-
-		//JDABuilder jdaBuilder =  JDABuilder.createDefault(token).setChunkingFilter(ChunkingFilter.ALL).setMemberCachePolicy(MemberCachePolicy.ALL).setDisabledIntents(JDAExpansion.getDisabledGatewayIntents()).enableIntents(JDAExpansion.getEnabledGatewayIntents());
 
 		try {
 			if(JDAPlug.getConfiguration().getBoolean("ShardManager.Enabled"))

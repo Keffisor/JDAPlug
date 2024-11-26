@@ -214,6 +214,101 @@ Messages:
   CoinsRemove: Added %quantity coins to %member
   
 ```
+- <strong>Casino</strong> - A fun and interactive horse racing game. Customize betting options and manage game settings easily. Requires Vault plugin installed. <a href="https://keffisor21.com/jdaplug/Casino/Casino.jar" rel="nofollow">Download here</a>
+``` Config.yml file
+HorseRace:
+  Settings:
+    MaxBet: 100000
+    MinBet: 100
+    WinMultiplier: 8
+SlashCommands:
+  HorseRace:
+    Command: horserace
+    Description: Bet coins in a horse race game!
+    Argument:
+      Coins:
+        Name: coins
+        Description: The coins to bet
+      Horses:
+        Name: horse
+        Description: The number of the horse that you bet to win
+Messages:
+  HorseRace:
+    Error:
+      InvalidArguments:
+        Title: ℹ️  Incorrect format
+        Description: 'Please enter a valid bet. Usage: `!horserace <bet> <number of
+          horse>`'
+        Color: '#0078d7'
+        FooterText: Casino
+      AlreadyInGame:
+        Title: ❌  Error
+        Description: You're already in a race horse game!
+        Color: '#ff0000'
+        FooterText: Casino
+      InvalidBetNumber:
+        Title: ℹ️  Incorrect format
+        Description: 'Please enter a number valid bet. Usage: `!horserace <bet> <number
+          of horse>`'
+        Color: '#0078d7'
+        FooterText: Casino
+      MaxBetSurpassed:
+        Title: ❌  Error
+        Description: The maximum bet of this game is %max_bet%!
+        Color: '#ff0000'
+        FooterText: Casino
+      MinBet:
+        Title: ℹ️  Invalid bet
+        Description: Please enter a bet equal or higher than %min_bet%!
+        Color: '#0078d7'
+        FooterText: Casino
+      InvalidHorseNumber:
+        Title: ℹ️  Horse race
+        Description: Please enter a number valid horse between 1 and 8!
+        Color: '#0078d7'
+        FooterText: Casino
+      NotEnoughCoins:
+        Title: ❌  Error
+        Description: You don't have enough coins to make that bet!
+        Color: '#ff0000'
+        FooterText: Casino
+    Game:
+      Start:
+        Title: Horse race 🏇
+        Description: |-
+          **Your bet:** %coins% coins
+
+          **Your racer:** `%horse%`
+        Color: '#ffa500'
+        FooterText: Casino
+      Won:
+        Title: Horse race 🏇 - You won!
+        Description: |2-
+
+
+          **RACER  `%winner%` WON!**
+
+          **Profit:** %coins_earned% coins
+
+          **Your coins:** %coins% coins
+        Color: '#00FF00'
+        FooterText: Casino
+      Lost:
+        Title: Horse race 🏇 - You lost!
+        Description: |2-
+
+
+          **RACER  `%winner%` LOST!**
+
+          **Lost:** %coins_lost% coins
+
+          **Your coins:** %coins% coins
+        Color: '#FF0000'
+        FooterText: Casino
+# Options: EU or US
+General:
+  NumberFormat: US
+```
 
 <br>
 <br>
